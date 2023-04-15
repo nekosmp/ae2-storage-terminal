@@ -51,15 +51,11 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
 import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
 
-import appeng.api.config.CondenserOutput;
-import appeng.api.features.P2PTunnelAttunementInternal;
 import appeng.api.integrations.rei.IngredientConverters;
 import appeng.api.util.AEColor;
 import appeng.client.gui.AEBaseScreen;
-import appeng.client.gui.implementations.InscriberScreen;
 import appeng.core.AEConfig;
 import appeng.core.AppEng;
-import appeng.core.FacadeCreativeTab;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
@@ -68,14 +64,8 @@ import appeng.core.localization.GuiText;
 import appeng.core.localization.ItemModText;
 import appeng.integration.abstraction.REIFacade;
 import appeng.integration.modules.jeirei.CompatLayerHelper;
-import appeng.integration.modules.rei.transfer.EncodePatternTransferHandler;
 import appeng.integration.modules.rei.transfer.UseCraftingRecipeTransfer;
-import appeng.items.parts.FacadeItem;
 import appeng.menu.me.items.CraftingTermMenu;
-import appeng.menu.me.items.PatternEncodingTermMenu;
-import appeng.recipes.handlers.ChargerRecipe;
-import appeng.recipes.handlers.InscriberRecipe;
-import appeng.recipes.transform.TransformRecipe;
 
 public class ReiPlugin implements REIClientPlugin {
 
@@ -106,33 +96,14 @@ public class ReiPlugin implements REIClientPlugin {
             return;
         }
 
-        registry.add(new TransformCategory());
-        registry.add(new CondenserCategory());
-        registry.add(new InscriberRecipeCategory());
-        registry.add(new AttunementCategory());
-        registry.add(new ChargerCategory());
-
         registerWorkingStations(registry);
     }
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        if (AEConfig.instance().isEnableFacadeRecipesInJEI()) {
-            registry.registerGlobalDisplayGenerator(new FacadeRegistryGenerator());
-        }
-
         if (CompatLayerHelper.IS_LOADED) {
             return;
         }
-
-        registry.registerRecipeFiller(InscriberRecipe.class, InscriberRecipe.TYPE, InscriberRecipeWrapper::new);
-        registry.registerRecipeFiller(ChargerRecipe.class, ChargerRecipe.TYPE, ChargerDisplay::new);
-        registry.registerRecipeFiller(TransformRecipe.class, TransformRecipe.TYPE, TransformRecipeWrapper::new);
-
-        registry.add(new CondenserOutputDisplay(CondenserOutput.MATTER_BALLS));
-        registry.add(new CondenserOutputDisplay(CondenserOutput.SINGULARITY));
-
-        registerDescriptions(registry);
     }
 
     @Override
@@ -142,7 +113,6 @@ public class ReiPlugin implements REIClientPlugin {
         }
 
         // Allow recipe transfer from JEI to crafting and pattern terminal
-        registry.register(new EncodePatternTransferHandler<>(PatternEncodingTermMenu.class));
         registry.register(new UseCraftingRecipeTransfer<>(CraftingTermMenu.class));
     }
 
@@ -168,10 +138,6 @@ public class ReiPlugin implements REIClientPlugin {
 
             return CompoundEventResult.pass();
         });
-        registry.registerContainerClickArea(
-                new Rectangle(82, 39, 26, 16),
-                InscriberScreen.class,
-                InscriberRecipeCategory.ID);
     }
 
     @Override
@@ -185,9 +151,7 @@ public class ReiPlugin implements REIClientPlugin {
                 AEBlocks.DEBUG_PHANTOM_NODE::isSameAs,
 
                 AEItems.DEBUG_CARD::isSameAs,
-                AEItems.DEBUG_ERASER::isSameAs,
-                AEItems.DEBUG_METEORITE_PLACER::isSameAs,
-                AEItems.DEBUG_REPLICATOR_CARD::isSameAs);
+                AEItems.DEBUG_ERASER::isSameAs);
 
         // Will be hidden if colored cables are hidden
         List<Predicate<ItemStack>> predicates = new ArrayList<>();
@@ -196,29 +160,11 @@ public class ReiPlugin implements REIClientPlugin {
             if (color == AEColor.TRANSPARENT) {
                 continue; // Keep the Fluix variant
             }
-            predicates.add(stack -> stack.getItem() == AEParts.COVERED_CABLE.item(color));
-            predicates.add(stack -> stack.getItem() == AEParts.COVERED_DENSE_CABLE.item(color));
             predicates.add(stack -> stack.getItem() == AEParts.GLASS_CABLE.item(color));
-            predicates.add(stack -> stack.getItem() == AEParts.SMART_CABLE.item(color));
-            predicates.add(stack -> stack.getItem() == AEParts.SMART_DENSE_CABLE.item(color));
-            predicates.add(stack -> stack.getItem() == AEItems.MEMORY_CARDS.item(color));
         }
         coloredCables = ImmutableList.copyOf(predicates);
 
         registry.removeEntryIf(this::shouldEntryBeHidden);
-
-        if (AEConfig.instance().isEnableFacadesInJEI()) {
-            registry.addEntries(EntryIngredients.ofItemStacks(FacadeCreativeTab.getSubTypes()));
-        }
-    }
-
-    @Override
-    public void registerCollapsibleEntries(CollapsibleEntryRegistry registry) {
-        if (AEConfig.instance().isEnableFacadesInJEI()) {
-            FacadeItem facadeItem = AEItems.FACADE.asItem();
-            registry.group(AppEng.makeId("facades"), Component.translatable("itemGroup.ae2.facades"),
-                    stack -> stack.getType() == VanillaEntryTypes.ITEM && stack.<ItemStack>castValue().is(facadeItem));
-        }
     }
 
     @Override
@@ -240,70 +186,11 @@ public class ReiPlugin implements REIClientPlugin {
     }
 
     private void registerWorkingStations(CategoryRegistry registry) {
-        ItemStack condenser = AEBlocks.CONDENSER.stack();
-        registry.addWorkstations(CondenserCategory.ID, EntryStacks.of(condenser));
-
-        ItemStack inscriber = AEBlocks.INSCRIBER.stack();
-        registry.addWorkstations(InscriberRecipeCategory.ID, EntryStacks.of(inscriber));
-        registry.setPlusButtonArea(InscriberRecipeCategory.ID, ButtonArea.defaultArea());
-
         ItemStack craftingTerminal = AEParts.CRAFTING_TERMINAL.stack();
         registry.addWorkstations(BuiltinPlugin.CRAFTING, EntryStacks.of(craftingTerminal));
 
         ItemStack wirelessCraftingTerminal = AEItems.WIRELESS_CRAFTING_TERMINAL.stack();
         registry.addWorkstations(BuiltinPlugin.CRAFTING, EntryStacks.of(wirelessCraftingTerminal));
-
-        registry.addWorkstations(ChargerDisplay.ID, EntryStacks.of(AEBlocks.CHARGER.stack()));
-        registry.addWorkstations(ChargerDisplay.ID, EntryStacks.of(AEBlocks.CRANK.stack()));
-    }
-
-    private void registerDescriptions(DisplayRegistry registry) {
-        var all = EntryRegistry.getInstance().getEntryStacks().collect(EntryIngredient.collector());
-
-        for (var entry : P2PTunnelAttunementInternal.getApiTunnels()) {
-            var inputs = List.of(all.filter(
-                    stack -> stack.getValue() instanceof ItemStack s && entry.stackPredicate().test(s)));
-            if (inputs.isEmpty()) {
-                continue;
-            }
-
-            registry.add(new AttunementDisplay(
-                    inputs,
-                    List.of(EntryIngredient.of(EntryStacks.of(entry.tunnelType()))),
-                    ItemModText.P2P_API_ATTUNEMENT.text(),
-                    entry.description()));
-        }
-
-        for (var entry : P2PTunnelAttunementInternal.getTagTunnels().entrySet()) {
-            var ingredient = Ingredient.of(entry.getKey());
-            if (ingredient.isEmpty()) {
-                continue;
-            }
-
-            registry.add(new AttunementDisplay(List.of(EntryIngredients.ofIngredient(ingredient)),
-                    List.of(EntryIngredient.of(EntryStacks.of(entry.getValue()))),
-                    ItemModText.P2P_TAG_ATTUNEMENT.text()));
-        }
-
-        addDescription(registry, AEItems.CERTUS_QUARTZ_CRYSTAL, GuiText.CertusQuartzObtain.getTranslationKey());
-
-        if (AEConfig.instance().isSpawnPressesInMeteoritesEnabled()) {
-            addDescription(registry, AEItems.LOGIC_PROCESSOR_PRESS, GuiText.inWorldCraftingPresses.getTranslationKey());
-            addDescription(registry, AEItems.CALCULATION_PROCESSOR_PRESS,
-                    GuiText.inWorldCraftingPresses.getTranslationKey());
-            addDescription(registry, AEItems.ENGINEERING_PROCESSOR_PRESS,
-                    GuiText.inWorldCraftingPresses.getTranslationKey());
-            addDescription(registry, AEItems.SILICON_PRESS, GuiText.inWorldCraftingPresses.getTranslationKey());
-        }
-
-        addDescription(registry, AEBlocks.CRANK, ItemModText.CRANK_DESCRIPTION.getTranslationKey());
-    }
-
-    private static void addDescription(DisplayRegistry registry, ItemDefinition<?> itemDefinition, String... message) {
-        DefaultInformationDisplay info = DefaultInformationDisplay.createFromEntry(EntryStacks.of(itemDefinition),
-                itemDefinition.asItem().getDescription());
-        info.lines(Arrays.stream(message).map(Component::translatable).collect(Collectors.toList()));
-        registry.add(info);
     }
 
     private boolean shouldEntryBeHidden(EntryStack<?> entryStack) {
@@ -313,10 +200,7 @@ public class ReiPlugin implements REIClientPlugin {
         ItemStack stack = entryStack.castValue();
 
         if (AEItems.WRAPPED_GENERIC_STACK.isSameAs(stack)
-                || AEItems.FACADE.isSameAs(stack) // REI will add a broken facade with no NBT
-                || AEBlocks.CABLE_BUS.isSameAs(stack)
-                || AEBlocks.MATRIX_FRAME.isSameAs(stack)
-                || AEBlocks.PAINT.isSameAs(stack)) {
+                || AEBlocks.CABLE_BUS.isSameAs(stack)) {
             return true;
         }
 

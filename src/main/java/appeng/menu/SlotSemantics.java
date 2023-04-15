@@ -64,7 +64,6 @@ public final class SlotSemantics {
 
     public static final SlotSemantic PLAYER_INVENTORY = register("PLAYER_INVENTORY", true);
     public static final SlotSemantic PLAYER_HOTBAR = register("PLAYER_HOTBAR", true);
-    public static final SlotSemantic TOOLBOX = register("TOOLBOX", true);
     /**
      * Used for configuration slots that configure a filter, such as on planes, import/export busses, etc.
      */
@@ -73,38 +72,12 @@ public final class SlotSemantics {
      * An upgrade slot on a machine, cell workbench, etc.
      */
     public static final SlotSemantic UPGRADE = register("UPGRADE", false);
-    /**
-     * One or more slots for storage cells, i.e. on drives, cell workbench or chest.
-     */
-    public static final SlotSemantic STORAGE_CELL = register("STORAGE_CELL", false);
 
-    public static final SlotSemantic INSCRIBER_PLATE_TOP = register("INSCRIBER_PLATE_TOP", false);
-
-    public static final SlotSemantic INSCRIBER_PLATE_BOTTOM = register("INSCRIBER_PLATE_BOTTOM", false);
+    public static final SlotSemantic CRAFTING_GRID = register("CRAFTING_GRID", false);
 
     public static final SlotSemantic MACHINE_INPUT = register("MACHINE_INPUT", false);
 
     public static final SlotSemantic MACHINE_OUTPUT = register("MACHINE_OUTPUT", false);
-
-    public static final SlotSemantic MACHINE_CRAFTING_GRID = register("MACHINE_CRAFTING_GRID", false);
-
-    public static final SlotSemantic BLANK_PATTERN = register("BLANK_PATTERN", false);
-
-    public static final SlotSemantic ENCODED_PATTERN = register("ENCODED_PATTERN", false);
-
-    public static final SlotSemantic VIEW_CELL = register("VIEW_CELL", false);
-
-    public static final SlotSemantic CRAFTING_GRID = register("CRAFTING_GRID", false);
-
-    public static final SlotSemantic PROCESSING_INPUTS = register("PROCESSING_INPUTS", false);
-
-    public static final SlotSemantic PROCESSING_OUTPUTS = register("PROCESSING_OUTPUTS", false);
-
-    public static final SlotSemantic SMITHING_TABLE_BASE = register("SMITHING_TABLE_BASE", false);
-    public static final SlotSemantic SMITHING_TABLE_ADDITION = register("SMITHING_TABLE_ADDITION", false);
-    public static final SlotSemantic SMITHING_TABLE_RESULT = register("SMITHING_TABLE_RESULT", false);
-
-    public static final SlotSemantic STONECUTTING_INPUT = register("STONECUTTING_INPUT", false);
 
     public static final SlotSemantic CRAFTING_RESULT = register("CRAFTING_RESULT", false);
 

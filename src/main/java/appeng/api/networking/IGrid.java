@@ -25,12 +25,9 @@ package appeng.api.networking;
 
 import java.util.Set;
 
-import appeng.api.networking.crafting.ICraftingService;
-import appeng.api.networking.energy.IEnergyService;
 import appeng.api.networking.events.GridEvent;
 import appeng.api.networking.pathing.IPathingService;
 import appeng.api.networking.security.ISecurityService;
-import appeng.api.networking.spatial.ISpatialService;
 import appeng.api.networking.storage.IStorageService;
 import appeng.api.networking.ticking.ITickManager;
 
@@ -140,26 +137,6 @@ public interface IGrid {
     }
 
     /**
-     * Get this grids {@link IEnergyService}.
-     *
-     * @see #getService(Class)
-     */
-
-    default IEnergyService getEnergyService() {
-        return getService(IEnergyService.class);
-    }
-
-    /**
-     * Get this grids {@link ICraftingService}.
-     *
-     * @see #getService(Class)
-     */
-
-    default ICraftingService getCraftingService() {
-        return getService(ICraftingService.class);
-    }
-
-    /**
      * Get this grids {@link ISecurityService}.
      *
      * @see #getService(Class)
@@ -177,15 +154,5 @@ public interface IGrid {
 
     default IPathingService getPathingService() {
         return getService(IPathingService.class);
-    }
-
-    /**
-     * Get this grids {@link ISpatialService}.
-     *
-     * @see #getService(Class)
-     */
-
-    default ISpatialService getSpatialService() {
-        return getService(ISpatialService.class);
     }
 }

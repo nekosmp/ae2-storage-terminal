@@ -30,9 +30,6 @@ import net.minecraft.world.phys.Vec3;
 import appeng.api.config.Settings;
 import appeng.api.config.SortDir;
 import appeng.api.config.SortOrder;
-import appeng.api.config.TypeFilter;
-import appeng.api.config.ViewItems;
-import appeng.api.implementations.blockentities.IViewCellStorage;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.parts.IPartItem;
 import appeng.api.storage.ITerminalHost;
@@ -58,27 +55,15 @@ import appeng.util.inv.InternalInventoryHost;
  * @since rv3
  */
 public abstract class AbstractTerminalPart extends AbstractDisplayPart
-        implements ITerminalHost, IViewCellStorage, InternalInventoryHost {
+        implements ITerminalHost, InternalInventoryHost {
 
     private final IConfigManager cm = new ConfigManager(this::saveChanges);
-    private final AppEngInternalInventory viewCell = new AppEngInternalInventory(this, 5);
 
     public AbstractTerminalPart(IPartItem<?> partItem) {
         super(partItem, true);
 
         this.cm.registerSetting(Settings.SORT_BY, SortOrder.NAME);
-        this.cm.registerSetting(Settings.VIEW_MODE, ViewItems.ALL);
-        this.cm.registerSetting(Settings.TYPE_FILTER, TypeFilter.ALL);
         this.cm.registerSetting(Settings.SORT_DIRECTION, SortDir.ASCENDING);
-    }
-
-    @Override
-    public void addAdditionalDrops(List<ItemStack> drops, boolean wrenched) {
-        for (var is : this.viewCell) {
-            if (!is.isEmpty()) {
-                drops.add(is);
-            }
-        }
     }
 
     @Override
@@ -95,14 +80,12 @@ public abstract class AbstractTerminalPart extends AbstractDisplayPart
     public void readFromNBT(CompoundTag data) {
         super.readFromNBT(data);
         this.cm.readFromNBT(data);
-        this.viewCell.readFromNBT(data, "viewCell");
     }
 
     @Override
     public void writeToNBT(CompoundTag data) {
         super.writeToNBT(data);
         this.cm.writeToNBT(data);
-        this.viewCell.writeToNBT(data, "viewCell");
     }
 
     @Override
@@ -134,11 +117,6 @@ public abstract class AbstractTerminalPart extends AbstractDisplayPart
             return grid.getStorageService().getInventory();
         }
         return null;
-    }
-
-    @Override
-    public InternalInventory getViewCellStorage() {
-        return this.viewCell;
     }
 
     @Override

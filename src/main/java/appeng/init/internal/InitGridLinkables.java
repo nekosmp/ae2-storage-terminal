@@ -20,7 +20,7 @@ package appeng.init.internal;
 
 import appeng.api.features.GridLinkables;
 import appeng.core.definitions.AEItems;
-import appeng.items.tools.powered.WirelessTerminalItem;
+import appeng.items.tools.WirelessTerminalItem;
 
 public final class InitGridLinkables {
 

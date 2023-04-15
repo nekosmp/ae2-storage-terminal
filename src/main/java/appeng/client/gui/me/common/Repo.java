@@ -36,7 +36,6 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 
 import appeng.api.config.SortDir;
 import appeng.api.config.SortOrder;
-import appeng.api.config.ViewItems;
 import appeng.api.stacks.AEKey;
 import appeng.client.gui.me.search.RepoSearch;
 import appeng.client.gui.widgets.IScrollSource;
@@ -44,8 +43,6 @@ import appeng.client.gui.widgets.ISortSource;
 import appeng.core.AELog;
 import appeng.menu.me.common.GridInventoryEntry;
 import appeng.menu.me.common.IClientRepo;
-import appeng.util.prioritylist.IPartitionList;
-
 /**
  * For showing the network content of a storage channel, this class will maintain a client-side copy of the current
  * server-side storage, which is continuously synchronized to the client while it is open.
@@ -65,13 +62,10 @@ public class Repo implements IClientRepo {
 
     private int rowSize = 9;
 
-    private boolean hasPower;
-
     private final BiMap<Long, GridInventoryEntry> entries = HashBiMap.create();
     private final ArrayList<GridInventoryEntry> view = new ArrayList<>();
     private final ArrayList<GridInventoryEntry> pinnedRow = new ArrayList<>();
     private final RepoSearch search = new RepoSearch();
-    private IPartitionList partitionList;
     private Runnable updateViewListener;
 
     private final IScrollSource src;
@@ -81,13 +75,6 @@ public class Repo implements IClientRepo {
     public Repo(IScrollSource src, ISortSource sortSrc) {
         this.src = src;
         this.sortSrc = sortSrc;
-    }
-
-    public void setPartitionList(IPartitionList partitionList) {
-        if (partitionList != this.partitionList) {
-            this.partitionList = partitionList;
-            this.updateView();
-        }
     }
 
     @Override
@@ -126,8 +113,7 @@ public class Repo implements IClientRepo {
                     serverEntry.getSerial(),
                     localEntry.getWhat(),
                     serverEntry.getStoredAmount(),
-                    serverEntry.getRequestableAmount(),
-                    serverEntry.isCraftable()));
+                    serverEntry.getRequestableAmount()));
         } else {
             entries.put(serverEntry.getSerial(), serverEntry);
         }
@@ -189,31 +175,12 @@ public class Repo implements IClientRepo {
     }
 
     private void addEntriesToView(Collection<GridInventoryEntry> entries) {
-        var viewMode = this.sortSrc.getSortDisplay();
-        var typeFilter = this.sortSrc.getTypeFilter().getFilter();
-
         var hasPinnedRow = !PinnedKeys.isEmpty();
 
         for (var entry : entries) {
             // Pinned keys ignore all filters & search
             if (hasPinnedRow && pinnedRow.size() < rowSize && PinnedKeys.isPinned(entry.getWhat())) {
                 pinnedRow.add(entry);
-                continue;
-            }
-
-            if (this.partitionList != null && !this.partitionList.isListed(entry.getWhat())) {
-                continue;
-            }
-
-            if (viewMode == ViewItems.CRAFTABLE && !entry.isCraftable()) {
-                continue;
-            }
-
-            if (viewMode == ViewItems.STORED && entry.getStoredAmount() == 0) {
-                continue;
-            }
-
-            if (!typeFilter.matches(entry.getWhat())) {
                 continue;
             }
 
@@ -231,7 +198,7 @@ public class Repo implements IClientRepo {
                 if (info.reason != PinnedKeys.PinReason.CRAFTING
                         && pinnedRow.stream().noneMatch(r -> pinnedKey.equals(r.getWhat()))) {
                     this.pinnedRow.add(new GridInventoryEntry(
-                            -1, pinnedKey, 0, 0, false));
+                            -1, pinnedKey, 0, 0));
                 }
             }
         }
@@ -250,8 +217,7 @@ public class Repo implements IClientRepo {
                         entry.getSerial(),
                         entry.getWhat(),
                         0,
-                        0,
-                        false);
+                        0);
             } else {
                 entry = serverEntry;
             }
@@ -319,14 +285,6 @@ public class Repo implements IClientRepo {
         return !this.pinnedRow.isEmpty();
     }
 
-    public final boolean hasPower() {
-        return this.hasPower;
-    }
-
-    public final void setPower(boolean hasPower) {
-        this.hasPower = hasPower;
-    }
-
     public final int getRowSize() {
         return this.rowSize;
     }
@@ -368,17 +326,5 @@ public class Repo implements IClientRepo {
 
     public final void setUpdateViewListener(Runnable updateViewListener) {
         this.updateViewListener = updateViewListener;
-    }
-
-    /**
-     * Checks if the repo knows that the given key can be crafted.
-     */
-    public boolean isCraftable(AEKey what) {
-        for (var entry : entries.values()) {
-            if (entry.isCraftable() && what.equals(entry.getWhat())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

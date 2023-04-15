@@ -1,6 +1,7 @@
 package appeng.integration.modules.jeirei;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.core.NonNullList;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 
 import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
 import appeng.core.AELog;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.FillCraftingGridFromRecipePacket;
@@ -23,7 +25,7 @@ public final class CraftingHelper {
     private CraftingHelper() {
     }
 
-    public static void performTransfer(CraftingTermMenu menu, Recipe<?> recipe, boolean craftMissing) {
+    public static void performTransfer(CraftingTermMenu menu, Recipe<?> recipe) {
 
         // We send the items in the recipe in any case to serve as a fallback in case the recipe is transient
         var templateItems = findGoodTemplateItems(recipe, menu);
@@ -37,11 +39,11 @@ public final class CraftingHelper {
         }
 
         NetworkHandler.instance()
-                .sendToServer(new FillCraftingGridFromRecipePacket(recipeId, templateItems, craftMissing));
+                .sendToServer(new FillCraftingGridFromRecipePacket(recipeId, templateItems));
     }
 
     private static NonNullList<ItemStack> findGoodTemplateItems(Recipe<?> recipe, MEStorageMenu menu) {
-        var ingredientPriorities = EncodingHelper.getIngredientPriorities(menu, ENTRY_COMPARATOR);
+        var ingredientPriorities = getIngredientPriorities(menu, ENTRY_COMPARATOR);
 
         var templateItems = NonNullList.withSize(9, ItemStack.EMPTY);
         var ingredients = CraftingRecipeUtil.ensure3by3CraftingMatrix(recipe);
@@ -63,4 +65,28 @@ public final class CraftingHelper {
         return templateItems;
     }
 
+    private static Map<AEKey, Integer> getIngredientPriorities(MEStorageMenu menu,
+            Comparator<GridInventoryEntry> comparator) {
+        var orderedEntries = menu.getClientRepo().getAllEntries()
+                .stream()
+                .sorted(comparator)
+                .map(GridInventoryEntry::getWhat)
+                .toList();
+
+        var result = new HashMap<AEKey, Integer>(orderedEntries.size());
+        for (int i = 0; i < orderedEntries.size(); i++) {
+            result.put(orderedEntries.get(i), i);
+        }
+
+        // Also consider the player inventory, but only as the last resort
+        for (var item : menu.getPlayerInventory().items) {
+            var key = AEItemKey.of(item);
+            if (key != null) {
+                // Use -1 as lower priority than the lowest network entry (which start at 0)
+                result.putIfAbsent(key, -1);
+            }
+        }
+
+        return result;
+    }
 }

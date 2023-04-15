@@ -70,9 +70,6 @@ public class CableBusRenderState {
     // cable connection should be drawn
     private EnumMap<Direction, Integer> attachmentConnections = new EnumMap<>(Direction.class);
 
-    // Contains the facade to use for each side that has a facade attached
-    private EnumMap<Direction, FacadeRenderState> facades = new EnumMap<>(Direction.class);
-
     // Used for Facades.
     private BlockPos pos;
 
@@ -139,10 +136,6 @@ public class CableBusRenderState {
 
     public EnumMap<Direction, Integer> getAttachmentConnections() {
         return this.attachmentConnections;
-    }
-
-    public EnumMap<Direction, FacadeRenderState> getFacades() {
-        return this.facades;
     }
 
     public BlockPos getPos() {

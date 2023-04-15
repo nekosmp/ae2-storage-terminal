@@ -41,7 +41,6 @@ import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.networking.ControllerBlockEntity;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
-import appeng.menu.me.networktool.NetworkStatusMenu;
 
 public class ControllerBlock extends AEBaseEntityBlock<ControllerBlockEntity> {
 
@@ -149,9 +148,6 @@ public class ControllerBlock extends AEBaseEntityBlock<ControllerBlockEntity> {
             @org.jetbrains.annotations.Nullable ItemStack heldItem, BlockHitResult hit) {
         var controller = getBlockEntity(level, pos);
         if (controller != null) {
-            if (!level.isClientSide) {
-                MenuOpener.open(NetworkStatusMenu.CONTROLLER_TYPE, player, MenuLocators.forBlockEntity(controller));
-            }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.FAIL;

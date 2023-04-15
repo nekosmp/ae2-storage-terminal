@@ -35,7 +35,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import appeng.api.networking.crafting.ICraftingService;
 import appeng.api.networking.pathing.IPathingService;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.util.AEColor;
@@ -115,7 +114,7 @@ public interface IGridNode {
      * visual state display to avoid the device looking disabled while the grid is booting.
      */
     default boolean isActive() {
-        return isPowered() && hasGridBooted() && meetsChannelRequirements();
+        return hasGridBooted() && meetsChannelRequirements();
     }
 
     /**
@@ -126,7 +125,7 @@ public interface IGridNode {
      * as the channels might still be outdated.
      */
     default boolean isOnline() {
-        return isPowered() && meetsChannelRequirements();
+        return meetsChannelRequirements();
     }
 
     /**
@@ -134,13 +133,6 @@ public interface IGridNode {
      * @see IPathingService#isNetworkBooting()
      */
     boolean hasGridBooted();
-
-    /**
-     * @return True if the node has power from it's connected grid. Can be used to show a machine being powered, even if
-     *         the machine doesn't have it's required channel or the network is still booting.
-     * @see #isActive()
-     */
-    boolean isPowered();
 
     /**
      * @return if the node's channel requirements are currently met, use this for display purposes, use isActive for
@@ -161,12 +153,6 @@ public interface IGridNode {
      * @see appeng.api.features.IPlayerRegistry
      */
     int getOwningPlayerId();
-
-    /**
-     * @return The power in AE/t that will be drained by this node.
-     */
-    @Nonnegative
-    double getIdlePowerUsage();
 
     /**
      * @return True if the grid node is accessible on the given side of the host.

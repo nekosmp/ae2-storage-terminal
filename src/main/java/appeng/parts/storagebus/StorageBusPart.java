@@ -65,10 +65,8 @@ import appeng.api.util.IConfigManager;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 import appeng.core.settings.TickRates;
-import appeng.core.stats.AdvancementTriggers;
 import appeng.helpers.IConfigInvHost;
 import appeng.helpers.IPriorityHost;
-import appeng.helpers.InterfaceLogicHost;
 import appeng.items.parts.PartModels;
 import appeng.me.helpers.MachineSource;
 import appeng.me.storage.CompositeStorage;
@@ -342,7 +340,6 @@ public class StorageBusPart extends UpgradeablePart
         MEStorage newInventory;
         if (foundMonitor != null) {
             newInventory = foundMonitor;
-            this.checkStorageBusOnInterface();
             handlerDescription = newInventory.getDescription();
         } else if (!foundExternalApi.isEmpty()) {
             newInventory = new CompositeStorage(foundExternalApi);
@@ -423,25 +420,6 @@ public class StorageBusPart extends UpgradeablePart
         });
     }
 
-    private void checkStorageBusOnInterface() {
-        var oppositeSide = getSide().getOpposite();
-        var targetPos = getBlockEntity().getBlockPos().relative(getSide());
-        var targetBe = getLevel().getBlockEntity(targetPos);
-
-        Object targetHost = targetBe;
-        if (targetBe instanceof IPartHost partHost) {
-            targetHost = partHost.getPart(oppositeSide);
-        }
-
-        if (targetHost instanceof InterfaceLogicHost) {
-            var server = getLevel().getServer();
-            var player = IPlayerRegistry.getConnected(server, this.getActionableNode().getOwningPlayerId());
-            if (player != null) {
-                AdvancementTriggers.RECURSIVE.trigger(player);
-            }
-        }
-    }
-
     @Override
     public void mountInventories(IStorageMounts mounts) {
         if (this.hasRegisteredCellToNetwork()) {
@@ -507,12 +485,10 @@ public class StorageBusPart extends UpgradeablePart
 
     @Override
     public IPartModel getStaticModels() {
-        if (this.isActive() && this.isPowered()) {
+        if (this.isActive()) {
             return MODELS_HAS_CHANNEL;
-        } else if (this.isPowered()) {
-            return MODELS_ON;
         } else {
-            return MODELS_OFF;
+            return MODELS_ON;
         }
     }
 

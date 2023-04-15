@@ -24,23 +24,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.features.GridLinkables;
 import appeng.api.features.IGridLinkableHandler;
-import appeng.api.ids.AETags;
 import appeng.api.implementations.items.IBiometricCard;
-import appeng.api.implementations.items.ISpatialStorageCell;
 import appeng.api.implementations.items.IStorageComponent;
 import appeng.api.inventories.InternalInventory;
-import appeng.api.storage.StorageCells;
-import appeng.api.storage.cells.ICellWorkbenchItem;
-import appeng.api.upgrades.Upgrades;
-import appeng.blockentity.crafting.IMolecularAssemblerSupportedPattern;
-import appeng.blockentity.misc.InscriberRecipes;
-import appeng.blockentity.misc.VibrationChamberBlockEntity;
 import appeng.client.gui.Icon;
 import appeng.core.definitions.AEItems;
-import appeng.crafting.pattern.EncodedPatternItem;
 import appeng.util.Platform;
 
 /**
@@ -102,74 +92,15 @@ public class RestrictedInputSlot extends AppEngSlot {
 
         // TODO: might need to check for our own patterns in some cases
         switch (this.which) {
-            case MOLECULAR_ASSEMBLER_PATTERN:
-                return PatternDetailsHelper.decodePattern(stack,
-                        getLevel()) instanceof IMolecularAssemblerSupportedPattern;
-            case ENCODED_PATTERN:
-                return PatternDetailsHelper.isEncodedPattern(stack);
-            case ENCODED_AE_PATTERN:
-                return AEItems.CRAFTING_PATTERN.isSameAs(stack)
-                        || AEItems.PROCESSING_PATTERN.isSameAs(stack)
-                        || AEItems.SMITHING_TABLE_PATTERN.isSameAs(stack)
-                        || AEItems.STONECUTTING_PATTERN.isSameAs(stack);
-            case BLANK_PATTERN:
-                return AEItems.BLANK_PATTERN.isSameAs(stack);
-
-            case INSCRIBER_PLATE:
-                if (AEItems.NAME_PRESS.isSameAs(stack)) {
-                    return true;
-                }
-
-                return InscriberRecipes.isValidOptionalIngredient(getLevel(), stack);
-
-            case INSCRIBER_INPUT:
-                return true;/*
-                             * for (ItemStack is : Inscribe.inputs) if ( Platform.isSameItemPrecise( is, i ) ) return
-                             * true; return false;
-                             */
-
-            case METAL_INGOTS:
-
-                return isMetalIngot(stack);
-
-            case VIEW_CELL:
-                return AEItems.VIEW_CELL.isSameAs(stack);
-            case FUEL:
-                return VibrationChamberBlockEntity.hasBurnTime(stack);
-            case POWERED_TOOL:
-                return Platform.isChargeable(stack);
-            case QE_SINGULARITY:
-                return AEItems.QUANTUM_ENTANGLED_SINGULARITY.isSameAs(stack);
-
-            case RANGE_BOOSTER:
-                return AEItems.WIRELESS_BOOSTER.isSameAs(stack);
-
-            case SPATIAL_STORAGE_CELLS:
-                return stack.getItem() instanceof ISpatialStorageCell
-                        && ((ISpatialStorageCell) stack.getItem()).isSpatialStorage(stack);
-            case STORAGE_CELLS:
-                return StorageCells.isCellHandled(stack);
-            case WORKBENCH_CELL:
-                return stack.getItem() instanceof ICellWorkbenchItem
-                        && ((ICellWorkbenchItem) stack.getItem()).isEditable(stack);
             case STORAGE_COMPONENT:
                 return stack.getItem() instanceof IStorageComponent
                         && ((IStorageComponent) stack.getItem()).isStorageComponent(stack);
-            case TRASH:
-                if (StorageCells.isCellHandled(stack)) {
-                    return false;
-                }
-
-                return !(stack.getItem() instanceof IStorageComponent
-                        && ((IStorageComponent) stack.getItem()).isStorageComponent(stack));
             case GRID_LINKABLE_ITEM: {
                 var handler = GridLinkables.get(stack.getItem());
                 return handler != null && handler.canLink(stack);
             }
             case BIOMETRIC_CARD:
                 return stack.getItem() instanceof IBiometricCard;
-            case UPGRADES:
-                return Upgrades.isUpgradeCardItem(stack);
             default:
                 break;
         }
@@ -184,21 +115,7 @@ public class RestrictedInputSlot extends AppEngSlot {
 
     @Override
     public ItemStack getDisplayStack() {
-        // If the slot only takes encoded patterns, show the encoded item instead
-        if (isRemote() && this.which == PlacableItemType.ENCODED_PATTERN) {
-            final ItemStack is = super.getDisplayStack();
-            if (!is.isEmpty() && is.getItem() instanceof EncodedPatternItem iep) {
-                final ItemStack out = iep.getOutput(is);
-                if (!out.isEmpty()) {
-                    return out;
-                }
-            }
-        }
         return super.getDisplayStack();
-    }
-
-    public static boolean isMetalIngot(ItemStack i) {
-        return i.getItem().builtInRegistryHolder().is(AETags.METAL_INGOTS);
     }
 
     private boolean isAllowEdit() {
@@ -230,12 +147,7 @@ public class RestrictedInputSlot extends AppEngSlot {
         /**
          * An encoded pattern from any mod (AE2 or otherwise). Delegates to AE2 API to identify such items.
          */
-        ENCODED_PATTERN(Icon.BACKGROUND_ENCODED_PATTERN),
-        PATTERN(Icon.BACKGROUND_BLANK_PATTERN),
-        BLANK_PATTERN(Icon.BACKGROUND_BLANK_PATTERN),
         POWERED_TOOL(Icon.BACKGROUND_CHARGABLE),
-        RANGE_BOOSTER(Icon.BACKGROUND_WIRELESS_BOOSTER),
-        QE_SINGULARITY(Icon.BACKGROUND_SINGULARITY),
         SPATIAL_STORAGE_CELLS(Icon.BACKGROUND_SPATIAL_CELL),
         FUEL(Icon.BACKGROUND_FUEL),
         UPGRADES(Icon.BACKGROUND_UPGRADE),

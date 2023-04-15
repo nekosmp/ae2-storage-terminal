@@ -131,14 +131,12 @@ public class MEInventoryUpdatePacket extends BasePacket {
                         serial,
                         key,
                         networkStorage.get(key),
-                        requestables.get(key),
-                        craftables.contains(key)));
+                        requestables.get(key)));
             }
         }
 
         public void addChanges(IncrementalUpdateHelper updateHelper,
                 KeyCounter networkStorage,
-                Set<AEKey> craftables,
                 KeyCounter requestables) {
             for (AEKey key : updateHelper) {
                 if (this.filter != null && !this.filter.matches(key)) {
@@ -161,14 +159,13 @@ public class MEInventoryUpdatePacket extends BasePacket {
                 // The queued changes are actual differences, but we need to send the real stored properties
                 // to the client.
                 var storedAmount = networkStorage.get(key);
-                var craftable = craftables.contains(key);
                 var requestable = requestables.get(key);
-                if (storedAmount <= 0 && requestable <= 0 && !craftable) {
+                if (storedAmount <= 0 && requestable <= 0) {
                     // This happens when an update is queued but the item is no longer stored
-                    add(new GridInventoryEntry(serial, sendKey, 0, 0, false));
+                    add(new GridInventoryEntry(serial, sendKey, 0, 0));
                     updateHelper.removeSerial(key);
                 } else {
-                    add(new GridInventoryEntry(serial, sendKey, storedAmount, requestable, craftable));
+                    add(new GridInventoryEntry(serial, sendKey, storedAmount, requestable));
                 }
             }
 
@@ -258,7 +255,6 @@ public class MEInventoryUpdatePacket extends BasePacket {
         AEKey.writeOptionalKey(buffer, entry.getWhat());
         buffer.writeVarLong(entry.getStoredAmount());
         buffer.writeVarLong(entry.getRequestableAmount());
-        buffer.writeBoolean(entry.isCraftable());
     }
 
     /**
@@ -269,8 +265,7 @@ public class MEInventoryUpdatePacket extends BasePacket {
         AEKey what = AEKey.readOptionalKey(buffer);
         long storedAmount = buffer.readVarLong();
         long requestableAmount = buffer.readVarLong();
-        boolean craftable = buffer.readBoolean();
-        return new GridInventoryEntry(serial, what, storedAmount, requestableAmount, craftable);
+        return new GridInventoryEntry(serial, what, storedAmount, requestableAmount);
     }
 
     @Override

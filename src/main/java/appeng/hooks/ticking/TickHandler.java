@@ -20,9 +20,7 @@ package appeng.hooks.ticking;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,8 +30,6 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -49,9 +45,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import appeng.blockentity.AEBaseBlockEntity;
-import appeng.core.AEConfig;
 import appeng.core.AELog;
-import appeng.crafting.CraftingCalculation;
 import appeng.me.Grid;
 import appeng.me.GridNode;
 import appeng.util.ILevelRunnable;
@@ -66,7 +60,6 @@ public class TickHandler {
 
     private static final TickHandler INSTANCE = new TickHandler();
     private final Queue<ILevelRunnable> serverQueue = new ArrayDeque<>();
-    private final Multimap<LevelAccessor, CraftingCalculation> craftingJobs = LinkedListMultimap.create();
     private final Map<LevelAccessor, Queue<ILevelRunnable>> callQueue = new HashMap<>();
     private final ServerBlockEntityRepo blockEntities = new ServerBlockEntityRepo();
     private final ServerGridRepo grids = new ServerGridRepo();
@@ -243,7 +236,6 @@ public class TickHandler {
     }
 
     private void onServerLevelTickEnd(ServerLevel level) {
-        this.simulateCraftingJobs(level);
         this.readyBlockEntities(level);
 
         // tick networks
@@ -301,38 +293,6 @@ public class TickHandler {
         tickCounter++;
     }
 
-    public void registerCraftingSimulation(Level level, CraftingCalculation craftingCalculation) {
-        Preconditions.checkArgument(!level.isClientSide, "Trying to register a crafting job for a client-level");
-
-        synchronized (this.craftingJobs) {
-            this.craftingJobs.put(level, craftingCalculation);
-        }
-    }
-
-    /**
-     * Simulates the current crafting requests before they user can submit them to be processed.
-     */
-    private void simulateCraftingJobs(LevelAccessor level) {
-        synchronized (this.craftingJobs) {
-            final Collection<CraftingCalculation> jobSet = this.craftingJobs.get(level);
-
-            if (!jobSet.isEmpty()) {
-                final int jobSize = jobSet.size();
-                final int microSecondsPerTick = AEConfig.instance().getCraftingCalculationTimePerTick() * 1000;
-                final int simTime = Math.max(1, microSecondsPerTick / jobSize);
-
-                final Iterator<CraftingCalculation> i = jobSet.iterator();
-
-                while (i.hasNext()) {
-                    final CraftingCalculation cj = i.next();
-                    if (!cj.simulateFor(simTime)) {
-                        i.remove();
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Ready the block entities in this level. server-side only.
      */
@@ -367,11 +327,8 @@ public class TickHandler {
                             info.callInit();
                         } catch (Throwable t) {
                             CrashReport crashReport = CrashReport.forThrowable(t, "Readying AE2 block entity");
-
-                            var category = crashReport.addCategory("Block entity being readied");
-                            category.setDetail("World", () -> level.dimension().location().toString());
-                            info.blockEntity().fillCrashReportCategory(category);
-
+                            info.blockEntity()
+                                    .fillCrashReportCategory(crashReport.addCategory("Block entity being readied"));
                             throw new ReportedException(crashReport);
                         }
                     }

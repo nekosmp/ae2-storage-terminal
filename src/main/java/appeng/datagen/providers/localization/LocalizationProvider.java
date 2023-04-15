@@ -14,9 +14,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import appeng.api.config.PowerUnits;
 import appeng.core.definitions.AEBlocks;
-import appeng.core.definitions.AEEntities;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.ButtonToolTips;
 import appeng.core.localization.GuiText;
@@ -46,19 +44,12 @@ public class LocalizationProvider implements IAE2DataProvider {
         for (var item : AEItems.getItems()) {
             add("item.ae2." + item.id().getPath(), item.getEnglishName());
         }
-        for (var entry : AEEntities.ENTITY_ENGLISH_NAMES.entrySet()) {
-            add("entity.ae2." + entry.getKey(), entry.getValue());
-        }
 
         addEnum(GuiText.class);
         addEnum(ButtonToolTips.class);
         addEnum(PlayerMessages.class);
         addEnum(InGameTooltip.class);
         addEnum(ItemModText.class);
-        // Can't implement LocalizationEnum since it's not in the API, but PowerUnits is
-        for (var powerUnit : PowerUnits.values()) {
-            add(powerUnit.unlocalizedName, powerUnit.symbolName);
-        }
 
         generateJadeLocalizations();
 

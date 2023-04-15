@@ -38,7 +38,6 @@ import appeng.api.config.SecurityPermissions;
 import appeng.api.config.Settings;
 import appeng.api.config.SortDir;
 import appeng.api.config.SortOrder;
-import appeng.api.config.ViewItems;
 import appeng.api.features.IPlayerRegistry;
 import appeng.api.features.Locatables;
 import appeng.api.implementations.blockentities.IColorableBlockEntity;
@@ -79,7 +78,6 @@ public class SecurityStationBlockEntity extends AENetworkBlockEntity implements 
         super(blockEntityType, pos, blockState);
         this.getMainNode()
                 .setFlags(GridFlags.REQUIRE_CHANNEL)
-                .setIdlePowerUsage(2.0)
                 .addService(ISecurityProvider.class, this);
         difference++;
 
@@ -89,7 +87,6 @@ public class SecurityStationBlockEntity extends AENetworkBlockEntity implements 
         }
 
         this.cm.registerSetting(Settings.SORT_BY, SortOrder.NAME);
-        this.cm.registerSetting(Settings.VIEW_MODE, ViewItems.ALL);
         this.cm.registerSetting(Settings.SORT_DIRECTION, SortDir.ASCENDING);
     }
 

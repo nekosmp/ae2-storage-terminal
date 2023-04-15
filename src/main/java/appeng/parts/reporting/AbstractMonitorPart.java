@@ -315,16 +315,12 @@ public abstract class AbstractMonitorPart extends AbstractDisplayPart
             } else {
                 return hasChannel;
             }
-        } else if (this.isPowered()) {
+        } else {
             if (this.isLocked()) {
                 return lockedOn;
             } else {
                 return on;
             }
-        } else if (this.isLocked()) {
-            return lockedOff;
-        } else {
-            return off;
         }
     }
 

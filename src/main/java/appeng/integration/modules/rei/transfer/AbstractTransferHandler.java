@@ -10,7 +10,6 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.display.SimpleGridMenuDisplay;
 
-import appeng.integration.modules.jeirei.EncodingHelper;
 import appeng.menu.AEBaseMenu;
 
 public abstract class AbstractTransferHandler<T extends AEBaseMenu> implements TransferHandler {
@@ -53,8 +52,7 @@ public abstract class AbstractTransferHandler<T extends AEBaseMenu> implements T
     }
 
     protected final boolean isCraftingRecipe(Recipe<?> recipe, Display display) {
-        return EncodingHelper.isSupportedCraftingRecipe(recipe)
-                || display.getCategoryIdentifier().equals(CRAFTING);
+        return display.getCategoryIdentifier().equals(CRAFTING);
     }
 
     protected final boolean fitsIn3x3Grid(Recipe<?> recipe, Display display) {

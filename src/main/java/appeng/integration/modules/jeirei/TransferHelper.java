@@ -17,17 +17,9 @@ public class TransferHelper {
     public static final int BLUE_PLUS_BUTTON_COLOR = 0x804545FF;
     public static final int ORANGE_PLUS_BUTTON_COLOR = 0x80FFA500;
 
-    public static List<Component> createCraftingTooltip(CraftingTermMenu.MissingIngredientSlots missingSlots,
-            boolean craftMissing) {
+    public static List<Component> createCraftingTooltip(CraftingTermMenu.MissingIngredientSlots missingSlots) {
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(ItemModText.MOVE_ITEMS.text());
-        if (missingSlots.anyCraftable()) {
-            if (craftMissing) {
-                tooltip.add(ItemModText.WILL_CRAFT.text().withStyle(ChatFormatting.BLUE));
-            } else {
-                tooltip.add(ItemModText.CTRL_CLICK_TO_CRAFT.text().withStyle(ChatFormatting.BLUE));
-            }
-        }
         if (missingSlots.anyMissing()) {
             tooltip.add(ItemModText.MISSING_ITEMS.text().withStyle(ChatFormatting.RED));
         }

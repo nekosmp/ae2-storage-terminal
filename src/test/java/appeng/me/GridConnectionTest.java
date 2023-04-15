@@ -139,38 +139,6 @@ class GridConnectionTest extends AbstractGridNodeTest {
         }
 
         /**
-         * Test that when two grids are merged, the one that is powered is preferred.
-         */
-        @Test
-        void testMergeGridsPreferPoweredGridA() throws Exception {
-            var a = makePoweredNode();
-            var gridA = a.getInternalGrid();
-            var b = makePoweredNode();
-            b.getInternalGrid();
-            assertNotNull(b.getGrid());
-
-            GridConnection.create(a, b, null);
-            assertSame(gridA, a.getGrid());
-            assertSame(gridA, b.getGrid());
-        }
-
-        /**
-         * Test that when two grids are merged, the one that is powered is preferred.
-         */
-        @Test
-        void testMergeGridsPreferPoweredGridB() throws Exception {
-            var a = makeNode();
-            a.getInternalGrid();
-            assertNotNull(a.getGrid());
-            var b = makePoweredNode();
-            var gridB = b.getInternalGrid();
-
-            GridConnection.create(a, b, null);
-            assertSame(gridB, a.getGrid());
-            assertSame(gridB, b.getGrid());
-        }
-
-        /**
          * Test that when merging two unpowered or powered grids, the grid size is used as a tie breaker to decide which
          * one propagates to the other nodes.
          */

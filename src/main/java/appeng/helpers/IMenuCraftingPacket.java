@@ -49,11 +49,6 @@ public interface IMenuCraftingPacket {
     boolean useRealItems();
 
     /**
-     * @return array of view cells. can contain empty itemstacks.
-     */
-    List<ItemStack> getViewCells();
-
-    /**
      * Autocraft the passed keys, in order. Will likely open the craft confirm menu, so this menu should not be used
      * afterwards.
      */

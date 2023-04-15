@@ -26,15 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import appeng.blockentity.networking.CableBusTESR;
-import appeng.client.render.crafting.CraftingMonitorRenderer;
-import appeng.client.render.crafting.MolecularAssemblerRenderer;
-import appeng.client.render.tesr.ChargerBlockEntityRenderer;
-import appeng.client.render.tesr.ChestBlockEntityRenderer;
-import appeng.client.render.tesr.CrankRenderer;
-import appeng.client.render.tesr.DriveLedBlockEntityRenderer;
-import appeng.client.render.tesr.InscriberTESR;
-import appeng.client.render.tesr.SkyChestTESR;
-import appeng.client.render.tesr.SkyStoneTankBlockEntityRenderer;
 import appeng.core.definitions.AEBlockEntities;
 
 @Environment(EnvType.CLIENT)
@@ -44,18 +35,7 @@ public final class InitBlockEntityRenderers {
     }
 
     public static void init() {
-
-        register(AEBlockEntities.CRANK, CrankRenderer::new);
-        register(AEBlockEntities.INSCRIBER, InscriberTESR::new);
-        register(AEBlockEntities.SKY_CHEST, SkyChestTESR::new);
-        register(AEBlockEntities.CHARGER, ChargerBlockEntityRenderer.FACTORY);
-        register(AEBlockEntities.DRIVE, DriveLedBlockEntityRenderer::new);
-        register(AEBlockEntities.CHEST, ChestBlockEntityRenderer::new);
-        register(AEBlockEntities.CRAFTING_MONITOR, CraftingMonitorRenderer::new);
-        register(AEBlockEntities.MOLECULAR_ASSEMBLER, MolecularAssemblerRenderer::new);
         register(AEBlockEntities.CABLE_BUS, CableBusTESR::new);
-        register(AEBlockEntities.SKY_STONE_TANK, SkyStoneTankBlockEntityRenderer::new);
-
     }
 
     private static <T extends BlockEntity> void register(BlockEntityType<T> type,

@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
 import appeng.api.util.IOrientable;
-import appeng.decorative.solid.QuartzPillarBlock;
 
 public class MetaRotation implements IOrientable {
 
@@ -62,16 +61,6 @@ public class MetaRotation implements IOrientable {
             return state.getValue(this.facingProp);
         }
 
-        // TODO 1.10.2-R - Temp
-        if (state.hasProperty(QuartzPillarBlock.AXIS)) {
-            Axis a = state.getValue(QuartzPillarBlock.AXIS);
-            return switch (a) {
-                case X -> Direction.EAST;
-                case Z -> Direction.SOUTH;
-                case Y -> Direction.UP;
-            };
-        }
-
         return Direction.UP;
     }
 
@@ -81,10 +70,6 @@ public class MetaRotation implements IOrientable {
             if (this.facingProp != null) {
                 ((Level) this.level).setBlockAndUpdate(this.pos,
                         this.level.getBlockState(this.pos).setValue(this.facingProp, up));
-            } else {
-                // TODO 1.10.2-R - Temp
-                ((Level) this.level).setBlockAndUpdate(this.pos,
-                        this.level.getBlockState(this.pos).setValue(QuartzPillarBlock.AXIS, up.getAxis()));
             }
         } else {
             throw new IllegalStateException(this.level.getClass().getName() + " received, expected World");

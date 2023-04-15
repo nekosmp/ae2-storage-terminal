@@ -78,8 +78,6 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu>
             return helper.createUserErrorWithTooltip(ItemModText.RECIPE_TOO_LARGE.text());
         }
 
-        // Thank you RS for pioneering this amazing feature! :)
-        boolean craftMissing = AbstractContainerScreen.hasControlDown();
         var inputSlots = display.getSlotViews(RecipeIngredientRole.INPUT);
         // Find missing ingredient
         var slotToIngredientMap = getGuiSlotToIngredientMap(recipe);
@@ -99,10 +97,10 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu>
             if (missingSlots.totalSize() != 0) {
                 // Highlight the slots with missing ingredients.
                 int color = missingSlots.anyMissing() ? ORANGE_PLUS_BUTTON_COLOR : BLUE_PLUS_BUTTON_COLOR;
-                return new ErrorRenderer(missingSlots, craftMissing, color);
+                return new ErrorRenderer(missingSlots, color);
             }
         } else {
-            CraftingHelper.performTransfer(menu, recipe, craftMissing);
+            CraftingHelper.performTransfer(menu, recipe);
         }
 
         // No error
@@ -186,7 +184,7 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu>
         return RecipeTypes.CRAFTING;
     }
 
-    private record ErrorRenderer(CraftingTermMenu.MissingIngredientSlots indices, boolean craftMissing,
+    private record ErrorRenderer(CraftingTermMenu.MissingIngredientSlots indices,
             int color) implements IRecipeTransferError {
         @Override
         public Type getType() {
@@ -209,8 +207,7 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu>
             for (int i = 0; i < slotViews.size(); i++) {
                 var slotView = slotViews.get(i);
                 boolean missing = indices.missingSlots().contains(i);
-                boolean craftable = indices.craftableSlots().contains(i);
-                if (missing || craftable) {
+                if (missing) {
                     slotView.drawHighlight(
                             poseStack,
                             missing ? RED_SLOT_HIGHLIGHT_COLOR : BLUE_SLOT_HIGHLIGHT_COLOR);
@@ -220,7 +217,7 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu>
             poseStack.popPose();
 
             // 2) draw tooltip
-            var tooltip = TransferHelper.createCraftingTooltip(indices, craftMissing);
+            var tooltip = TransferHelper.createCraftingTooltip(indices);
             JEIPlugin.drawHoveringText(poseStack, tooltip, mouseX, mouseY);
         }
     }

@@ -19,10 +19,7 @@
 package appeng.core.sync.packets;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -39,19 +36,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.SecurityPermissions;
-import appeng.api.networking.crafting.ICraftingService;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.StorageHelper;
 import appeng.core.AELog;
 import appeng.core.sync.BasePacket;
 import appeng.helpers.IMenuCraftingPacket;
-import appeng.items.storage.ViewCellItem;
 import appeng.util.CraftingRecipeUtil;
 import appeng.util.prioritylist.IPartitionList;
 
@@ -76,11 +68,6 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
      */
     private NonNullList<ItemStack> ingredientTemplates;
 
-    /**
-     * True if missing entries should be queued for autocrafting instead.
-     */
-    private boolean craftMissing;
-
     public FillCraftingGridFromRecipePacket(FriendlyByteBuf stream) {
         if (stream.readBoolean()) {
             this.recipeId = stream.readResourceLocation();
@@ -92,11 +79,10 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
         for (int i = 0; i < ingredientTemplates.size(); i++) {
             ingredientTemplates.set(i, stream.readItem());
         }
-        craftMissing = stream.readBoolean();
     }
 
     public FillCraftingGridFromRecipePacket(@Nullable ResourceLocation recipeId,
-            NonNullList<ItemStack> ingredientTemplates, boolean craftMissing) {
+            NonNullList<ItemStack> ingredientTemplates) {
         var data = new FriendlyByteBuf(Unpooled.buffer());
 
         data.writeInt(this.getPacketID());
@@ -110,7 +96,6 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
         for (var stack : ingredientTemplates) {
             data.writeItem(stack);
         }
-        data.writeBoolean(craftMissing);
 
         configureWrite(data);
     }
@@ -142,20 +127,13 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
 
         var storageService = grid.getStorageService();
         var security = grid.getSecurityService();
-        var energy = grid.getEnergyService();
         var craftMatrix = cct.getCraftingMatrix();
 
         // We'll try to use the best possible ingredients based on what's available in the network
 
         var storage = storageService.getInventory();
         var cachedStorage = storageService.getCachedInventory();
-        var filter = ViewCellItem.createItemFilter(cct.getViewCells());
         var ingredients = getDesiredIngredients(player);
-
-        // Prepare to autocraft some stuff
-        var craftingService = grid.getCraftingService();
-        var toAutoCraft = new LinkedHashMap<AEItemKey, IntList>();
-        boolean touchedGridStorage = false;
 
         // Handle each slot
         for (var x = 0; x < craftMatrix.size(); x++) {
@@ -171,11 +149,8 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
                 } else {
                     if (security.hasPermission(player, SecurityPermissions.INJECT)) {
                         var in = AEItemKey.of(currentItem);
-                        var inserted = StorageHelper.poweredInsert(energy, storage, in, currentItem.getCount(),
+                        var inserted = StorageHelper.insert(storage, in, currentItem.getCount(),
                                 cct.getActionSource());
-                        if (inserted > 0) {
-                            touchedGridStorage = true;
-                        }
                         if (inserted < currentItem.getCount()) {
                             currentItem = currentItem.copy();
                             currentItem.shrink((int) inserted);
@@ -197,11 +172,10 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
             // Try to find the best item for this slot. Sort by the amount available in the last tick,
             // then try to extract from most to least available item until 1 can be extracted.
             if (currentItem.isEmpty() && security.hasPermission(player, SecurityPermissions.EXTRACT)) {
-                var request = findBestMatchingItemStack(ingredient, filter, cachedStorage);
+                var request = findBestMatchingItemStack(ingredient, cachedStorage);
                 for (var what : request) {
-                    var extracted = StorageHelper.poweredExtraction(energy, storage, what, 1, cct.getActionSource());
+                    var extracted = StorageHelper.extract(storage, what, 1, cct.getActionSource());
                     if (extracted > 0) {
-                        touchedGridStorage = true;
                         currentItem = what.toStack(Ints.saturatedCast(extracted));
                         break;
                     }
@@ -214,30 +188,9 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
             }
 
             craftMatrix.setItemDirect(x, currentItem);
-
-            // If we couldn't find the item, schedule its autocrafting
-            if (currentItem.isEmpty() && craftMissing) {
-                int slot = x;
-                findCraftableKey(ingredient, craftingService).ifPresent(key -> {
-                    toAutoCraft.computeIfAbsent(key, k -> new IntArrayList()).add(slot);
-                });
-            }
         }
 
         menu.slotsChanged(craftMatrix.toContainer());
-
-        if (!toAutoCraft.isEmpty()) {
-            // Invalidate the grid storage cache if we modified it. The crafting plan will use
-            // the outdated cached inventory otherwise.
-            if (touchedGridStorage) {
-                storageService.invalidateCache();
-            }
-
-            // This must be the last call since it changes the menu!
-            var stacks = toAutoCraft.entrySet().stream()
-                    .map(e -> new IMenuCraftingPacket.AutoCraftEntry(e.getKey(), e.getValue())).toList();
-            cct.startAutoCrafting(stacks);
-        }
     }
 
     private ItemStack takeIngredientFromPlayer(IMenuCraftingPacket cct, ServerPlayer player, Ingredient ingredient) {
@@ -298,11 +251,10 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
      * once.
      * </pre>
      */
-    private List<AEItemKey> findBestMatchingItemStack(Ingredient ingredient, IPartitionList filter,
+    private List<AEItemKey> findBestMatchingItemStack(Ingredient ingredient,
             KeyCounter storage) {
         return Arrays.stream(ingredient.getItems())//
                 .map(AEItemKey::of) //
-                .filter(r -> r != null && (filter == null || filter.isListed(r)))
                 .flatMap(s -> storage.findFuzzy(s, FuzzyMode.IGNORE_ALL).stream())//
                 // While FuzzyMode.IGNORE_ALL will retrieve all stacks of the same Item which matches
                 // standard Vanilla Ingredient matching, there are NBT-matching Ingredient subclasses on Forge,
@@ -312,14 +264,5 @@ public class FillCraftingGridFromRecipePacket extends BasePacket {
                 .sorted((a, b) -> Long.compare(b.getLongValue(), a.getLongValue()))//
                 .map(e -> (AEItemKey) e.getKey())//
                 .toList();
-    }
-
-    private Optional<AEItemKey> findCraftableKey(Ingredient ingredient, ICraftingService craftingService) {
-        return Arrays.stream(ingredient.getItems())//
-                .map(AEItemKey::of)//
-                .map(s -> (AEItemKey) craftingService.getFuzzyCraftable(s,
-                        key -> ingredient.test(((AEItemKey) key).toStack())))//
-                .filter(Objects::nonNull)//
-                .findAny();//
     }
 }

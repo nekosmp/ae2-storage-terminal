@@ -31,9 +31,7 @@ public final class PartHostTooltips {
     public static @Nullable Component getName(IPartHost object, TooltipContext context) {
         var selected = getPart(object, context.hitLocation());
 
-        if (selected.facade != null) {
-            return selected.facade.getItemStack().getHoverName();
-        } else if (selected.part != null) {
+        if (selected.part != null) {
             for (var provider : PartTooltipProviders.getProviders(selected.part).nameProviders()) {
                 var name = provider.getName(selected.part, context);
                 if (name != null) {
@@ -55,9 +53,7 @@ public final class PartHostTooltips {
         var selected = getPart(object, context.hitLocation());
 
         Item item;
-        if (selected.facade != null) {
-            item = selected.facade.getItemStack().getItem();
-        } else if (selected.part != null) {
+        if (selected.part != null) {
             item = selected.part.getPartItem().asItem();
         } else {
             return null;
@@ -72,9 +68,7 @@ public final class PartHostTooltips {
 
     public static @Nullable ItemStack getIcon(IPartHost object, TooltipContext context) {
         var selected = getPart(object, context.hitLocation());
-        if (selected.facade != null) {
-            return selected.facade.getItemStack();
-        } else if (selected.part != null) {
+        if (selected.part != null) {
             for (var provider : PartTooltipProviders.getProviders(selected.part).iconProviders()) {
                 var icon = provider.getIcon(selected.part, context);
                 if (icon != null) {

@@ -31,7 +31,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import appeng.api.ids.AETags;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.BlockDefinition;
 import appeng.datagen.providers.IAE2DataProvider;
@@ -43,37 +42,10 @@ public class BlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider
 
     @Override
     protected void addTags() {
-        // Black- and whitelist tags
-        tag(AETags.SPATIAL_BLACKLIST)
-                .add(Blocks.BEDROCK)
-                .addOptionalTag(ConventionTags.IMMOVABLE_BLOCKS.location());
-        tag(AETags.ANNIHILATION_PLANE_BLOCK_BLACKLIST);
-        tag(AETags.FACADE_BLOCK_WHITELIST)
-                .add(Blocks.GLASS,
-                        AEBlocks.QUARTZ_GLASS.block(),
-                        AEBlocks.QUARTZ_VIBRANT_GLASS.block())
-                .addTag(ConventionTags.STAINED_GLASS_BLOCK);
-        tag(AETags.GROWTH_ACCELERATABLE)
-                .addTag(ConventionTags.BUDDING_BLOCKS_BLOCKS);
 
         // Only provide amethyst in the budding tag since that's the one we use; the other tags are for other mods
         tag(ConventionTags.BUDDING_BLOCKS_BLOCKS)
-                .add(Blocks.BUDDING_AMETHYST)
-                .add(AEBlocks.FLAWLESS_BUDDING_QUARTZ.block())
-                .add(AEBlocks.FLAWED_BUDDING_QUARTZ.block())
-                .add(AEBlocks.CHIPPED_BUDDING_QUARTZ.block())
-                .add(AEBlocks.DAMAGED_BUDDING_QUARTZ.block());
-        tag(ConventionTags.BUDS_BLOCKS)
-                .add(AEBlocks.SMALL_QUARTZ_BUD.block())
-                .add(AEBlocks.MEDIUM_QUARTZ_BUD.block())
-                .add(AEBlocks.LARGE_QUARTZ_BUD.block());
-        tag(ConventionTags.CLUSTERS_BLOCKS)
-                .add(AEBlocks.QUARTZ_CLUSTER.block());
-
-        tag(ConventionTags.CERTUS_QUARTZ_STORAGE_BLOCK_BLOCK)
-                .add(AEBlocks.QUARTZ_BLOCK.block());
-        tag("c:storage_blocks")
-                .addTag(ConventionTags.CERTUS_QUARTZ_STORAGE_BLOCK_BLOCK);
+                .add(Blocks.BUDDING_AMETHYST);
 
         tag(ConventionTags.TERRACOTTA_BLOCK).add(
                 Blocks.TERRACOTTA,
@@ -94,57 +66,13 @@ public class BlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider
                 Blocks.RED_TERRACOTTA,
                 Blocks.BLACK_TERRACOTTA);
 
-        // Special behavior is associated with this tag, so our walls need to be added to it
-        tag(BlockTags.WALLS).add(
-                AEBlocks.SKY_STONE_WALL.block(),
-                AEBlocks.SMOOTH_SKY_STONE_WALL.block(),
-                AEBlocks.SKY_STONE_BRICK_WALL.block(),
-                AEBlocks.SKY_STONE_SMALL_BRICK_WALL.block(),
-                AEBlocks.FLUIX_WALL.block(),
-                AEBlocks.QUARTZ_WALL.block(),
-                AEBlocks.CUT_QUARTZ_WALL.block(),
-                AEBlocks.SMOOTH_QUARTZ_WALL.block(),
-                AEBlocks.QUARTZ_BRICK_WALL.block(),
-                AEBlocks.CHISELED_QUARTZ_WALL.block(),
-                AEBlocks.QUARTZ_PILLAR_WALL.block());
-
-        // Fixtures should cause walls to have posts
-        tag(BlockTags.WALL_POST_OVERRIDE).add(AEBlocks.QUARTZ_FIXTURE.block(), AEBlocks.LIGHT_DETECTOR.block());
-
         addEffectiveTools();
 
         addConventionTags();
     }
 
-    /**
-     * All sky-stone related blocks should be minable with iron-pickaxes and up.
-     */
-    private static final BlockDefinition<?>[] SKY_STONE_BLOCKS = {
-            AEBlocks.SKY_STONE_BLOCK,
-            AEBlocks.SMOOTH_SKY_STONE_BLOCK,
-            AEBlocks.SKY_STONE_BRICK,
-            AEBlocks.SKY_STONE_SMALL_BRICK,
-            AEBlocks.SKY_STONE_CHEST,
-            AEBlocks.SMOOTH_SKY_STONE_CHEST,
-            AEBlocks.SKY_STONE_STAIRS,
-            AEBlocks.SMOOTH_SKY_STONE_STAIRS,
-            AEBlocks.SKY_STONE_BRICK_STAIRS,
-            AEBlocks.SKY_STONE_SMALL_BRICK_STAIRS,
-            AEBlocks.SKY_STONE_WALL,
-            AEBlocks.SMOOTH_SKY_STONE_WALL,
-            AEBlocks.SKY_STONE_BRICK_WALL,
-            AEBlocks.SKY_STONE_SMALL_BRICK_WALL,
-            AEBlocks.SKY_STONE_SLAB,
-            AEBlocks.SMOOTH_SKY_STONE_SLAB,
-            AEBlocks.SKY_STONE_BRICK_SLAB,
-            AEBlocks.SKY_STONE_SMALL_BRICK_SLAB
-    };
-
     private void addEffectiveTools() {
         Map<BlockDefinition<?>, List<TagKey<Block>>> specialTags = new HashMap<>();
-        for (var skyStoneBlock : SKY_STONE_BLOCKS) {
-            specialTags.put(skyStoneBlock, List.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL));
-        }
         var defaultTags = List.of(BlockTags.MINEABLE_WITH_PICKAXE);
 
         for (var block : AEBlocks.getBlocks()) {

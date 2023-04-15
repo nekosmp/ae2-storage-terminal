@@ -50,9 +50,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.networking.WirelessBlockEntity;
 import appeng.helpers.AEMaterials;
-import appeng.menu.MenuOpener;
-import appeng.menu.implementations.WirelessMenu;
-import appeng.menu.locator.MenuLocators;
 import appeng.util.InteractionUtil;
 
 public class WirelessBlock extends AEBaseEntityBlock<WirelessBlockEntity> implements SimpleWaterloggedBlock {
@@ -82,7 +79,7 @@ public class WirelessBlock extends AEBaseEntityBlock<WirelessBlockEntity> implem
 
         if (be.isActive()) {
             teState = State.HAS_CHANNEL;
-        } else if (be.isPowered()) {
+        } else {
             teState = State.ON;
         }
 
@@ -104,8 +101,6 @@ public class WirelessBlock extends AEBaseEntityBlock<WirelessBlockEntity> implem
         if (tg != null && !InteractionUtil.isInAlternateUseMode(player)) {
             if (!level.isClientSide()) {
                 hit.getDirection();
-                MenuOpener.open(WirelessMenu.TYPE, player,
-                        MenuLocators.forBlockEntity(tg));
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }

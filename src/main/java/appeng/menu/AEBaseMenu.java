@@ -65,7 +65,6 @@ import appeng.menu.guisync.DataSynchronization;
 import appeng.menu.locator.MenuLocator;
 import appeng.menu.me.interaction.StackInteractions;
 import appeng.menu.slot.AppEngSlot;
-import appeng.menu.slot.CraftingMatrixSlot;
 import appeng.menu.slot.CraftingTermSlot;
 import appeng.menu.slot.DisabledSlot;
 import appeng.menu.slot.FakeSlot;
@@ -299,10 +298,6 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
 
     @Override
     public void broadcastChanges() {
-        if (!isValidMenu()) {
-            return;
-        }
-
         if (itemMenuHost != null && !itemMenuHost.onBroadcastChanges(this)) {
             setValidMenu(false);
             return;
@@ -334,7 +329,6 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
         SlotSemantic slotSemantic = semanticBySlot.get(slot);
         return slotSemantic == SlotSemantics.PLAYER_INVENTORY
                 || slotSemantic == SlotSemantics.PLAYER_HOTBAR
-                || slotSemantic == SlotSemantics.TOOLBOX
                 // The crafting grid in the crafting terminal also shift-clicks into the network
                 || slotSemantic == SlotSemantics.CRAFTING_GRID;
     }
@@ -396,7 +390,7 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
                 if (!tis.isEmpty()) {
                     // target slots in the menu...
                     for (Slot cs : this.slots) {
-                        if (!isPlayerSideSlot(cs) && !(cs instanceof FakeSlot) && !(cs instanceof CraftingMatrixSlot)
+                        if (!isPlayerSideSlot(cs) && !(cs instanceof FakeSlot)
                                 && cs.mayPlace(tis)) {
                             selectedSlots.add(cs);
                         }
@@ -407,7 +401,7 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
 
                 // target slots in the menu...
                 for (Slot cs : this.slots) {
-                    if (isPlayerSideSlot(cs) && !(cs instanceof FakeSlot) && !(cs instanceof CraftingMatrixSlot)
+                    if (isPlayerSideSlot(cs) && !(cs instanceof FakeSlot)
                             && cs.mayPlace(tis)) {
                         selectedSlots.add(cs);
                     }
@@ -626,29 +620,29 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
             return;
         }
 
-        // Check if we can pull out of the system
-        var canPull = source.extract(Long.MAX_VALUE, Actionable.SIMULATE);
-        if (canPull <= 0) {
-            return;
-        }
-
         // Check how much we can store in the item
-        long amountAllowed = ctx.insert(what, canPull, Actionable.SIMULATE);
+        long amountAllowed = ctx.insert(what, Long.MAX_VALUE, Actionable.SIMULATE);
         if (amountAllowed == 0) {
             return; // Nothing.
         }
 
-        // Now actually pull out of the system
-        var extracted = source.extract(amountAllowed, Actionable.MODULATE);
-        if (extracted <= 0) {
-            // Something went wrong
-            AELog.error("Unable to pull fluid out of the ME system even though the simulation said yes ");
+        // Check if we can pull out of the system
+        var canPull = source.extract(amountAllowed, Actionable.SIMULATE);
+        if (canPull <= 0) {
             return;
         }
 
         // How much could fit into the carried container
-        long inserted = ctx.insert(what, extracted, Actionable.MODULATE);
-        if (inserted == 0) {
+        long canFill = ctx.insert(what, canPull, Actionable.MODULATE);
+        if (canFill == 0) {
+            return;
+        }
+
+        // Now actually pull out of the system
+        var extracted = source.extract(canFill, Actionable.MODULATE);
+        if (extracted <= 0) {
+            // Something went wrong
+            AELog.error("Unable to pull fluid out of the ME system even though the simulation said yes ");
             return;
         }
 

@@ -104,9 +104,6 @@ public class SecurityStationMenu extends MEStorageMenu implements InternalInvent
                 this.setPermissionMode(this.getPermissionMode() | 1 << sp.ordinal());
             }
         }
-
-        this.updatePowerStatus();
-
         super.broadcastChanges();
     }
 

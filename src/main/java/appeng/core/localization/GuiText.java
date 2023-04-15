@@ -41,8 +41,6 @@ public enum GuiText implements LocalizationEnum {
     Cancel("Cancel"),
     CantStoreItems("Can't Store Contents!"),
     CellWorkbench("Cell Workbench"),
-    CertusQuartzObtain(
-            "Certus Quartz is grown by the various Budding Certus Quartz blocks, which can be found in meteors, or crafted from regular Certus Quartz blocks."),
     ChannelEnergyDrain("Channel Passive Drain: %s"),
     Chest("ME Chest"),
     Clean("Clean"),
@@ -236,7 +234,6 @@ public enum GuiText implements LocalizationEnum {
     TerminalSettingsPinAutoCraftedItems("Pin auto-crafted items to first row"),
     TerminalSettingsNotifyForFinishedJobs("Notify about finished crafting jobs (requires wireless terminal)"),
     TerminalSettingsClearGridOnClose("Automatically clear terminal grid on close (if applicable)"),
-    TerminalViewCellsTooltip("View Cells"),
     ToastCraftingJobFinishedTitle("Auto-Crafting Complete"),
     ToastCraftingJobFinishedText("%d %s"),
     ToCraft("To Craft: %s"),
@@ -254,11 +251,7 @@ public enum GuiText implements LocalizationEnum {
     WirelessTerminal("Wireless Term"),
     With("with"),
     Yellow("Yellow"),
-    Yes("Yes"),
-    inWorldCraftingPresses(
-            "Crafting Presses are obtained by breaking a Mysterious Cube. Mysterious Cubes are in the center of meteorites which can be found in around the world. They can be located by using a meteorite compass."),
-    inWorldSingularity(
-            "To create drop 1 Singularity and 1 Ender Dust and cause an explosion within range of the items.");
+    Yes("Yes");
 
     private final String root;
 

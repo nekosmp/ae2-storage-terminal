@@ -31,7 +31,6 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.ResourceLocation;
 
 import appeng.block.AEBaseBlock;
-import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.model.AutoRotatingBakedModel;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
@@ -45,18 +44,7 @@ public final class InitAutoRotatingModel {
      */
     private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
             AEBlocks.CABLE_BUS,
-            AEBlocks.CONTROLLER,
-            AEBlocks.PAINT,
-            AEBlocks.QUANTUM_LINK,
-            AEBlocks.QUANTUM_RING,
-            AEBlocks.CRAFTING_UNIT,
-            AEBlocks.CRAFTING_ACCELERATOR,
-            AEBlocks.CRAFTING_MONITOR,
-            AEBlocks.CRAFTING_STORAGE_1K,
-            AEBlocks.CRAFTING_STORAGE_4K,
-            AEBlocks.CRAFTING_STORAGE_16K,
-            AEBlocks.CRAFTING_STORAGE_64K,
-            AEBlocks.CRAFTING_STORAGE_256K);
+            AEBlocks.CONTROLLER);
 
     // Maps from resource path to customizer
     private static final Map<String, Function<BakedModel, BakedModel>> CUSTOMIZERS = new HashMap<>();
@@ -65,8 +53,6 @@ public final class InitAutoRotatingModel {
     }
 
     public static void init() {
-        register(AEBlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
-
         for (BlockDefinition<?> block : AEBlocks.getBlocks()) {
             if (NO_AUTO_ROTATION.contains(block)) {
                 continue;
@@ -85,14 +71,6 @@ public final class InitAutoRotatingModel {
     private static void register(BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
         String path = block.id().getPath();
         CUSTOMIZERS.put(path, customizer);
-    }
-
-    private static BakedModel customizeCraftingMonitorModel(BakedModel model) {
-        // The formed model handles rotations itself, the unformed one does not
-        if (model instanceof MonitorBakedModel) {
-            return model;
-        }
-        return new AutoRotatingBakedModel(model);
     }
 
     private static void onModelBake(Map<ResourceLocation, BakedModel> modelRegistry) {

@@ -38,15 +38,11 @@ public class GridInventoryEntry {
 
     private final long requestableAmount;
 
-    private final boolean craftable;
-
-    public GridInventoryEntry(long serial, @Nullable AEKey what, long storedAmount, long requestableAmount,
-            boolean craftable) {
+    public GridInventoryEntry(long serial, @Nullable AEKey what, long storedAmount, long requestableAmount) {
         this.serial = serial;
         this.what = what;
         this.storedAmount = storedAmount;
         this.requestableAmount = requestableAmount;
-        this.craftable = craftable;
     }
 
     /**
@@ -83,16 +79,9 @@ public class GridInventoryEntry {
     }
 
     /**
-     * Indicates that {@link #what} can be automatically crafted.
-     */
-    public boolean isCraftable() {
-        return craftable;
-    }
-
-    /**
      * @return True if this entry should still be present, otherwise it's a removal.
      */
     public boolean isMeaningful() {
-        return storedAmount > 0 || requestableAmount > 0 || craftable;
+        return storedAmount > 0 || requestableAmount > 0;
     }
 }

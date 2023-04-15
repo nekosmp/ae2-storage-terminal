@@ -37,3 +37,5 @@ build
 
 # Explicit ignores
 Thumbs.db
+
+libs/markdown/bin/

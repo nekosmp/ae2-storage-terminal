@@ -36,35 +36,9 @@ public final class InitRenderTypes {
      * List of blocks that should render in the cutout layer.
      */
     private static final BlockDefinition<?>[] CUTOUT_BLOCKS = {
-            AEBlocks.CRAFTING_MONITOR,
             AEBlocks.SECURITY_STATION,
             AEBlocks.CONTROLLER,
-            AEBlocks.MOLECULAR_ASSEMBLER,
-            AEBlocks.QUARTZ_GLASS,
-            AEBlocks.QUARTZ_VIBRANT_GLASS,
-            AEBlocks.QUARTZ_FIXTURE,
-            AEBlocks.LIGHT_DETECTOR,
             AEBlocks.WIRELESS_ACCESS_POINT,
-            AEBlocks.PAINT,
-            AEBlocks.QUANTUM_RING,
-            AEBlocks.QUANTUM_LINK,
-            AEBlocks.CHEST,
-            AEBlocks.DRIVE,
-            AEBlocks.CRAFTING_UNIT,
-            AEBlocks.CRAFTING_ACCELERATOR,
-            AEBlocks.CRAFTING_STORAGE_1K,
-            AEBlocks.CRAFTING_STORAGE_4K,
-            AEBlocks.CRAFTING_STORAGE_16K,
-            AEBlocks.CRAFTING_STORAGE_64K,
-            AEBlocks.CRAFTING_STORAGE_256K,
-            AEBlocks.SPATIAL_PYLON,
-            AEBlocks.SKY_STONE_TANK,
-            AEBlocks.SMALL_QUARTZ_BUD,
-            AEBlocks.MEDIUM_QUARTZ_BUD,
-            AEBlocks.LARGE_QUARTZ_BUD,
-            AEBlocks.QUARTZ_CLUSTER,
-            AEBlocks.MYSTERIOUS_CUBE,
-            AEBlocks.NOT_SO_MYSTERIOUS_CUBE,
     };
 
     private InitRenderTypes() {

@@ -20,13 +20,9 @@ package appeng.server;
 
 import java.util.Locale;
 
-import appeng.server.services.compass.TestCompassCommand;
 import appeng.server.subcommands.ChannelModeCommand;
 import appeng.server.subcommands.ChunkLogger;
-import appeng.server.subcommands.SetupTestWorldCommand;
-import appeng.server.subcommands.SpatialStorageCommand;
 import appeng.server.subcommands.Supporters;
-import appeng.server.subcommands.TestMeteoritesCommand;
 import appeng.server.subcommands.TickMonitoring;
 
 public enum Commands {
@@ -35,14 +31,8 @@ public enum Commands {
 
     // Admin
     Chunklogger(4, new ChunkLogger()),
-    Spatial(4, new SpatialStorageCommand()),
     CHANNEL_MODE(4, "channelmode", new ChannelModeCommand()),
-    TICK_MONITORING(4, "tickmonitor", new TickMonitoring()),
-
-    // Testing
-    Compass(4, new TestCompassCommand(), true),
-    TestMeteorites(4, new TestMeteoritesCommand(), true),
-    SetupTestWorld(4, new SetupTestWorldCommand(), true);
+    TICK_MONITORING(4, "tickmonitor", new TickMonitoring());
 
     public final int level;
     public final ISubCommand command;

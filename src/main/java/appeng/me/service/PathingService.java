@@ -41,8 +41,6 @@ import appeng.api.networking.pathing.IPathingService;
 import appeng.blockentity.networking.ControllerBlockEntity;
 import appeng.core.AEConfig;
 import appeng.core.AELog;
-import appeng.core.stats.AdvancementTriggers;
-import appeng.core.stats.IAdvancementTrigger;
 import appeng.me.Grid;
 import appeng.me.pathfinding.AdHocChannelUpdater;
 import appeng.me.pathfinding.ChannelFinalizer;
@@ -147,7 +145,6 @@ public class PathingService implements IPathingService, IGridServiceProvider {
             // Booting completes when both pathfinding completes, and the minimum boot time has elapsed
             if (ongoingCalculation == null) {
                 // check for achievements
-                this.achievementPost();
 
                 this.booting = false;
                 this.setChannelPowerUsage(this.channelsByBlocks / 128.0);
@@ -256,40 +253,6 @@ public class PathingService implements IPathingService, IGridServiceProvider {
         }
 
         return channels;
-    }
-
-    private void achievementPost() {
-        var server = grid.getPivot().getLevel().getServer();
-
-        if (this.lastChannels != this.channelsInUse) {
-            final IAdvancementTrigger currentBracket = this.getAchievementBracket(this.channelsInUse);
-            final IAdvancementTrigger lastBracket = this.getAchievementBracket(this.lastChannels);
-            if (currentBracket != lastBracket && currentBracket != null) {
-                for (var n : this.nodesNeedingChannels) {
-                    var player = IPlayerRegistry.getConnected(server, n.getOwningPlayerId());
-                    if (player != null) {
-                        currentBracket.trigger(player);
-                    }
-                }
-            }
-        }
-        this.lastChannels = this.channelsInUse;
-    }
-
-    private IAdvancementTrigger getAchievementBracket(int ch) {
-        if (ch < 8) {
-            return null;
-        }
-
-        if (ch < 128) {
-            return AdvancementTriggers.NETWORK_APPRENTICE;
-        }
-
-        if (ch < 2048) {
-            return AdvancementTriggers.NETWORK_ENGINEER;
-        }
-
-        return AdvancementTriggers.NETWORK_ADMIN;
     }
 
     private void updateNodReq(GridChannelRequirementChanged ev) {

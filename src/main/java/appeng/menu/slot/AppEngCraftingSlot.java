@@ -26,7 +26,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 import appeng.api.inventories.InternalInventory;
-import appeng.crafting.CraftingEvent;
 import appeng.helpers.Inventories;
 import appeng.util.inv.AppEngInternalInventory;
 
@@ -79,7 +78,6 @@ public class AppEngCraftingSlot extends AppEngSlot {
 
     @Override
     public void onTake(Player playerIn, ItemStack stack) {
-        CraftingEvent.fireCraftingEvent(playerIn, stack, this.craftingGrid.toContainer());
         this.checkTakeAchievements(stack);
         // FIXME FABRIC no crafting hooks
         // ForgeHooks.setCraftingPlayer(playerIn);

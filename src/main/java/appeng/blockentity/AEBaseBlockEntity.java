@@ -66,7 +66,6 @@ import appeng.core.AELog;
 import appeng.helpers.ICustomNameObject;
 import appeng.hooks.VisualStateSaving;
 import appeng.hooks.ticking.TickHandler;
-import appeng.items.tools.MemoryCardItem;
 import appeng.util.CustomNameUtil;
 import appeng.util.Platform;
 import appeng.util.SettingsFrom;
@@ -328,10 +327,6 @@ public class AEBaseBlockEntity extends BlockEntity
     @OverridingMethodsMustInvokeSuper
     public void exportSettings(SettingsFrom mode, CompoundTag output, @Nullable Player player) {
         CustomNameUtil.setCustomName(output, customName);
-
-        if (mode == SettingsFrom.MEMORY_CARD) {
-            MemoryCardItem.exportGenericSettings(this, output);
-        }
     }
 
     /**
@@ -346,8 +341,6 @@ public class AEBaseBlockEntity extends BlockEntity
         if (customName != null) {
             this.customName = customName.getString();
         }
-
-        MemoryCardItem.importGenericSettings(this, input, player);
     }
 
     /**

@@ -42,10 +42,7 @@ public class RepoSlot extends ClientReadOnlySlot {
     }
 
     public GridInventoryEntry getEntry() {
-        if (this.repo.hasPower()) {
-            return this.repo.get(this.offset);
-        }
-        return null;
+        return this.repo.get(this.offset);
     }
 
     public long getStoredAmount() {
@@ -56,11 +53,6 @@ public class RepoSlot extends ClientReadOnlySlot {
     public long getRequestableAmount() {
         GridInventoryEntry entry = getEntry();
         return entry != null ? entry.getRequestableAmount() : 0;
-    }
-
-    public boolean isCraftable() {
-        GridInventoryEntry entry = getEntry();
-        return entry != null && entry.isCraftable();
     }
 
     @Override

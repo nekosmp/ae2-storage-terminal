@@ -30,7 +30,6 @@ import appeng.api.client.AEStackRendering;
 import appeng.api.stacks.AmountFormat;
 import appeng.api.stacks.GenericStack;
 import appeng.client.gui.me.common.StackSizeRenderer;
-import appeng.crafting.pattern.EncodedPatternItem;
 
 public final class ItemRendererHooks {
 
@@ -46,27 +45,6 @@ public final class ItemRendererHooks {
      */
     public static boolean onRenderGuiItemModel(ItemRenderer renderer, ItemStack stack, int x, int y) {
         var minecraft = Minecraft.getInstance();
-
-        if (stack.getItem() instanceof EncodedPatternItem) {
-            if (OVERRIDING_FOR.get() == stack) {
-                return false; // Don't allow recursive model replacements
-            }
-
-            boolean shiftHeld = Screen.hasShiftDown();
-            var level = minecraft.level;
-            if (shiftHeld && level != null) {
-                var encodedPattern = (EncodedPatternItem) stack.getItem();
-                var output = encodedPattern.getOutput(stack);
-                if (!output.isEmpty()) {
-                    var realModel = renderer.getModel(output, level, minecraft.player, 0);
-                    renderInstead(renderer, output, x, y, realModel);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         var unwrapped = GenericStack.unwrapItemStack(stack);
         if (unwrapped != null) {
             AEStackRendering.drawInGui(

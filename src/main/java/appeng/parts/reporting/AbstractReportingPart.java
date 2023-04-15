@@ -29,8 +29,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import appeng.api.implementations.parts.IMonitorPart;
 import appeng.api.networking.GridFlags;
+import appeng.api.parts.IPart;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
@@ -51,7 +51,7 @@ import appeng.util.InteractionUtil;
  * @version rv3
  * @since rv3
  */
-public abstract class AbstractReportingPart extends AEBasePart implements IMonitorPart {
+public abstract class AbstractReportingPart extends AEBasePart implements IPart {
 
     private byte spin = 0; // 0-3
     private int opacity = -1;
@@ -61,9 +61,6 @@ public abstract class AbstractReportingPart extends AEBasePart implements IMonit
 
         if (requireChannel) {
             this.getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL);
-            this.getMainNode().setIdlePowerUsage(1.0 / 2.0);
-        } else {
-            this.getMainNode().setIdlePowerUsage(1.0 / 16.0); // lights drain less
         }
     }
 
@@ -112,7 +109,7 @@ public abstract class AbstractReportingPart extends AEBasePart implements IMonit
 
     @Override
     public final int getLightLevel() {
-        return this.blockLight(this.isPowered() ? this.isLightSource() ? 15 : 9 : 0);
+        return this.blockLight(this.isLightSource() ? 15 : 9);
     }
 
     @Override
@@ -153,10 +150,8 @@ public abstract class AbstractReportingPart extends AEBasePart implements IMonit
     protected IPartModel selectModel(IPartModel offModels, IPartModel onModels, IPartModel hasChannelModels) {
         if (this.isActive()) {
             return hasChannelModels;
-        } else if (this.isPowered()) {
-            return onModels;
         } else {
-            return offModels;
+            return onModels;
         }
     }
 

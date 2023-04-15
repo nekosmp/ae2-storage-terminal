@@ -175,11 +175,6 @@ public class CableBusBlockEntity extends AEBaseBlockEntity implements AEMultiBlo
         }
     }
 
-    @Override
-    public IFacadeContainer getFacadeContainer() {
-        return this.getCableBus().getFacadeContainer();
-    }
-
     @Nullable
     @Override
     public IPart getPart(@Nullable Direction side) {
@@ -325,13 +320,6 @@ public class CableBusBlockEntity extends AEBaseBlockEntity implements AEMultiBlo
             }
 
             var pos = getBlockPos();
-
-            // A facade cannot exist without a cable part, no host cleanup needed.
-            if (sp.facade != null) {
-                is.add(sp.facade.getItemStack());
-                cb.getFacadeContainer().removeFacade(cb, sp.side);
-                Platform.notifyBlocksOfNeighbors(level, pos);
-            }
 
             if (!is.isEmpty()) {
                 Platform.spawnDrops(level, pos, is);

@@ -36,7 +36,6 @@ import net.minecraft.world.level.block.Block;
 
 import appeng.api.util.IOrientable;
 import appeng.api.util.IOrientableBlock;
-import appeng.block.misc.LightDetectorBlock;
 import appeng.block.networking.WirelessBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 
@@ -80,14 +79,7 @@ public class AEBaseBlockItem extends BlockItem {
         Player player = context.getPlayer();
 
         if (this.blockType instanceof AEBaseEntityBlock) {
-            if (this.blockType instanceof LightDetectorBlock) {
-                up = side;
-                if (up == Direction.UP || up == Direction.DOWN) {
-                    forward = Direction.SOUTH;
-                } else {
-                    forward = Direction.UP;
-                }
-            } else if (this.blockType instanceof WirelessBlock) {
+            if (this.blockType instanceof WirelessBlock) {
                 forward = side;
                 if (forward == Direction.UP || forward == Direction.DOWN) {
                     up = Direction.SOUTH;
@@ -129,7 +121,7 @@ public class AEBaseBlockItem extends BlockItem {
             return result;
         }
 
-        if (this.blockType instanceof AEBaseEntityBlock && !(this.blockType instanceof LightDetectorBlock)) {
+        if (this.blockType instanceof AEBaseEntityBlock) {
             final AEBaseBlockEntity blockEntity = ((AEBaseEntityBlock<?>) this.blockType).getBlockEntity(
                     context.getLevel(),
                     context.getClickedPos());

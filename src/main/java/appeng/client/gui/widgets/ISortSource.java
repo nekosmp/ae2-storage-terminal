@@ -20,15 +20,9 @@ package appeng.client.gui.widgets;
 
 import appeng.api.config.SortDir;
 import appeng.api.config.SortOrder;
-import appeng.api.config.TypeFilter;
-import appeng.api.config.ViewItems;
 
 public interface ISortSource {
     SortOrder getSortBy();
 
     SortDir getSortDir();
-
-    ViewItems getSortDisplay();
-
-    TypeFilter getTypeFilter();
 }

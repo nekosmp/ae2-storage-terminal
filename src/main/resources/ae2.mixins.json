@@ -5,21 +5,14 @@
   "compatibilityLevel": "JAVA_11",
   "plugin": "appeng.mixins.ConfigPlugin",
   "mixins": [
-    "spatial.MinecraftServerMixin",
     "feature.LevelLightEngineMixin",
     "EarlyStartupMixin",
     "EnchantmentHelperMixin",
     "DynamicLadderMixin",
-    "ItemEntityMixin",
     "OnNeighborUpdateMixin",
-    "BreakSpeedMixin",
-    "AnnihilationPlaneEnchantmentMixin",
-    "tests.StructureUtilsMixin",
     "StructureTemplateMixin"
   ],
   "client": [
-    "spatial.SkyRenderMixin",
-    "spatial.SkyPropertiesMixin",
     "unlitquad.ModelBakeryMixin",
     "unlitquad.BlockModelMixin",
     "unlitquad.BlockPartFaceDeserializerMixin",
@@ -30,7 +23,6 @@
     "ItemRendererMixin",
     "WrappedGenericStackTooltipModIdMixin",
     "ResizableSlotHighlightMixin",
-    "PickColorMixin",
     "PonderWorldMixin"
   ],
   "server": [],

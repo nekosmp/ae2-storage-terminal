@@ -24,18 +24,9 @@ import java.util.function.Function;
 
 import net.minecraft.network.FriendlyByteBuf;
 
-import appeng.core.sync.packets.AssemblerAnimationPacket;
 import appeng.core.sync.packets.BlockTransitionEffectPacket;
-import appeng.core.sync.packets.ClearPatternAccessTerminalPacket;
-import appeng.core.sync.packets.ColorApplicatorSelectColorPacket;
-import appeng.core.sync.packets.CompassRequestPacket;
-import appeng.core.sync.packets.CompassResponsePacket;
 import appeng.core.sync.packets.ConfigButtonPacket;
 import appeng.core.sync.packets.ConfigValuePacket;
-import appeng.core.sync.packets.ConfirmAutoCraftPacket;
-import appeng.core.sync.packets.CraftConfirmPlanPacket;
-import appeng.core.sync.packets.CraftingJobStatusPacket;
-import appeng.core.sync.packets.CraftingStatusPacket;
 import appeng.core.sync.packets.FillCraftingGridFromRecipePacket;
 import appeng.core.sync.packets.GuiDataSyncPacket;
 import appeng.core.sync.packets.HotkeyPacket;
@@ -47,9 +38,7 @@ import appeng.core.sync.packets.MEInventoryUpdatePacket;
 import appeng.core.sync.packets.MatterCannonPacket;
 import appeng.core.sync.packets.MockExplosionPacket;
 import appeng.core.sync.packets.MouseWheelPacket;
-import appeng.core.sync.packets.NetworkStatusPacket;
 import appeng.core.sync.packets.PartLeftClickPacket;
-import appeng.core.sync.packets.PatternAccessTerminalPacket;
 import appeng.core.sync.packets.SpawnEntityPacket;
 import appeng.core.sync.packets.SwapSlotsPacket;
 import appeng.core.sync.packets.SwitchGuisPacket;
@@ -59,10 +48,6 @@ public class BasePacketHandler {
 
     public enum PacketTypes {
         SPAWN_ENTITY(SpawnEntityPacket.class, SpawnEntityPacket::new),
-
-        COMPASS_REQUEST(CompassRequestPacket.class, CompassRequestPacket::new),
-
-        COMPASS_RESPONSE(CompassResponsePacket.class, CompassResponsePacket::new),
 
         INVENTORY_ACTION(InventoryActionPacket.class, InventoryActionPacket::new),
 
@@ -94,26 +79,9 @@ public class BasePacketHandler {
 
         FILL_CRAFTING_GRID_FROM_RECIPE(FillCraftingGridFromRecipePacket.class, FillCraftingGridFromRecipePacket::new),
 
-        CONFIRM_AUTO_CRAFT(ConfirmAutoCraftPacket.class, ConfirmAutoCraftPacket::new),
-
-        ASSEMBLER_ANIMATION(AssemblerAnimationPacket.class, AssemblerAnimationPacket::new),
-
-        PATTERN_PROVIDER_CLEAR(ClearPatternAccessTerminalPacket.class, ClearPatternAccessTerminalPacket::new),
-        PATTERN_PROVIDER_UPDATE(PatternAccessTerminalPacket.class, PatternAccessTerminalPacket::new),
-
-        NETWORK_STATUS(NetworkStatusPacket.class, NetworkStatusPacket::new),
-
-        CRAFT_CONFIRM_PLAN(CraftConfirmPlanPacket.class, CraftConfirmPlanPacket::new),
-
-        CRAFTING_STATUS(CraftingStatusPacket.class, CraftingStatusPacket::new),
-
         MOUSE_WHEEL(MouseWheelPacket.class, MouseWheelPacket::new),
 
-        COLOR_APPLICATOR_SELECT_COLOR(ColorApplicatorSelectColorPacket.class, ColorApplicatorSelectColorPacket::new),
-
-        HOTKEY(HotkeyPacket.class, HotkeyPacket::new),
-
-        CRAFTING_JOB_STATUS(CraftingJobStatusPacket.class, CraftingJobStatusPacket::new);
+        HOTKEY(HotkeyPacket.class, HotkeyPacket::new);
 
         private final Function<FriendlyByteBuf, BasePacket> factory;
 

@@ -2,7 +2,6 @@ package appeng.api.networking;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import appeng.api.networking.crafting.ICraftingWatcherNode;
 import appeng.api.networking.storage.IStorageWatcherNode;
 import appeng.api.stacks.AEKey;
 

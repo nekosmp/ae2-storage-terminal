@@ -18,9 +18,7 @@
 
 package appeng.core;
 
-import appeng.init.InitAdvancementTriggers;
 import appeng.init.InitStats;
-import appeng.init.internal.InitBlockEntityMoveStrategies;
 import appeng.init.internal.InitGridServices;
 
 /**
@@ -40,11 +38,9 @@ public final class AppEngBootstrap {
         if (!bootstrapped) {
             bootstrapped = true;
             InitGridServices.init();
-            InitBlockEntityMoveStrategies.init();
 
             // This has to be initialized here because Forge's common setup event will not run in datagens.
             InitStats.init();
-            InitAdvancementTriggers.init();
         }
     }
 

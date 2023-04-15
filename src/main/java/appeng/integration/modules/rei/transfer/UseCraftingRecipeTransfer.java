@@ -66,8 +66,6 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu> extends Abstr
             recipe = createFakeRecipe(display);
         }
 
-        // Thank you RS for pioneering this amazing feature! :)
-        boolean craftMissing = AbstractContainerScreen.hasControlDown();
         // Find missing ingredient
         var slotToIngredientMap = getGuiSlotToIngredientMap(recipe);
         var missingSlots = menu.findMissingIngredients(getGuiSlotToIngredientMap(recipe));
@@ -85,13 +83,13 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu> extends Abstr
                         .color(color)
                         .renderer(createErrorRenderer(missingSlots));
 
-                var tooltip = TransferHelper.createCraftingTooltip(missingSlots, craftMissing);
+                var tooltip = TransferHelper.createCraftingTooltip(missingSlots);
                 result.overrideTooltipRenderer((point, sink) -> sink.accept(Tooltip.create(tooltip)));
 
                 return result;
             }
         } else {
-            CraftingHelper.performTransfer(menu, recipe, craftMissing);
+            CraftingHelper.performTransfer(menu, recipe);
         }
 
         // No error
@@ -145,9 +143,8 @@ public class UseCraftingRecipeTransfer<T extends CraftingTermMenu> extends Abstr
             for (Widget widget : widgets) {
                 if (widget instanceof Slot slot && slot.getNoticeMark() == Slot.INPUT) {
                     boolean missing = indices.missingSlots().contains(i);
-                    boolean craftable = indices.craftableSlots().contains(i);
                     i++;
-                    if (missing || craftable) {
+                    if (missing) {
                         matrices.pushPose();
                         matrices.translate(0, 0, 400);
                         Rectangle innerBounds = slot.getInnerBounds();

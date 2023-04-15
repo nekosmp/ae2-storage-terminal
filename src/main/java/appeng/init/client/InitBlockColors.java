@@ -39,7 +39,6 @@ public final class InitBlockColors {
         blockColors.register(new StaticBlockColor(AEColor.TRANSPARENT), AEBlocks.WIRELESS_ACCESS_POINT.block());
         blockColors.register(new CableBusColor(), AEBlocks.CABLE_BUS.block());
         blockColors.register(ColorableBlockEntityBlockColor.INSTANCE, AEBlocks.SECURITY_STATION.block());
-        blockColors.register(new ColorableBlockEntityBlockColor(), AEBlocks.CHEST.block());
     }
 
     @FunctionalInterface

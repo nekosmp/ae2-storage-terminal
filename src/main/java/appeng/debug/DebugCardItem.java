@@ -40,8 +40,6 @@ import net.minecraft.world.level.Level;
 
 import appeng.api.networking.GridHelper;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.energy.IAEPowerStorage;
-import appeng.api.networking.energy.IEnergyService;
 import appeng.api.networking.pathing.ControllerState;
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartHost;
@@ -55,7 +53,6 @@ import appeng.me.GridNode;
 import appeng.me.helpers.IGridConnectedBlockEntity;
 import appeng.me.service.TickManagerService;
 import appeng.parts.networking.CablePart;
-import appeng.parts.p2p.P2PTunnelPart;
 import appeng.util.InteractionUtil;
 import appeng.util.Platform;
 
@@ -126,8 +123,6 @@ public class DebugCardItem extends AEBaseItem implements AEToolItem {
                 this.outputMessage(player, "-- Grid Details");
                 final Grid g = node.getInternalGrid();
                 final IGridNode center = g.getPivot();
-                this.outputPrimaryMessage(player, "Grid Powered",
-                        String.valueOf(g.getEnergyService().isNetworkPowered()));
                 this.outputPrimaryMessage(player, "Grid Booted",
                         String.valueOf(!g.getPathingService().isNetworkBooting()));
                 this.outputPrimaryMessage(player, "Nodes in grid", String.valueOf(Iterables.size(g.getNodes())));
@@ -195,10 +190,6 @@ public class DebugCardItem extends AEBaseItem implements AEToolItem {
 
                     this.outputSecondaryMessage(player, "Cable Distance", Integer.toString(length));
                 }
-
-                if (center.getOwner() instanceof P2PTunnelPart<?>tunnelPart) {
-                    this.outputSecondaryMessage(player, "Freq", Integer.toString(tunnelPart.getFrequency()));
-                }
             } else {
                 this.outputMessage(player, "No Node Available.");
             }
@@ -231,20 +222,6 @@ public class DebugCardItem extends AEBaseItem implements AEToolItem {
                 player.sendSystemMessage(Component.literal("Connected Sides: ")
                         .withStyle(ChatFormatting.GRAY)
                         .append(msg));
-            }
-        }
-
-        if (te instanceof IAEPowerStorage ps) {
-            this.outputMessage(player, "-- EnergyStorage Details");
-            this.outputSecondaryMessage(player, "Energy", ps.getAECurrentPower() + " / " + ps.getAEMaxPower());
-
-            if (gh != null) {
-                final IGridNode node = gh.getGridNode(side);
-                if (node != null) {
-                    final IEnergyService eg = node.getGrid().getEnergyService();
-                    this.outputSecondaryMessage(player, "GridEnergy",
-                            +eg.getStoredPower() + " : " + eg.getEnergyDemand(Double.MAX_VALUE));
-                }
             }
         }
 

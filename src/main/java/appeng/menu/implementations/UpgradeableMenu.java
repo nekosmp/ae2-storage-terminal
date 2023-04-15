@@ -25,7 +25,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.api.config.FuzzyMode;
-import appeng.api.config.RedstoneMode;
 import appeng.api.config.SchedulingMode;
 import appeng.api.config.SecurityPermissions;
 import appeng.api.config.Settings;
@@ -38,7 +37,6 @@ import appeng.core.definitions.AEItems;
 import appeng.helpers.externalstorage.GenericStackInv;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.SlotSemantics;
-import appeng.menu.ToolboxMenu;
 import appeng.menu.guisync.GuiSync;
 import appeng.menu.slot.FakeSlot;
 import appeng.menu.slot.IOptionalSlotHost;
@@ -47,8 +45,6 @@ import appeng.menu.slot.OptionalFakeSlot;
 public abstract class UpgradeableMenu<T extends IUpgradeableObject> extends AEBaseMenu implements IOptionalSlotHost {
 
     private final T host;
-    @GuiSync(0)
-    public RedstoneMode rsMode = RedstoneMode.IGNORE;
     @GuiSync(1)
     public FuzzyMode fzMode = FuzzyMode.IGNORE_ALL;
     @GuiSync(5)
@@ -56,13 +52,9 @@ public abstract class UpgradeableMenu<T extends IUpgradeableObject> extends AEBa
     @GuiSync(6)
     public SchedulingMode schedulingMode = SchedulingMode.DEFAULT;
 
-    private final ToolboxMenu toolbox;
-
     public UpgradeableMenu(MenuType<?> menuType, int id, Inventory ip, T host) {
         super(menuType, id, ip, host);
         this.host = host;
-
-        this.toolbox = new ToolboxMenu(this);
 
         // The real inventory needs to be sent to the client before the upgrade slots
         // since some blocks, such as the cell workbench, have a variable number of
@@ -110,10 +102,6 @@ public abstract class UpgradeableMenu<T extends IUpgradeableObject> extends AEBa
         }
     }
 
-    public ToolboxMenu getToolbox() {
-        return toolbox;
-    }
-
     @Override
     public void broadcastChanges() {
         this.verifyPermissions(SecurityPermissions.BUILD, false);
@@ -121,8 +109,6 @@ public abstract class UpgradeableMenu<T extends IUpgradeableObject> extends AEBa
         if (isServerSide() && getHost() instanceof IConfigurableObject configurableObject) {
             this.loadSettingsFromHost(configurableObject.getConfigManager());
         }
-
-        toolbox.tick();
 
         for (Object o : this.slots) {
             if (o instanceof OptionalFakeSlot fs) {
@@ -137,7 +123,6 @@ public abstract class UpgradeableMenu<T extends IUpgradeableObject> extends AEBa
 
     protected void loadSettingsFromHost(IConfigManager cm) {
         this.setFuzzyMode(cm.getSetting(Settings.FUZZY_MODE));
-        this.setRedStoneMode(cm.getSetting(Settings.REDSTONE_CONTROLLED));
         if (cm.hasSetting(Settings.CRAFT_ONLY)) {
             this.setCraftingMode(cm.getSetting(Settings.CRAFT_ONLY));
         }
@@ -171,14 +156,6 @@ public abstract class UpgradeableMenu<T extends IUpgradeableObject> extends AEBa
 
     public void setCraftingMode(YesNo cMode) {
         this.cMode = cMode;
-    }
-
-    public RedstoneMode getRedStoneMode() {
-        return this.rsMode;
-    }
-
-    public void setRedStoneMode(RedstoneMode rsMode) {
-        this.rsMode = rsMode;
     }
 
     public SchedulingMode getSchedulingMode() {

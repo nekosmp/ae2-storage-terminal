@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
@@ -61,15 +60,11 @@ import net.minecraft.world.level.material.Fluid;
 
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
-import appeng.api.config.PowerMultiplier;
-import appeng.api.config.PowerUnits;
 import appeng.api.config.SecurityPermissions;
 import appeng.api.config.SortOrder;
-import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IManagedGridNode;
-import appeng.api.networking.energy.IEnergySource;
 import appeng.api.networking.security.IActionHost;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
@@ -144,36 +139,6 @@ public class Platform {
         return RANDOM_GENERATOR.nextFloat();
     }
 
-    /**
-     * This displays the value for encoded longs ( double *100 )
-     *
-     * @param n      to be formatted long value
-     * @param isRate if true it adds a /t to the formatted string
-     * @return formatted long value
-     */
-    public static String formatPowerLong(long n, boolean isRate) {
-        return formatPower((double) n / 100, isRate);
-    }
-
-    public static String formatPower(double p, boolean isRate) {
-        var displayUnits = AEConfig.instance().getSelectedPowerUnit();
-        p = PowerUnits.AE.convertTo(displayUnits, p);
-
-        final String[] preFixes = { "k", "M", "G", "T", "P", "T", "P", "E", "Z", "Y" };
-        var unitName = displayUnits.getSymbolName();
-
-        String level = "";
-        int offset = 0;
-        while (p > 1000 && offset < preFixes.length) {
-            p /= 1000;
-            level = preFixes[offset];
-            offset++;
-        }
-
-        final DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(p) + ' ' + level + unitName + (isRate ? "/t" : "");
-    }
-
     public static String formatTimeMeasurement(long nanos) {
         if (nanos <= 0) {
             return "0 ns";
@@ -238,13 +203,6 @@ public class Platform {
         var gn = actionHost.getActionableNode();
         if (gn != null) {
             var g = gn.getGrid();
-            if (requirePower) {
-                var eg = g.getEnergyService();
-                if (!eg.isNetworkPowered()) {
-                    return false;
-                }
-            }
-
             var sg = g.getSecurityService();
             if (!sg.hasPermission(player, requiredPermission)) {
                 if (notifyPlayer) {
@@ -337,7 +295,8 @@ public class Platform {
     }
 
     public static Component getFluidDisplayName(Fluid fluid, @Nullable CompoundTag tag) {
-        return FluidVariantAttributes.getName(FluidVariant.of(fluid, tag));
+        // no usage of the tag, but we keep it for compatibility
+        return Component.translatable(getDescriptionId(fluid));
     }
 
     // tag copy is not necessary, as the tag is not modified.
@@ -346,17 +305,6 @@ public class Platform {
         var itemStack = new ItemStack(item);
         itemStack.setTag(tag);
         return itemStack.getHoverName();
-    }
-
-    public static boolean isChargeable(ItemStack i) {
-        if (i.isEmpty()) {
-            return false;
-        }
-        if (i.getItem() instanceof IAEItemPowerStorage powerStorage) {
-            return powerStorage.getAEMaxPower(i) > 0 &&
-                    powerStorage.getPowerFlow(i) != AccessRestriction.READ;
-        }
-        return false;
     }
 
     public static Player getPlayer(ServerLevel level) {
@@ -395,8 +343,8 @@ public class Platform {
         }
 
         // If the node has no grid, it counts as unpowered
-        final boolean a_isSecure = a.isPowered() && a.getLastSecurityKey() != -1;
-        final boolean b_isSecure = b.isPowered() && b.getLastSecurityKey() != -1;
+        final boolean a_isSecure = a.getLastSecurityKey() != -1;
+        final boolean b_isSecure = b.getLastSecurityKey() != -1;
 
         if (AEConfig.instance().isSecurityAuditLogEnabled()) {
             AELog.info(
@@ -472,7 +420,7 @@ public class Platform {
         }
     }
 
-    public static ItemStack extractItemsByRecipe(IEnergySource energySrc,
+    public static ItemStack extractItemsByRecipe(
             IActionSource mySrc,
             MEStorage src,
             Level level,
@@ -484,39 +432,35 @@ public class Platform {
             KeyCounter items,
             Actionable realForFake,
             IPartitionList filter) {
-        if (energySrc.extractAEPower(1, Actionable.SIMULATE, PowerMultiplier.CONFIG) > 0.9) {
-            if (providedTemplate == null) {
-                return ItemStack.EMPTY;
+        if (providedTemplate == null) {
+            return ItemStack.EMPTY;
+        }
+
+        var ae_req = AEItemKey.of(providedTemplate);
+
+        if (filter == null || filter.isListed(ae_req)) {
+            var extracted = src.extract(ae_req, 1, realForFake, mySrc);
+            if (extracted > 0) {
+                return ae_req.toStack();
             }
+        }
 
-            var ae_req = AEItemKey.of(providedTemplate);
+        var checkFuzzy = providedTemplate.hasTag() || providedTemplate.isDamageableItem();
 
-            if (filter == null || filter.isListed(ae_req)) {
-                var extracted = src.extract(ae_req, 1, realForFake, mySrc);
-                if (extracted > 0) {
-                    energySrc.extractAEPower(1, realForFake, PowerMultiplier.CONFIG);
-                    return ae_req.toStack();
-                }
-            }
-
-            var checkFuzzy = providedTemplate.hasTag() || providedTemplate.isDamageableItem();
-
-            if (items != null && checkFuzzy) {
-                for (var x : items) {
-                    if (x.getKey() instanceof AEItemKey itemKey) {
-                        if (providedTemplate.getItem() == itemKey.getItem() && !itemKey.matches(output)) {
-                            ci.setItem(slot, itemKey.toStack());
-                            if (r.matches(ci, level) && ItemStack.isSame(r.assemble(ci), output)) {
-                                if (filter == null || filter.isListed(itemKey)) {
-                                    var ex = src.extract(itemKey, 1, realForFake, mySrc);
-                                    if (ex > 0) {
-                                        energySrc.extractAEPower(1, realForFake, PowerMultiplier.CONFIG);
-                                        return itemKey.toStack();
-                                    }
+        if (items != null && checkFuzzy) {
+            for (var x : items) {
+                if (x.getKey() instanceof AEItemKey itemKey) {
+                    if (providedTemplate.getItem() == itemKey.getItem() && !itemKey.matches(output)) {
+                        ci.setItem(slot, itemKey.toStack());
+                        if (r.matches(ci, level) && ItemStack.isSame(r.assemble(ci), output)) {
+                            if (filter == null || filter.isListed(itemKey)) {
+                                var ex = src.extract(itemKey, 1, realForFake, mySrc);
+                                if (ex > 0) {
+                                    return itemKey.toStack();
                                 }
                             }
-                            ci.setItem(slot, providedTemplate);
                         }
+                        ci.setItem(slot, providedTemplate);
                     }
                 }
             }
@@ -546,8 +490,7 @@ public class Platform {
             return null;
         }
 
-        // Note: chunk could be in ticking range but not loaded, this checks for both!
-        if (!serverLevel.getChunkSource().isPositionTicking(ChunkPos.asLong(pos))) {
+        if (!serverLevel.shouldTickBlocksAt(ChunkPos.asLong(pos))) {
             return null;
         }
 

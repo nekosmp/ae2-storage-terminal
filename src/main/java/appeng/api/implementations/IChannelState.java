@@ -21,36 +21,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package appeng.api.parts;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.core.Direction;
+package appeng.api.implementations;
 
 /**
- * Reports a selected part from the IPartHost
- *
+ * This is intended for use on the client side to provide details to WAILA.
  */
-public class SelectedPart {
-
+public interface IChannelState {
     /**
-     * selected part.
+     * @return true if the part/block isActive
      */
-    public final IPart part;
-
-    /**
-     * side the part is mounted too, or null for cables.
-     */
-    @Nullable
-    public final Direction side;
-
-    public SelectedPart() {
-        this.part = null;
-        this.side = null;
-    }
-
-    public SelectedPart(IPart part, Direction side) {
-        this.part = part;
-        this.side = side;
-    }
+    boolean isActive();
 }

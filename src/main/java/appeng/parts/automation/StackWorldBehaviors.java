@@ -12,8 +12,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appeng.api.behaviors.ExternalStorageStrategy;
-import appeng.api.behaviors.PickupStrategy;
-import appeng.api.behaviors.PlacementStrategy;
 import appeng.api.behaviors.StackExportStrategy;
 import appeng.api.behaviors.StackImportStrategy;
 import appeng.api.stacks.AEKeyType;
@@ -25,8 +23,6 @@ public final class StackWorldBehaviors {
     private static final CowMap<AEKeyType, StackExportStrategy.Factory> exportStrategies = CowMap.identityHashMap();
     private static final CowMap<AEKeyType, ExternalStorageStrategy.Factory> externalStorageStrategies = CowMap
             .identityHashMap();
-    private static final CowMap<AEKeyType, PlacementStrategy.Factory> placementStrategies = CowMap.identityHashMap();
-    private static final CowMap<AEKeyType, PickupStrategy.Factory> pickupStrategies = CowMap.identityHashMap();
 
     static {
         registerImportStrategy(AEKeyType.items(), StorageImportStrategy::createItem);
@@ -35,10 +31,6 @@ public final class StackWorldBehaviors {
         registerExportStrategy(AEKeyType.fluids(), StorageExportStrategy::createFluid);
         registerExternalStorageStrategy(AEKeyType.items(), FabricExternalStorageStrategy::createItem);
         registerExternalStorageStrategy(AEKeyType.fluids(), FabricExternalStorageStrategy::createFluid);
-        registerPlacementStrategy(AEKeyType.fluids(), FluidPlacementStrategy::new);
-        registerPlacementStrategy(AEKeyType.items(), ItemPlacementStrategy::new);
-        registerPickupStrategy(AEKeyType.fluids(), FluidPickupStrategy::new);
-        registerPickupStrategy(AEKeyType.items(), ItemPickupStrategy::new);
     }
 
     private StackWorldBehaviors() {
@@ -56,14 +48,6 @@ public final class StackWorldBehaviors {
         externalStorageStrategies.putIfAbsent(type, factory);
     }
 
-    public static void registerPlacementStrategy(AEKeyType type, PlacementStrategy.Factory factory) {
-        placementStrategies.putIfAbsent(type, factory);
-    }
-
-    public static void registerPickupStrategy(AEKeyType type, PickupStrategy.Factory factory) {
-        pickupStrategies.putIfAbsent(type, factory);
-    }
-
     /**
      * {@return filter matching any key for which there is an import strategy}
      */
@@ -76,13 +60,6 @@ public final class StackWorldBehaviors {
      */
     public static AEKeyFilter hasExportStrategyFilter() {
         return what -> exportStrategies.getMap().containsKey(what.getType());
-    }
-
-    /**
-     * {@return filter matching any key for which there is an export strategy}
-     */
-    public static AEKeyFilter hasPlacementStrategy() {
-        return what -> placementStrategies.getMap().containsKey(what.getType());
     }
 
     public static StackImportStrategy createImportFacade(ServerLevel level, BlockPos fromPos, Direction fromSide) {
@@ -110,22 +87,4 @@ public final class StackWorldBehaviors {
         }
         return strategies;
     }
-
-    public static PlacementStrategy createPlacementStrategies(ServerLevel level, BlockPos fromPos, Direction fromSide,
-            BlockEntity host) {
-        var strategies = new IdentityHashMap<AEKeyType, PlacementStrategy>(placementStrategies.getMap().size());
-        for (var entry : placementStrategies.getMap().entrySet()) {
-            strategies.put(entry.getKey(), entry.getValue().create(level, fromPos, fromSide, host));
-        }
-        return new PlacementStrategyFacade(strategies);
-    }
-
-    public static List<PickupStrategy> createPickupStrategies(ServerLevel level, BlockPos fromPos, Direction fromSide,
-            BlockEntity host, Map<Enchantment, Integer> enchantments) {
-        return pickupStrategies.getMap().values()
-                .stream()
-                .map(f -> f.create(level, fromPos, fromSide, host, enchantments))
-                .toList();
-    }
-
 }

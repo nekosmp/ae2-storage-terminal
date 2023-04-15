@@ -356,7 +356,6 @@
           "STORAGE",
           "PLAYER_INVENTORY",
           "PLAYER_HOTBAR",
-          "TOOLBOX",
           "CONFIG",
           "UPGRADE",
           "STORAGE_CELL",

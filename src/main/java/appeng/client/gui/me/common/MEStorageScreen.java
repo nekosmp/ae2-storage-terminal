@@ -37,7 +37,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
 
 import appeng.api.client.AEStackRendering;
 import appeng.api.config.ActionItems;
@@ -45,18 +44,13 @@ import appeng.api.config.Setting;
 import appeng.api.config.Settings;
 import appeng.api.config.SortDir;
 import appeng.api.config.SortOrder;
-import appeng.api.config.TypeFilter;
-import appeng.api.config.ViewItems;
-import appeng.api.implementations.blockentities.IMEChest;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AmountFormat;
-import appeng.api.storage.AEKeyFilter;
 import appeng.api.util.IConfigManager;
 import appeng.api.util.IConfigurableObject;
 import appeng.client.Point;
 import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.AESubScreen;
-import appeng.client.gui.Icon;
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.style.TerminalStyle;
@@ -66,7 +60,6 @@ import appeng.client.gui.widgets.ISortSource;
 import appeng.client.gui.widgets.Scrollbar;
 import appeng.client.gui.widgets.SettingToggleButton;
 import appeng.client.gui.widgets.TabButton;
-import appeng.client.gui.widgets.ToolboxPanel;
 import appeng.client.gui.widgets.UpgradesPanel;
 import appeng.core.AEConfig;
 import appeng.core.AELog;
@@ -76,13 +69,10 @@ import appeng.core.localization.Tooltips;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.ConfigValuePacket;
 import appeng.core.sync.packets.MEInteractionPacket;
-import appeng.core.sync.packets.SwitchGuisPacket;
 import appeng.helpers.InventoryAction;
-import appeng.items.storage.ViewCellItem;
 import appeng.menu.SlotSemantics;
 import appeng.menu.me.common.GridInventoryEntry;
 import appeng.menu.me.common.MEStorageMenu;
-import appeng.menu.me.crafting.CraftingStatusMenu;
 import appeng.menu.me.interaction.StackInteractions;
 import appeng.util.ExternalSearch;
 import appeng.util.IConfigManagerListener;
@@ -99,14 +89,10 @@ public class MEStorageScreen<C extends MEStorageMenu>
     private static String rememberedSearch = "";
     private final TerminalStyle style;
     protected final Repo repo;
-    private final List<ItemStack> currentViewCells = new ArrayList<>();
     private final IConfigManager configSrc;
-    private final boolean supportsViewCells;
     private TabButton craftingStatusBtn;
     private final AETextField searchField;
     private int rows = 0;
-    private SettingToggleButton<ViewItems> viewModeToggle;
-    private SettingToggleButton<TypeFilter> filterTypesToggle;
     private SettingToggleButton<SortOrder> sortByToggle;
     private final SettingToggleButton<SortDir> sortDirToggle;
     private int currentMouseX = 0;
@@ -140,35 +126,9 @@ public class MEStorageScreen<C extends MEStorageMenu>
         this.configSrc = ((IConfigurableObject) this.menu).getConfigManager();
         this.menu.setGui(this);
 
-        List<Slot> viewCellSlots = menu.getSlots(SlotSemantics.VIEW_CELL);
-        this.supportsViewCells = !viewCellSlots.isEmpty();
-        if (this.supportsViewCells) {
-            List<Component> tooltip = Collections.singletonList(GuiText.TerminalViewCellsTooltip.text());
-            this.widgets.add("viewCells", new UpgradesPanel(viewCellSlots, () -> tooltip));
-        }
-
-        if (this.style.isSupportsAutoCrafting()) {
-            this.craftingStatusBtn = new TabButton(Icon.PERMISSION_CRAFT,
-                    GuiText.CraftingStatus.text(), this.itemRenderer, btn -> showCraftingStatus());
-            this.craftingStatusBtn.setStyle(TabButton.Style.CORNER);
-            this.widgets.add("craftingStatus", this.craftingStatusBtn);
-        }
-
         if (this.style.isSortable()) {
             this.sortByToggle = this.addToLeftToolbar(new SettingToggleButton<>(Settings.SORT_BY,
                     getSortBy(), Platform::isSortOrderAvailable, this::toggleServerSetting));
-        }
-
-        // Toggling between craftable/stored items only makes sense if the terminal supports auto-crafting
-        if (this.style.isSupportsAutoCrafting()) {
-            this.viewModeToggle = this.addToLeftToolbar(new SettingToggleButton<>(
-                    Settings.VIEW_MODE, getSortDisplay(), this::toggleServerSetting));
-        }
-
-        if (this.menu.canConfigureTypeFilter()) {
-            this.filterTypesToggle = this.addToLeftToolbar(new SettingToggleButton<>(
-                    Settings.TYPE_FILTER, getTypeFilter(), this::toggleServerSetting));
-
         }
 
         this.addToLeftToolbar(this.sortDirToggle = new SettingToggleButton<>(
@@ -183,9 +143,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
         this.widgets.add("upgrades", new UpgradesPanel(
                 menu.getSlots(SlotSemantics.UPGRADE),
                 menu.getHost()));
-        if (menu.getToolbox().isPresent()) {
-            this.widgets.add("toolbox", new ToolboxPanel(style, menu.getToolbox().getName()));
-        }
 
         // Restore previous search term
         if ((menu.isReturnedFromSubScreen() || config.isRememberLastSearch()) && rememberedSearch != null
@@ -203,11 +160,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
 
     private void showSettings() {
         switchToScreen(new TerminalSettingsScreen<>(this));
-    }
-
-    @Nullable
-    protected IPartitionList createPartitionList(List<ItemStack> viewCells) {
-        return ViewCellItem.createFilter(AEKeyFilter.none(), viewCells);
     }
 
     protected void handleGridInventoryEntryMouseClick(@Nullable GridInventoryEntry entry,
@@ -248,24 +200,13 @@ public class MEStorageScreen<C extends MEStorageMenu>
                 case PICKUP: // pickup / set-down.
                     action = mouseButton == 1 ? InventoryAction.SPLIT_OR_PLACE_SINGLE
                             : InventoryAction.PICKUP_OR_SET_DOWN;
-
-                    if (action == InventoryAction.PICKUP_OR_SET_DOWN
-                            && shouldCraftOnClick(entry)
-                            && getMenu().getCarried().isEmpty()) {
-                        menu.handleInteraction(serial, InventoryAction.AUTO_CRAFT);
-                        return;
-                    }
-
                     break;
                 case QUICK_MOVE:
                     action = mouseButton == 1 ? InventoryAction.PICKUP_SINGLE : InventoryAction.SHIFT_CLICK;
                     break;
 
                 case CLONE: // creative dupe:
-                    if (entry.isCraftable()) {
-                        menu.handleInteraction(serial, InventoryAction.AUTO_CRAFT);
-                        return;
-                    } else if (getMenu().getPlayer().getAbilities().instabuild) {
+                    if (getMenu().getPlayer().getAbilities().instabuild) {
                         action = InventoryAction.CREATIVE_DUPLICATE;
                     }
                     break;
@@ -280,16 +221,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
         }
     }
 
-    private boolean shouldCraftOnClick(GridInventoryEntry entry) {
-        // Always auto-craft when viewing only craftable items
-        if (isViewOnlyCraftable()) {
-            return true;
-        }
-
-        // Otherwise only craft if there are no stored items
-        return entry.getStoredAmount() == 0 && entry.isCraftable();
-    }
-
     private void updateScrollbar() {
         scrollbar.setHeight(this.rows * style.getRow().getSrcHeight() - 2);
         int totalRows = (this.repo.size() + getSlotsPerRow() - 1) / getSlotsPerRow();
@@ -297,10 +228,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
             totalRows++;
         }
         scrollbar.setRange(0, totalRows - this.rows, Math.max(1, this.rows / 6));
-    }
-
-    private void showCraftingStatus() {
-        NetworkHandler.instance().sendToServer(SwitchGuisPacket.openSubMenu(CraftingStatusMenu.TYPE));
     }
 
     private int getSlotsPerRow() {
@@ -349,9 +276,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
         // Override the dialog title found in the screen JSON with the user-supplied name
         if (!this.title.getString().isEmpty()) {
             setTextContent(TEXT_ID_DIALOG_TITLE, this.title);
-        } else if (this.menu.getTarget() instanceof IMEChest) {
-            // ME Chest uses Item Terminals, but overrides the title
-            setTextContent(TEXT_ID_DIALOG_TITLE, GuiText.Chest.text());
         }
     }
 
@@ -413,11 +337,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
         this.currentMouseX = mouseX;
         this.currentMouseY = mouseY;
 
-        // Render the pinned row decorations
-        if (repo.hasPinnedRow()) {
-            renderPinnedRowDecorations(poseStack);
-        }
-
         // Show the number of active crafting jobs
         if (this.craftingStatusBtn != null && menu.activeCraftingJobs != -1) {
             // The stack size renderer expects a 16x16 slot, while the button is normally
@@ -430,23 +349,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
         }
     }
 
-    private void renderPinnedRowDecorations(PoseStack poseStack) {
-        for (Slot slot : menu.slots) {
-            if (slot instanceof RepoSlot repoSlot) {
-                var entry = repoSlot.getEntry();
-                if (entry != null && PendingCraftingJobs.hasPendingJob(entry.getWhat())) {
-                    var frames = 192 / 16;
-                    var frame = (int) ((System.currentTimeMillis() / 100) % frames);
-
-                    Blitter.texture("block/molecular_assembler_lights.png", 16, 192)
-                            .src(2, 2 + frame * 16, 12, 12)
-                            .dest(slot.x - 1, slot.y - 1, 18, 18)
-                            .blit(poseStack, getBlitOffset());
-                }
-            }
-        }
-    }
-
     @Override
     public boolean mouseClicked(double xCoord, double yCoord, int btn) {
         // Right-clicking on the search field should clear it
@@ -454,15 +356,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
             this.searchField.setValue("");
             setSearchText("");
             // Don't return immediately to also grab focus.
-        }
-
-        // handler for middle mouse button crafting in survival mode
-        if (Minecraft.getInstance().options.keyPickItem.matchesMouse(btn)) {
-            Slot slot = this.findSlot(xCoord, yCoord);
-            if (slot instanceof RepoSlot repoSlot && repoSlot.isCraftable()) {
-                handleGridInventoryEntryMouseClick(repoSlot.getEntry(), btn, ClickType.CLONE);
-                return true;
-            }
         }
 
         return super.mouseClicked(xCoord, yCoord, btn);
@@ -508,8 +401,7 @@ public class MEStorageScreen<C extends MEStorageMenu>
         // they will be removed the next time the screen is opened fresh
         for (var entry : repo.getPinnedEntries()) {
             var info = PinnedKeys.getPinInfo(entry.getWhat());
-            if (info != null && info.reason == PinnedKeys.PinReason.CRAFTING
-                    && !PendingCraftingJobs.hasPendingJob(entry.getWhat())) {
+            if (info != null && info.reason == PinnedKeys.PinReason.CRAFTING) {
                 info.canPrune = true;
             }
         }
@@ -559,55 +451,36 @@ public class MEStorageScreen<C extends MEStorageMenu>
     @Override
     public void renderSlot(PoseStack poseStack, Slot s) {
         if (s instanceof RepoSlot repoSlot) {
-            if (!this.repo.hasPower()) {
-                fill(poseStack, s.x, s.y, 16 + s.x, 16 + s.y, 0x66111111);
-            } else {
-                GridInventoryEntry entry = repoSlot.getEntry();
-                if (entry != null) {
-                    try {
-                        AEStackRendering.drawInGui(
-                                minecraft,
-                                poseStack,
-                                s.x,
-                                s.y,
-                                getBlitOffset(),
-                                entry.getWhat());
-                    } catch (Exception err) {
-                        AELog.warn("[AppEng] AE prevented crash while drawing slot: " + err);
-                    }
-
-                    // If a view mode is selected that only shows craftable items, display the "craftable" text
-                    // regardless of stack size
-                    long storedAmount = entry.getStoredAmount();
-                    boolean craftable = entry.isCraftable();
-                    var useLargeFonts = config.isUseLargeFonts();
-                    if (craftable && (isViewOnlyCraftable() || storedAmount <= 0)) {
-                        var craftLabelText = useLargeFonts ? GuiText.LargeFontCraft.getLocal()
-                                : GuiText.SmallFontCraft.getLocal();
-                        StackSizeRenderer.renderSizeLabel(this.font, s.x, s.y, craftLabelText);
-                    } else {
-                        AmountFormat format = useLargeFonts ? AmountFormat.SLOT_LARGE_FONT
-                                : AmountFormat.SLOT;
-                        var text = entry.getWhat().formatAmount(storedAmount, format);
-                        StackSizeRenderer.renderSizeLabel(this.font, s.x, s.y, text, useLargeFonts);
-                        if (craftable) {
-                            StackSizeRenderer.renderSizeLabel(this.font, s.x - 11, s.y - 11, "+", false);
-                        }
-                    }
+            GridInventoryEntry entry = repoSlot.getEntry();
+            if (entry != null) {
+                try {
+                    AEStackRendering.drawInGui(
+                            minecraft,
+                            poseStack,
+                            s.x,
+                            s.y,
+                            getBlitOffset(),
+                            entry.getWhat());
+                } catch (Exception err) {
+                    AELog.warn("[AppEng] AE prevented crash while drawing slot: " + err);
                 }
+
+                // If a view mode is selected that only shows craftable items, display the "craftable" text
+                // regardless of stack size
+                long storedAmount = entry.getStoredAmount();
+                var useLargeFonts = config.isUseLargeFonts();
+                
+                AmountFormat format = useLargeFonts ? AmountFormat.SLOT_LARGE_FONT
+                        : AmountFormat.SLOT;
+                var text = entry.getWhat().formatAmount(storedAmount, format);
+                StackSizeRenderer.renderSizeLabel(this.font, s.x, s.y, text, useLargeFonts);
+                
             }
 
             return;
         }
 
         super.renderSlot(poseStack, s);
-    }
-
-    /**
-     * @return True if the terminal should only show craftable items.
-     */
-    protected final boolean isViewOnlyCraftable() {
-        return viewModeToggle != null && viewModeToggle.getCurrentValue() == ViewItems.CRAFTABLE;
     }
 
     @Override
@@ -654,11 +527,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
         if (requestableAmount > 0) {
             var formattedAmount = entry.getWhat().formatAmount(requestableAmount, AmountFormat.FULL);
             currentToolTip.add(ButtonToolTips.RequestableAmount.text(formattedAmount));
-        }
-
-        // When we're _NOT_ showing the "craft" text as the amount anyway, add a Craftable entry to the tooltip
-        if (entry.isCraftable() && !(isViewOnlyCraftable() || entry.getStoredAmount() <= 0)) {
-            currentToolTip.add(ButtonToolTips.Craftable.text().copy().withStyle(ChatFormatting.DARK_GRAY));
         }
 
         if (Minecraft.getInstance().options.advancedItemTooltips) {
@@ -714,22 +582,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
     }
 
     @Override
-    public void containerTick() {
-        this.repo.setPower(this.menu.isPowered());
-
-        if (this.supportsViewCells) {
-            List<ItemStack> viewCells = this.menu.getViewCells();
-            if (!this.currentViewCells.equals(viewCells)) {
-                this.currentViewCells.clear();
-                this.currentViewCells.addAll(viewCells);
-                this.repo.setPartitionList(createPartitionList(viewCells));
-            }
-        }
-
-        super.containerTick();
-    }
-
-    @Override
     public SortOrder getSortBy() {
         return this.configSrc.getSetting(Settings.SORT_BY);
     }
@@ -740,16 +592,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
     }
 
     @Override
-    public ViewItems getSortDisplay() {
-        return this.configSrc.getSetting(Settings.VIEW_MODE);
-    }
-
-    @Override
-    public TypeFilter getTypeFilter() {
-        return this.configSrc.getSetting(Settings.TYPE_FILTER);
-    }
-
-    @Override
     public void onSettingChanged(IConfigManager manager, Setting<?> setting) {
         if (this.sortByToggle != null) {
             this.sortByToggle.set(getSortBy());
@@ -757,14 +599,6 @@ public class MEStorageScreen<C extends MEStorageMenu>
 
         if (this.sortDirToggle != null) {
             this.sortDirToggle.set(getSortDir());
-        }
-
-        if (this.viewModeToggle != null) {
-            this.viewModeToggle.set(getSortDisplay());
-        }
-
-        if (this.filterTypesToggle != null) {
-            this.filterTypesToggle.set(getTypeFilter());
         }
 
         this.repo.updateView();

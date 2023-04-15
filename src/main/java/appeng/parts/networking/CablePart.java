@@ -31,7 +31,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 
 import appeng.api.config.SecurityPermissions;
@@ -50,7 +49,6 @@ import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
 import appeng.core.definitions.AEParts;
 import appeng.items.parts.ColoredPartItem;
-import appeng.items.tools.powered.ColorApplicatorItem;
 import appeng.parts.AEBasePart;
 
 public class CablePart extends AEBasePart implements ICablePart {
@@ -71,7 +69,6 @@ public class CablePart extends AEBasePart implements ICablePart {
         super(partItem);
         this.getMainNode()
                 .setFlags(GridFlags.PREFERRED)
-                .setIdlePowerUsage(0.0)
                 .setInWorldNode(true)
                 .setExposedOnSides(EnumSet.allOf(Direction.class));
         this.getMainNode().setGridColor(partItem.getColor());
@@ -112,36 +109,12 @@ public class CablePart extends AEBasePart implements ICablePart {
     }
 
     @Override
-    public void onPlacement(Player player) {
-        super.onPlacement(player);
-
-        // Apply the color of a held color applicator on placement
-        var stack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (!stack.isEmpty() && stack.getItem() instanceof ColorApplicatorItem item) {
-            var color = item.getActiveColor(stack);
-            if (color != null && color != getCableColor() && item.consumeColor(stack, color, true)) {
-                if (changeColor(color, player) && !player.getAbilities().instabuild) {
-                    item.consumeColor(stack, color, false);
-                }
-            }
-        }
-    }
-
-    @Override
     public boolean changeColor(AEColor newColor, Player who) {
         if (this.getCableColor() != newColor) {
             IPartItem<?> newPart = null;
 
             if (this.getCableConnectionType() == AECableType.GLASS) {
                 newPart = AEParts.GLASS_CABLE.item(newColor);
-            } else if (this.getCableConnectionType() == AECableType.COVERED) {
-                newPart = AEParts.COVERED_CABLE.item(newColor);
-            } else if (this.getCableConnectionType() == AECableType.SMART) {
-                newPart = AEParts.SMART_CABLE.item(newColor);
-            } else if (this.getCableConnectionType() == AECableType.DENSE_COVERED) {
-                newPart = AEParts.COVERED_DENSE_CABLE.item(newColor);
-            } else if (this.getCableConnectionType() == AECableType.DENSE_SMART) {
-                newPart = AEParts.SMART_DENSE_CABLE.item(newColor);
             }
 
             boolean hasPermission = true;
@@ -417,9 +390,6 @@ public class CablePart extends AEBasePart implements ICablePart {
     }
 
     public int getChannelsOnSide(Direction side) {
-        if (!this.isPowered()) {
-            return 0;
-        }
         return this.channelsOnSide[side.ordinal()];
     }
 

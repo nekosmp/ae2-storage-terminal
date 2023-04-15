@@ -29,7 +29,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -38,24 +37,13 @@ import appeng.blockentity.misc.SecurityStationBlockEntity;
 import appeng.util.InteractionUtil;
 
 public class SecurityStationBlock extends AEBaseEntityBlock<SecurityStationBlockEntity> {
-
-    private static final BooleanProperty POWERED = BooleanProperty.create("powered");
-
     public SecurityStationBlock() {
         super(defaultProps(Material.METAL));
-
-        this.registerDefaultState(this.defaultBlockState().setValue(POWERED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(POWERED);
-    }
-
-    @Override
-    protected BlockState updateBlockStateFromBlockEntity(BlockState currentState, SecurityStationBlockEntity be) {
-        return currentState.setValue(POWERED, be.isActive());
     }
 
     @Override

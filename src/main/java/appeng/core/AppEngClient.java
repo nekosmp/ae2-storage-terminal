@@ -38,13 +38,9 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.event.client.player.ClientPickBlockGatherCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
@@ -65,15 +61,9 @@ import appeng.client.Hotkeys;
 import appeng.client.commands.ClientCommands;
 import appeng.client.gui.me.common.PinnedKeys;
 import appeng.client.gui.style.StyleManager;
-import appeng.client.guidebook.Guide;
-import appeng.client.guidebook.PageAnchor;
-import appeng.client.guidebook.screen.GuideScreen;
-import appeng.client.render.StorageCellClientTooltipComponent;
 import appeng.client.render.effects.EnergyParticleData;
 import appeng.client.render.effects.ParticleTypes;
 import appeng.client.render.overlay.OverlayManager;
-import appeng.client.render.tesr.InscriberTESR;
-import appeng.client.render.tesr.SkyChestTESR;
 import appeng.core.sync.network.ClientNetworkHandler;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.MouseWheelPacket;
@@ -88,16 +78,11 @@ import appeng.init.client.InitAutoRotatingModel;
 import appeng.init.client.InitBlockColors;
 import appeng.init.client.InitBlockEntityRenderers;
 import appeng.init.client.InitBuiltInModels;
-import appeng.init.client.InitEntityLayerDefinitions;
-import appeng.init.client.InitEntityRendering;
 import appeng.init.client.InitItemColors;
-import appeng.init.client.InitItemModelsProperties;
 import appeng.init.client.InitParticleFactories;
 import appeng.init.client.InitRenderTypes;
 import appeng.init.client.InitScreens;
 import appeng.init.client.InitStackRenderHandlers;
-import appeng.items.storage.StorageCellTooltipComponent;
-import appeng.siteexport.SiteExporter;
 import appeng.util.InteractionUtil;
 import appeng.util.Platform;
 
@@ -116,17 +101,12 @@ public class AppEngClient extends AppEngBase {
      */
     private CableRenderMode prevCableRenderMode = CableRenderMode.STANDARD;
 
-    private Guide guidePages;
-
     public AppEngClient() {
         this.registerParticleFactories();
         this.registerTextures();
         this.modelRegistryEvent();
         this.registerBlockColors();
         this.registerItemColors();
-        this.registerEntityRenderers();
-        this.registerEntityLayerDefinitions();
-        this.registerClientTooltipComponents();
         this.registerClientCommands();
 
         ClientPickBlockGatherCallback.EVENT.register(this::onPickBlock);
@@ -135,7 +115,6 @@ public class AppEngClient extends AppEngBase {
         InitAutoRotatingModel.init();
         BlockAttackHook.install();
         RenderBlockOutlineHook.install();
-        guidePages = loadGuidePages();
 
         ClientLifecycleEvents.CLIENT_STARTED.register(this::clientSetup);
 
@@ -145,14 +124,6 @@ public class AppEngClient extends AppEngBase {
         ClientTickEvents.END_CLIENT_TICK.register(c -> Hotkeys.checkHotkeys());
 
         ClientTickEvents.END_CLIENT_TICK.register(this::tickPinnedKeys);
-
-        registerTests();
-
-        // Only activate the site exporter when we're not running a release version, since it'll
-        // replace blocks around spawn.
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            SiteExporter.initialize();
-        }
     }
 
     private void registerClientCommands() {
@@ -165,10 +136,6 @@ public class AppEngClient extends AppEngBase {
             }
             dispatcher.register(builder);
         });
-    }
-
-    private Guide loadGuidePages() {
-        return Guide.builder(MOD_ID, "ae2guide").build();
     }
 
     private void tickPinnedKeys(Minecraft minecraft) {
@@ -197,7 +164,7 @@ public class AppEngClient extends AppEngBase {
     }
 
     public void registerTextures() {
-        Stream<Collection<Material>> sprites = Stream.of(SkyChestTESR.SPRITES, InscriberTESR.SPRITES);
+        Stream<Collection<Material>> sprites = Stream.of();
 
         // Group every needed sprite by atlas, since every atlas has their own event
         Map<ResourceLocation, List<Material>> groupedByAtlas = sprites.flatMap(Collection::stream)
@@ -221,30 +188,11 @@ public class AppEngClient extends AppEngBase {
         InitItemColors.init(ColorProviderRegistry.ITEM::register);
     }
 
-    private void registerClientTooltipComponents() {
-        TooltipComponentCallback.EVENT.register(data -> {
-            if (data instanceof StorageCellTooltipComponent cellTooltipComponent) {
-                return new StorageCellClientTooltipComponent(cellTooltipComponent);
-            }
-            return null;
-        });
-    }
-
     private void clientSetup(Minecraft client) {
         postClientSetup(client);
 
         MouseWheelScrolled.EVENT.register(this::wheelEvent);
         WorldRenderEvents.LAST.register(OverlayManager.getInstance()::renderWorldLastEvent);
-    }
-
-    private void registerEntityRenderers() {
-        InitEntityRendering.init(EntityRendererRegistry::register);
-    }
-
-    private void registerEntityLayerDefinitions() {
-        InitEntityLayerDefinitions.init((modelLayerLocation, layerDefinition) -> {
-            EntityModelLayerRegistry.registerModelLayer(modelLayerLocation, () -> layerDefinition);
-        });
     }
 
     /**
@@ -260,7 +208,6 @@ public class AppEngClient extends AppEngBase {
     public void modelRegistryEvent() {
         InitAdditionalModels.init();
         InitBlockEntityRenderers.init();
-        InitItemModelsProperties.init();
         InitRenderTypes.init();
         InitBuiltInModels.init();
     }
@@ -403,15 +350,5 @@ public class AppEngClient extends AppEngBase {
             }
         }
         return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void openGuide(ResourceLocation initialPage) {
-        try {
-            var screen = GuideScreen.openAtPreviousPage(guidePages, PageAnchor.page(initialPage));
-            Minecraft.getInstance().setScreen(screen);
-        } catch (Exception e) {
-            LOGGER.error("Failed to open guide.", e);
-        }
     }
 }

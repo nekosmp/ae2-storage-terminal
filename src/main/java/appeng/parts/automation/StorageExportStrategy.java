@@ -51,8 +51,7 @@ public class StorageExportStrategy<V extends TransferVariant<?>> implements Stac
 
         var inv = context.getInternalStorage();
 
-        var extracted = StorageHelper.poweredExtraction(
-                context.getEnergySource(),
+        var extracted = StorageHelper.extract(
                 inv.getInventory(),
                 what,
                 amount,
@@ -72,8 +71,7 @@ public class StorageExportStrategy<V extends TransferVariant<?>> implements Stac
         if (wasInserted > 0) {
             // Now *really* extract because the simulate may have returned more items than we can actually get
             // (i.e. two storage buses on the same chest).
-            extracted = StorageHelper.poweredExtraction(
-                    context.getEnergySource(),
+            extracted = StorageHelper.extract(
                     inv.getInventory(),
                     what,
                     wasInserted,

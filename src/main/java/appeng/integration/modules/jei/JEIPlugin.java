@@ -35,31 +35,17 @@ import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 
-import appeng.api.config.CondenserOutput;
-import appeng.api.features.P2PTunnelAttunementInternal;
 import appeng.api.integrations.jei.IngredientConverters;
 import appeng.client.gui.AEBaseScreen;
-import appeng.client.gui.implementations.InscriberScreen;
 import appeng.core.AEConfig;
 import appeng.core.AppEng;
-import appeng.core.FacadeCreativeTab;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
-import appeng.core.definitions.ItemDefinition;
-import appeng.core.localization.GuiText;
-import appeng.core.localization.ItemModText;
 import appeng.integration.abstraction.JEIFacade;
-import appeng.integration.modules.jei.transfer.EncodePatternTransferHandler;
 import appeng.integration.modules.jei.transfer.UseCraftingRecipeTransfer;
-import appeng.items.parts.FacadeItem;
 import appeng.menu.me.items.CraftingTermMenu;
-import appeng.menu.me.items.PatternEncodingTermMenu;
 import appeng.menu.me.items.WirelessCraftingTermMenu;
-import appeng.recipes.entropy.EntropyRecipe;
-import appeng.recipes.handlers.ChargerRecipe;
-import appeng.recipes.handlers.InscriberRecipe;
-import appeng.recipes.transform.TransformRecipe;
 
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
@@ -69,30 +55,11 @@ public class JEIPlugin implements IModPlugin {
 
     public JEIPlugin() {
         IngredientConverters.register(new ItemIngredientConverter());
-        IngredientConverters.register(new FluidIngredientConverter());
     }
 
     @Override
     public ResourceLocation getPluginUid() {
         return ID;
-    }
-
-    @Override
-    public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-        subtypeRegistry.useNbtForSubtypes(AEItems.FACADE.asItem());
-    }
-
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registry) {
-        var jeiHelpers = registry.getJeiHelpers();
-        registry.addRecipeCategories(
-                new TransformCategory(jeiHelpers),
-                new CondenserCategory(jeiHelpers.getGuiHelper()),
-                new InscriberRecipeCategory(jeiHelpers.getGuiHelper()),
-                new ChargerCategory(jeiHelpers),
-                new AttunementCategory(jeiHelpers),
-                new CertusGrowthCategory(jeiHelpers),
-                new EntropyManipulatorCategory(jeiHelpers));
     }
 
     @Override
@@ -106,111 +73,15 @@ public class JEIPlugin implements IModPlugin {
                 new UseCraftingRecipeTransfer<>(WirelessCraftingTermMenu.class, WirelessCraftingTermMenu.TYPE,
                         registration.getTransferHelper()),
                 RecipeTypes.CRAFTING);
-
-        // Universal handler for processing to try and handle all IRecipe
-        registration.addUniversalRecipeTransferHandler(new EncodePatternTransferHandler<>(
-                PatternEncodingTermMenu.TYPE,
-                PatternEncodingTermMenu.class,
-                registration.getTransferHelper()));
-    }
-
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        registration.addRecipes(InscriberRecipeCategory.RECIPE_TYPE,
-                List.copyOf(recipeManager.byType(InscriberRecipe.TYPE).values()));
-        registration.addRecipes(ChargerCategory.RECIPE_TYPE,
-                List.copyOf(recipeManager.byType(ChargerRecipe.TYPE).values()));
-        registration.addRecipes(CondenserCategory.RECIPE_TYPE,
-                ImmutableList.of(CondenserOutput.MATTER_BALLS, CondenserOutput.SINGULARITY));
-        registration.addRecipes(EntropyManipulatorCategory.TYPE,
-                List.copyOf(recipeManager.byType(EntropyRecipe.TYPE).values()));
-        registration.addRecipes(TransformCategory.RECIPE_TYPE,
-                List.copyOf(recipeManager.byType(TransformRecipe.TYPE).values()));
-
-        registerP2PAttunement(registration);
-        registerDescriptions(registration);
-
-        registration.addItemStackInfo(
-                AEBlocks.CRANK.stack(),
-                ItemModText.CRANK_DESCRIPTION.text());
-
-        registration.addRecipes(CertusGrowthCategory.TYPE, List.of(CertusGrowthCategory.Page.values()));
-    }
-
-    private void registerP2PAttunement(IRecipeRegistration registration) {
-
-        List<AttunementDisplay> attunementRecipes = new ArrayList<>();
-        for (var entry : P2PTunnelAttunementInternal.getApiTunnels()) {
-            attunementRecipes.add(
-                    new AttunementDisplay(
-                            Ingredient.of(Registry.ITEM.stream()
-                                    .map(ItemStack::new)
-                                    .filter(entry.stackPredicate())
-                                    .toArray(ItemStack[]::new)),
-                            entry.tunnelType(),
-                            ItemModText.P2P_API_ATTUNEMENT.text(),
-                            entry.description()));
-        }
-
-        for (var entry : P2PTunnelAttunementInternal.getTagTunnels().entrySet()) {
-            attunementRecipes.add(new AttunementDisplay(
-                    Ingredient.of(entry.getKey()),
-                    entry.getValue(),
-                    ItemModText.P2P_TAG_ATTUNEMENT.text()));
-        }
-
-        // Remove attunements with empty ingredients
-        attunementRecipes.removeIf(a -> a.inputs().isEmpty());
-
-        registration.addRecipes(AttunementCategory.TYPE, attunementRecipes);
-
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        var condenser = AEBlocks.CONDENSER.stack();
-        registration.addRecipeCatalyst(condenser, CondenserCategory.RECIPE_TYPE);
-
-        var inscriber = AEBlocks.INSCRIBER.stack();
-        registration.addRecipeCatalyst(inscriber, InscriberRecipeCategory.RECIPE_TYPE);
-
         var craftingTerminal = AEParts.CRAFTING_TERMINAL.stack();
         registration.addRecipeCatalyst(craftingTerminal, RecipeTypes.CRAFTING);
 
         var wirelessCraftingTerminal = AEItems.WIRELESS_CRAFTING_TERMINAL.stack();
         registration.addRecipeCatalyst(wirelessCraftingTerminal, RecipeTypes.CRAFTING);
-
-        // Both the charger and crank will be used as catalysts here to make it more discoverable
-        registration.addRecipeCatalyst(AEBlocks.CHARGER.stack(), ChargerCategory.RECIPE_TYPE);
-        registration.addRecipeCatalyst(AEBlocks.CRANK.stack(), ChargerCategory.RECIPE_TYPE);
-
-        registration.addRecipeCatalyst(AEItems.ENTROPY_MANIPULATOR.stack(), EntropyManipulatorCategory.TYPE);
-    }
-
-    private void registerDescriptions(IRecipeRegistration registry) {
-        this.addDescription(registry, AEItems.LOGIC_PROCESSOR_PRESS,
-                GuiText.inWorldCraftingPresses.text());
-        this.addDescription(registry, AEItems.CALCULATION_PROCESSOR_PRESS,
-                GuiText.inWorldCraftingPresses.text());
-        this.addDescription(registry, AEItems.ENGINEERING_PROCESSOR_PRESS,
-                GuiText.inWorldCraftingPresses.text());
-        this.addDescription(registry, AEItems.SILICON_PRESS,
-                GuiText.inWorldCraftingPresses.text());
-    }
-
-    private void addDescription(IRecipeRegistration registry, ItemDefinition<?> itemDefinition,
-            Component... message) {
-        registry.addIngredientInfo(itemDefinition.stack(), VanillaTypes.ITEM_STACK, message);
-    }
-
-    @Override
-    public void registerAdvanced(IAdvancedRegistration registration) {
-        if (AEConfig.instance().isEnableFacadeRecipesInJEI()) {
-            FacadeItem itemFacade = AEItems.FACADE.asItem();
-            ItemStack cableAnchor = AEParts.CABLE_ANCHOR.stack();
-            registration.addRecipeManagerPlugin(new FacadeRegistryPlugin(itemFacade, cableAnchor));
-        }
     }
 
     @Override
@@ -238,11 +109,6 @@ public class JEIPlugin implements IModPlugin {
                     @Override
                     public Collection<IGuiClickableArea> getGuiClickableAreas(AEBaseScreen<?> screen, double mouseX,
                             double mouseY) {
-                        if (screen instanceof InscriberScreen) {
-                            return Collections.singletonList(
-                                    IGuiClickableArea.createBasic(82, 39, 26, 16, InscriberRecipeCategory.RECIPE_TYPE));
-                        }
-
                         return Collections.emptyList();
                     }
                 });
@@ -254,11 +120,6 @@ public class JEIPlugin implements IModPlugin {
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         JEIFacade.setInstance(new JeiRuntimeAdapter(jeiRuntime));
         this.hideDebugTools(jeiRuntime);
-
-        if (!AEConfig.instance().isEnableFacadesInJEI()) {
-            jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK,
-                    FacadeCreativeTab.getSubTypes());
-        }
     }
 
     private void hideDebugTools(IJeiRuntime jeiRuntime) {
@@ -274,8 +135,6 @@ public class JEIPlugin implements IModPlugin {
 
             toRemove.add(AEItems.DEBUG_CARD.stack());
             toRemove.add(AEItems.DEBUG_ERASER.stack());
-            toRemove.add(AEItems.DEBUG_METEORITE_PLACER.stack());
-            toRemove.add(AEItems.DEBUG_REPLICATOR_CARD.stack());
 
             jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK,
                     toRemove);

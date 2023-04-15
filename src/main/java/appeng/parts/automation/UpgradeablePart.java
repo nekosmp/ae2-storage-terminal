@@ -26,7 +26,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import appeng.api.config.RedstoneMode;
 import appeng.api.config.Setting;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.parts.IPartItem;
@@ -68,21 +67,7 @@ public abstract class UpgradeablePart extends BasicStatePart
     }
 
     protected boolean isSleeping() {
-        if (upgrades.isInstalled(AEItems.REDSTONE_CARD)) {
-            return switch (this.getRSMode()) {
-                case IGNORE -> false;
-                case HIGH_SIGNAL -> !this.getHost().hasRedstone();
-                case LOW_SIGNAL -> this.getHost().hasRedstone();
-                case SIGNAL_PULSE -> true;
-            };
-        }
-
         return false;
-    }
-
-    @Override
-    public boolean canConnectRedstone() {
-        return this.upgrades.getMaxInstalled(AEItems.REDSTONE_CARD) > 0;
     }
 
     @Override
@@ -126,10 +111,6 @@ public abstract class UpgradeablePart extends BasicStatePart
     @Override
     public IUpgradeInventory getUpgrades() {
         return upgrades;
-    }
-
-    public RedstoneMode getRSMode() {
-        return null;
     }
 
     protected void onSettingChanged(IConfigManager manager, Setting<?> setting) {

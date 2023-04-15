@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import appeng.core.AELog;
 import appeng.core.AppEng;
@@ -32,7 +33,7 @@ import appeng.me.GridStorage;
  * @version rv3 - 30.05.2015
  * @since rv3 30.05.2015
  */
-public final class GridStorageSaveData extends AESavedData implements IGridStorageSaveData {
+public final class GridStorageSaveData extends SavedData implements IGridStorageSaveData {
 
     public static final String NAME = AppEng.MOD_ID + "_storage";
 
@@ -127,9 +128,4 @@ public final class GridStorageSaveData extends AESavedData implements IGridStora
         return tag;
     }
 
-    @Override
-    public boolean isDirty() {
-        // Always save!
-        return true;
-    }
 }

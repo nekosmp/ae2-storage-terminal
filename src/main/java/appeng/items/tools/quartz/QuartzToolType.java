@@ -28,7 +28,6 @@ import appeng.core.AppEng;
 import appeng.datagen.providers.tags.ConventionTags;
 
 public enum QuartzToolType {
-    CERTUS("certus_quartz", () -> Ingredient.of(ConventionTags.CERTUS_QUARTZ)),
     NETHER("nether_quartz", () -> Ingredient.of(ConventionTags.NETHER_QUARTZ)),
     ;
 

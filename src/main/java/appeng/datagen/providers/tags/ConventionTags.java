@@ -53,15 +53,6 @@ public final class ConventionTags {
 
     // Includes purified versions of certus/nether and the natural ones
     public static final TagKey<Item> ALL_QUARTZ = tag("ae2:all_quartz");
-    // Includes both certus/nether quartz dust
-    public static final TagKey<Item> ALL_QUARTZ_DUST = tag("ae2:all_quartz_dust");
-
-    // Includes charged, synthetic/purified and natural certus quartz
-    public static final TagKey<Item> ALL_CERTUS_QUARTZ = tag("ae2:all_certus_quartz");
-    public static final TagKey<Item> CERTUS_QUARTZ = tag("c:certus_quartz");
-    public static final TagKey<Block> CERTUS_QUARTZ_STORAGE_BLOCK_BLOCK = blockTag("c:certus_quartz_blocks");
-    public static final TagKey<Item> CERTUS_QUARTZ_DUST = tag("c:certus_quartz_dusts");
-
     // Includes synthetic/purified
     public static final TagKey<Item> ALL_NETHER_QUARTZ = tag("ae2:all_nether_quartz");
     public static final TagKey<Item> NETHER_QUARTZ = tag("c:quartz");

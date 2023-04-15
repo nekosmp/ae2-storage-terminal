@@ -51,7 +51,6 @@ import appeng.api.util.IOrientable;
 import appeng.block.networking.CableBusBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.AEBaseInvBlockEntity;
-import appeng.items.tools.MemoryCardItem;
 import appeng.util.InteractionUtil;
 import appeng.util.Platform;
 import appeng.util.SettingsFrom;
@@ -193,37 +192,6 @@ public abstract class AEBaseEntityBlock<T extends AEBaseBlockEntity> extends AEB
         ItemStack heldItem;
         if (player != null && !player.getItemInHand(hand).isEmpty()) {
             heldItem = player.getItemInHand(hand);
-
-            if (heldItem.getItem() instanceof IMemoryCard memoryCard && !(this instanceof CableBusBlock)) {
-                final AEBaseBlockEntity blockEntity = this.getBlockEntity(level, pos);
-
-                if (blockEntity == null) {
-                    return InteractionResult.FAIL;
-                }
-
-                final String name = this.getDescriptionId();
-
-                if (InteractionUtil.isInAlternateUseMode(player)) {
-                    var data = new CompoundTag();
-                    blockEntity.exportSettings(SettingsFrom.MEMORY_CARD, data, player);
-                    if (!data.isEmpty()) {
-                        memoryCard.setMemoryCardContents(heldItem, name, data);
-                        memoryCard.notifyUser(player, MemoryCardMessages.SETTINGS_SAVED);
-                    }
-                } else {
-                    final String savedName = memoryCard.getSettingsName(heldItem);
-                    final CompoundTag data = memoryCard.getData(heldItem);
-
-                    if (this.getDescriptionId().equals(savedName)) {
-                        blockEntity.importSettings(SettingsFrom.MEMORY_CARD, data, player);
-                        memoryCard.notifyUser(player, MemoryCardMessages.SETTINGS_LOADED);
-                    } else {
-                        MemoryCardItem.importGenericSettingsAndNotify(blockEntity, data, player);
-                    }
-                }
-
-                return InteractionResult.sidedSuccess(level.isClientSide());
-            }
         }
 
         return this.onActivated(level, pos, player, hand, player.getItemInHand(hand), hit);
