@@ -57,6 +57,7 @@ import appeng.init.InitItems;
 import appeng.init.InitMenuTypes;
 import appeng.init.client.InitKeyTypes;
 import appeng.init.internal.InitGridLinkables;
+import appeng.init.internal.InitUpgrades;
 import appeng.server.AECommand;
 import appeng.server.services.ChunkLoadingService;
 
@@ -126,6 +127,7 @@ public abstract class AppEngBase implements AppEng {
         InitApiLookup.init();
 
         AEConfig.instance().save();
+        InitUpgrades.init();
         initNetworkHandler();
 
         ChunkLoadingService.register();

@@ -50,7 +50,7 @@ import appeng.menu.me.common.MEStorageMenu;
  */
 @SuppressWarnings("unused")
 public final class AEItems {
-
+    
     // spotless:off
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
     
