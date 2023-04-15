@@ -3,8 +3,6 @@ package appeng.init;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 
-import team.reborn.energy.api.EnergyStorage;
-
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.inventories.PartApiLookup;
 import appeng.blockentity.AEBaseInvBlockEntity;
@@ -21,9 +19,6 @@ public final class InitApiLookup {
 
         // Allow forwarding of API lookups to parts for the cable bus
         PartApiLookup.addHostType(AEBlockEntities.CABLE_BUS);
-
-        // Forward to interfaces
-        initMisc();
 
         ItemStorage.SIDED.registerFallback((world, pos, state, blockEntity, direction) -> {
             if (blockEntity instanceof AEBaseInvBlockEntity baseInvBlockEntity) {
@@ -45,12 +40,5 @@ public final class InitApiLookup {
             }
             return null;
         });
-    }
-
-    private static void initMisc() {
-        ItemStorage.SIDED.registerForBlockEntity((blockEntity, context) -> {
-            return blockEntity.getItemHandler();
-        }, AEBlockEntities.DEBUG_ITEM_GEN);
-        EnergyStorage.SIDED.registerSelf(AEBlockEntities.DEBUG_ENERGY_GEN);
     }
 }

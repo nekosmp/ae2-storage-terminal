@@ -38,15 +38,11 @@ import appeng.api.util.AEColor;
 import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.CreativeTab;
-import appeng.debug.DebugCardItem;
-import appeng.debug.EraserItem;
 import appeng.items.materials.MaterialItem;
 import appeng.items.misc.WrappedGenericStack;
 import appeng.items.tools.BiometricCardItem;
 import appeng.items.tools.WirelessCraftingTerminalItem;
 import appeng.items.tools.WirelessTerminalItem;
-import appeng.items.tools.quartz.QuartzToolType;
-import appeng.items.tools.quartz.QuartzWrenchItem;
 import appeng.menu.me.common.MEStorageMenu;
 
 /**
@@ -58,16 +54,9 @@ public final class AEItems {
     // spotless:off
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
     
-    public static final ItemDefinition<QuartzWrenchItem> NETHER_QUARTZ_WRENCH = item("Nether Quartz Wrench", AEItemIds.NETHER_QUARTZ_WRENCH, p -> new QuartzWrenchItem(p.stacksTo(1)), CreativeModeTab.TAB_TOOLS);
     public static final ItemDefinition<WirelessTerminalItem> WIRELESS_TERMINAL = item("Wireless Terminal", AEItemIds.WIRELESS_TERMINAL, p -> new WirelessTerminalItem(p.stacksTo(1)));
     public static final ItemDefinition<WirelessTerminalItem> WIRELESS_CRAFTING_TERMINAL = item("Wireless Crafting Terminal", AEItemIds.WIRELESS_CRAFTING_TERMINAL, p -> new WirelessCraftingTerminalItem(p.stacksTo(1)));
     public static final ItemDefinition<BiometricCardItem> BIOMETRIC_CARD = item("Biometric Card", AEItemIds.BIOMETRIC_CARD, p -> new BiometricCardItem(p.stacksTo(1)));
-    ///
-    /// UNSUPPORTED DEV TOOLS
-    ///
-
-    public static final ItemDefinition<EraserItem> DEBUG_ERASER = item("Dev.Eraser", AppEng.makeId("debug_eraser"), EraserItem::new);
-    public static final ItemDefinition<DebugCardItem> DEBUG_CARD = item("Dev.DebugCard", AppEng.makeId("debug_card"), DebugCardItem::new);
     public static final ItemDefinition<WrappedGenericStack> WRAPPED_GENERIC_STACK = item("Wrapped Generic Stack", AEItemIds.WRAPPED_GENERIC_STACK, WrappedGenericStack::new);
     public static final ItemDefinition<Item> INVERTER_CARD = item("Inverter Card", AEItemIds.INVERTER_CARD, Upgrades::createUpgradeCardItem);
     public static final ItemDefinition<Item> CAPACITY_CARD = item("Capacity Card", AEItemIds.CAPACITY_CARD, Upgrades::createUpgradeCardItem);

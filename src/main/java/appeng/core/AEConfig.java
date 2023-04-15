@@ -427,7 +427,7 @@ public final class AEConfig {
             debugTools = general.addBoolean("unsupportedDeveloperTools", false);
             serverOpsIgnoreSecurity = general.addBoolean("serverOpsIgnoreSecurity", true,
                     "Server operators are not restricted by ME security terminal settings.");
-            channels = general.addEnum("channels", ChannelMode.DEFAULT,
+            channels = general.addEnum("channels", ChannelMode.INFINITE,
                     "Changes the channel capacity that cables provide in AE2.");
             pathfindingStepsPerTick = general.addInt("pathfindingStepsPerTick", 4,
                     1, 1024,

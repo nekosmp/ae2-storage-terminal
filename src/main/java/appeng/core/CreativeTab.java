@@ -26,7 +26,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
-import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
 
 public final class CreativeTab {
@@ -37,7 +37,7 @@ public final class CreativeTab {
 
     public static void init() {
         INSTANCE = FabricItemGroupBuilder.create(AppEng.makeId("main"))
-                .icon(() -> AEBlocks.CONTROLLER.stack(1))
+                .icon(() -> AEItems.WIRELESS_TERMINAL.stack(1))
                 .appendItems(CreativeTab::fill)
                 .build();
     }

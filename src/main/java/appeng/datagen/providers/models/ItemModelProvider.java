@@ -29,28 +29,12 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         flatSingleLayer(AEItems.CAPACITY_CARD, "item/card_capacity");
         flatSingleLayer(AEItems.FUZZY_CARD, "item/card_fuzzy");
         flatSingleLayer(AEItems.INVERTER_CARD, "item/card_inverter");
-        flatSingleLayer(AEItems.NETHER_QUARTZ_WRENCH, "item/nether_quartz_wrench");
         flatSingleLayer(AEItems.WIRELESS_CRAFTING_TERMINAL, "item/wireless_crafting_terminal");
         flatSingleLayer(AEItems.WIRELESS_TERMINAL, "item/wireless_terminal");
-
-        flatSingleLayer(AEItems.DEBUG_CARD, "item/debug_card");
-        flatSingleLayer(AEItems.DEBUG_ERASER, "item/debug/eraser");
         registerEmptyModel(AEItems.WRAPPED_GENERIC_STACK);
         registerEmptyModel(AEBlocks.CABLE_BUS);
-        registerHandheld();
     }
 
-    private void registerHandheld() {
-        handheld(AEItems.NETHER_QUARTZ_WRENCH);
-    }
-
-    private void handheld(ItemDefinition<?> item) {
-        singleTexture(
-                item.id().getPath(),
-                new ResourceLocation("item/handheld"),
-                "layer0",
-                makeId("item/" + item.id().getPath()));
-    }
 
     private void registerEmptyModel(ItemDefinition<?> item) {
         this.getBuilder(item.id().getPath());

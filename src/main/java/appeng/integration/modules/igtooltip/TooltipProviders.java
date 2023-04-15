@@ -37,8 +37,6 @@ public final class TooltipProviders implements TooltipProvider {
         PartTooltips.addBody(AbstractMonitorPart.class, new StorageMonitorDataProvider());
         PartTooltips.addBody(IPart.class, new GridNodeStateProvider());
         PartTooltips.addServerData(IPart.class, new GridNodeStateProvider());
-        PartTooltips.addBody(AEBasePart.class, DebugProvider::providePartBody, DEBUG_PRIORITY);
-        PartTooltips.addServerData(AEBasePart.class, DebugProvider::providePartData, DEBUG_PRIORITY);
     }
 
     public static void loadCommon(CommonRegistration registration) {
@@ -52,7 +50,6 @@ public final class TooltipProviders implements TooltipProvider {
         for (var clazz : baseClasses.getBaseClasses()) {
             LOGGER.debug("Registering default-data for BE {} and sub-classes", clazz);
             registration.addBlockEntityData(clazz.blockEntity(), new GridNodeStateDataProvider());
-            registration.addBlockEntityData(clazz.blockEntity(), DebugProvider::provideBlockEntityData);
         }
 
         for (var clazz : baseClasses.getPartHostClasses()) {
@@ -76,12 +73,6 @@ public final class TooltipProviders implements TooltipProvider {
                     clazz.block(),
                     TooltipIds.GRID_NODE_STATE,
                     new GridNodeStateDataProvider());
-            registration.addBlockEntityBody(
-                    clazz.blockEntity(),
-                    clazz.block(),
-                    TooltipIds.DEBUG,
-                    DebugProvider::provideBlockEntityBody,
-                    TooltipProvider.DEBUG_PRIORITY);
         }
 
         for (var clazz : baseClasses.getPartHostClasses()) {

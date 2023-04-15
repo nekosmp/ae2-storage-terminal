@@ -40,7 +40,6 @@ public final class AEItemIds {
     public static final ResourceLocation WIRELESS_TERMINAL = id("wireless_terminal");
     public static final ResourceLocation WIRELESS_CRAFTING_TERMINAL = id("wireless_crafting_terminal");
     public static final ResourceLocation WRAPPED_GENERIC_STACK = id("wrapped_generic_stack");
-    public static final ResourceLocation NETHER_QUARTZ_WRENCH = id("nether_quartz_wrench");
 
     public static final ResourceLocation INVERTER_CARD = id("inverter_card");
     public static final ResourceLocation CAPACITY_CARD = id("capacity_card");

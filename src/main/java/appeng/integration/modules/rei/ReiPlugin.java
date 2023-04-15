@@ -56,9 +56,6 @@ import appeng.integration.modules.rei.transfer.UseCraftingRecipeTransfer;
 import appeng.menu.me.items.CraftingTermMenu;
 
 public class ReiPlugin implements REIClientPlugin {
-
-    // Will be hidden if developer items are disabled in the config
-    private List<Predicate<ItemStack>> developerItems;
     // Will be hidden if colored cables are hidden
     private List<Predicate<ItemStack>> coloredCables;
 
@@ -130,16 +127,6 @@ public class ReiPlugin implements REIClientPlugin {
 
     @Override
     public void registerEntries(EntryRegistry registry) {
-        // Will be hidden if developer items are disabled in the config
-        developerItems = ImmutableList.of(
-                AEBlocks.DEBUG_CUBE_GEN::isSameAs,
-                AEBlocks.DEBUG_CHUNK_LOADER::isSameAs,
-                AEBlocks.DEBUG_ENERGY_GEN::isSameAs,
-                AEBlocks.DEBUG_ITEM_GEN::isSameAs,
-                AEBlocks.DEBUG_PHANTOM_NODE::isSameAs,
-
-                AEItems.DEBUG_CARD::isSameAs,
-                AEItems.DEBUG_ERASER::isSameAs);
 
         // Will be hidden if colored cables are hidden
         List<Predicate<ItemStack>> predicates = new ArrayList<>();
@@ -190,14 +177,6 @@ public class ReiPlugin implements REIClientPlugin {
         if (AEItems.WRAPPED_GENERIC_STACK.isSameAs(stack)
                 || AEBlocks.CABLE_BUS.isSameAs(stack)) {
             return true;
-        }
-
-        if (!AEConfig.instance().isDebugToolsEnabled()) {
-            for (var developerItem : developerItems) {
-                if (developerItem.test(stack)) {
-                    return true;
-                }
-            }
         }
 
         if (AEConfig.instance().isDisableColoredCableRecipesInJEI()) {

@@ -55,12 +55,6 @@ public class ItemTagsProvider extends net.minecraft.data.tags.ItemTagsProvider i
             tag(ConventionTags.GLASS_CABLE).add(AEParts.GLASS_CABLE.item(color));
         }
 
-
-
-        // Fabric replacement for ToolActions for now
-        tag(ConventionTags.WRENCH).add(
-                AEItems.NETHER_QUARTZ_WRENCH.asItem());
-
         addConventionTags();
     }
 

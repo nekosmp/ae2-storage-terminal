@@ -111,27 +111,6 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         JEIFacade.setInstance(new JeiRuntimeAdapter(jeiRuntime));
-        this.hideDebugTools(jeiRuntime);
-    }
-
-    private void hideDebugTools(IJeiRuntime jeiRuntime) {
-        if (!AEConfig.instance().isDebugToolsEnabled()) {
-            Collection<ItemStack> toRemove = new ArrayList<>();
-
-            // We use the internal API here as exception as debug tools are not part of the public one by design.
-            toRemove.add(AEBlocks.DEBUG_CUBE_GEN.stack());
-            toRemove.add(AEBlocks.DEBUG_CHUNK_LOADER.stack());
-            toRemove.add(AEBlocks.DEBUG_ENERGY_GEN.stack());
-            toRemove.add(AEBlocks.DEBUG_ITEM_GEN.stack());
-            toRemove.add(AEBlocks.DEBUG_PHANTOM_NODE.stack());
-
-            toRemove.add(AEItems.DEBUG_CARD.stack());
-            toRemove.add(AEItems.DEBUG_ERASER.stack());
-
-            jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK,
-                    toRemove);
-        }
-
     }
 
     // Copy-pasted from JEI since it doesn't seem to expose these

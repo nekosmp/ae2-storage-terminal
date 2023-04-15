@@ -42,11 +42,6 @@ import appeng.blockentity.networking.CableBusBlockEntity;
 import appeng.blockentity.networking.ControllerBlockEntity;
 import appeng.blockentity.networking.WirelessBlockEntity;
 import appeng.core.AppEng;
-import appeng.debug.ChunkLoaderBlockEntity;
-import appeng.debug.CubeGeneratorBlockEntity;
-import appeng.debug.EnergyGeneratorBlockEntity;
-import appeng.debug.ItemGenBlockEntity;
-import appeng.debug.PhantomNodeBlockEntity;
 
 @SuppressWarnings("unused")
 public final class AEBlockEntities {
@@ -61,20 +56,6 @@ public final class AEBlockEntities {
             CableBusBlockEntity::new, AEBlocks.CABLE_BUS);
     public static final BlockEntityType<ControllerBlockEntity> CONTROLLER = create("controller",
             ControllerBlockEntity.class, ControllerBlockEntity::new, AEBlocks.CONTROLLER);
-
-    public static final BlockEntityType<ItemGenBlockEntity> DEBUG_ITEM_GEN = create("debug_item_gen",
-            ItemGenBlockEntity.class, ItemGenBlockEntity::new, AEBlocks.DEBUG_ITEM_GEN);
-    public static final BlockEntityType<ChunkLoaderBlockEntity> DEBUG_CHUNK_LOADER = create("debug_chunk_loader",
-            ChunkLoaderBlockEntity.class, ChunkLoaderBlockEntity::new, AEBlocks.DEBUG_CHUNK_LOADER);
-    public static final BlockEntityType<PhantomNodeBlockEntity> DEBUG_PHANTOM_NODE = create("debug_phantom_node",
-            PhantomNodeBlockEntity.class, PhantomNodeBlockEntity::new, AEBlocks.DEBUG_PHANTOM_NODE);
-    public static final BlockEntityType<CubeGeneratorBlockEntity> DEBUG_CUBE_GEN = create("debug_cube_gen",
-            CubeGeneratorBlockEntity.class, CubeGeneratorBlockEntity::new, AEBlocks.DEBUG_CUBE_GEN);
-    public static final BlockEntityType<EnergyGeneratorBlockEntity> DEBUG_ENERGY_GEN = create("debug_energy_gen",
-            EnergyGeneratorBlockEntity.class, EnergyGeneratorBlockEntity::new, AEBlocks.DEBUG_ENERGY_GEN);
-
-    private AEBlockEntities() {
-    }
 
     public static Map<ResourceLocation, BlockEntityType<?>> getBlockEntityTypes() {
         return ImmutableMap.copyOf(BLOCK_ENTITY_TYPES);
