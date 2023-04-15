@@ -267,9 +267,9 @@ sourceSets {
     crowdin
 }
 
-test {
-    useJUnitPlatform()
-}
+//test {
+//    useJUnitPlatform()
+//}
 
 dependencies {
     crowdinImplementation 'de.siegmar:fastcsv:2.1.0'

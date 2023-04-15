@@ -16,46 +16,47 @@
  * along with CodeChickenLib. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-package appeng.thirdparty.codechicken.lib.model.pipeline.transformers;
+ package appeng.thirdparty.codechicken.lib.model.pipeline.transformers;
 
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.fabricmc.fabric.impl.client.indigo.renderer.helper.ColorHelper;
-
-/**
- * This transformer tints quads.. Feed it the output of BlockColors.colorMultiplier.
- *
- * @author covers1624
- */
-public class QuadTinter implements RenderContext.QuadTransform {
-
-    private int abgr;
-
-    QuadTinter() {
-        super();
-    }
-
-    public QuadTinter(int rgb) {
-        this.abgr = 0xFF << 24 |
-                ((rgb & 0xFF) << 16) |
-                (rgb & 0xFF00) |
-                ((rgb >> 16) & 0xFF);
-    }
-
-    public QuadTinter setTint(int abgr) {
-        this.abgr = abgr;
-        return this;
-    }
-
-    @Override
-    public boolean transform(MutableQuadView quad) {
-        // Nuke tintIndex.
-        quad.colorIndex(-1);
-        for (int i = 0; i < 4; i++) {
-            int color = quad.spriteColor(i, 0);
-            color = ColorHelper.multiplyColor(color, abgr);
-            quad.spriteColor(i, 0, color);
-        }
-        return true;
-    }
-}
+ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
+ import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+ 
+ /**
+  * This transformer tints quads.
+  */
+ public class QuadTinter implements RenderContext.QuadTransform {
+ 
+     private final int argb;
+ 
+     public QuadTinter(int rgb) {
+         this.argb = 0xFF << 24 | rgb;
+     }
+ 
+     @Override
+     public boolean transform(MutableQuadView quad) {
+         // Nuke tintIndex.
+         quad.colorIndex(-1);
+         for (int i = 0; i < 4; i++) {
+             int color = quad.spriteColor(i, 0);
+             color = multiplyColor(color, argb);
+             quad.spriteColor(i, 0, color);
+         }
+         return true;
+     }
+ 
+     private static int multiplyColor(int color1, int color2) {
+         if (color1 == -1) {
+             return color2;
+         } else if (color2 == -1) {
+             return color1;
+         }
+ 
+         final int alpha = ((color1 >> 24) & 0xFF) * ((color2 >> 24) & 0xFF) / 0xFF;
+         final int red = ((color1 >> 16) & 0xFF) * ((color2 >> 16) & 0xFF) / 0xFF;
+         final int green = ((color1 >> 8) & 0xFF) * ((color2 >> 8) & 0xFF) / 0xFF;
+         final int blue = (color1 & 0xFF) * (color2 & 0xFF) / 0xFF;
+ 
+         return (alpha << 24) | (red << 16) | (green << 8) | blue;
+     }
+ }
+ 

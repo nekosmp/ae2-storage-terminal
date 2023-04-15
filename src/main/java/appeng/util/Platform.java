@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
@@ -293,8 +294,7 @@ public class Platform {
     }
 
     public static Component getFluidDisplayName(Fluid fluid, @Nullable CompoundTag tag) {
-        // no usage of the tag, but we keep it for compatibility
-        return Component.translatable(getDescriptionId(fluid));
+        return FluidVariantAttributes.getName(FluidVariant.of(fluid, tag));
     }
 
     // tag copy is not necessary, as the tag is not modified.
@@ -342,7 +342,7 @@ public class Platform {
 
         // If the node has no grid, it counts as inactive
         final boolean a_isSecure = a.isActive() && a.getLastSecurityKey() != -1;
-        final boolean b_isSecure = a.isActive() && b.getLastSecurityKey() != -1;
+        final boolean b_isSecure = b.isActive() && b.getLastSecurityKey() != -1;
 
         if (AEConfig.instance().isSecurityAuditLogEnabled()) {
             AELog.info(
@@ -488,7 +488,8 @@ public class Platform {
             return null;
         }
 
-        if (!serverLevel.shouldTickBlocksAt(ChunkPos.asLong(pos))) {
+        // Note: chunk could be in ticking range but not loaded, this checks for both!
+        if (!serverLevel.getChunkSource().isPositionTicking(ChunkPos.asLong(pos))) {
             return null;
         }
 
