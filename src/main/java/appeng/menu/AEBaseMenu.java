@@ -65,6 +65,7 @@ import appeng.menu.guisync.DataSynchronization;
 import appeng.menu.locator.MenuLocator;
 import appeng.menu.me.interaction.StackInteractions;
 import appeng.menu.slot.AppEngSlot;
+import appeng.menu.slot.CraftingMatrixSlot;
 import appeng.menu.slot.CraftingTermSlot;
 import appeng.menu.slot.DisabledSlot;
 import appeng.menu.slot.FakeSlot;
@@ -394,7 +395,7 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
                 if (!tis.isEmpty()) {
                     // target slots in the menu...
                     for (Slot cs : this.slots) {
-                        if (!isPlayerSideSlot(cs) && !(cs instanceof FakeSlot)
+                        if (!isPlayerSideSlot(cs) && !(cs instanceof FakeSlot) && !(cs instanceof CraftingMatrixSlot)
                                 && cs.mayPlace(tis)) {
                             selectedSlots.add(cs);
                         }
@@ -405,7 +406,7 @@ public abstract class AEBaseMenu extends AbstractContainerMenu {
 
                 // target slots in the menu...
                 for (Slot cs : this.slots) {
-                    if (isPlayerSideSlot(cs) && !(cs instanceof FakeSlot)
+                    if (isPlayerSideSlot(cs) && !(cs instanceof FakeSlot) && !(cs instanceof CraftingMatrixSlot)
                             && cs.mayPlace(tis)) {
                         selectedSlots.add(cs);
                     }
