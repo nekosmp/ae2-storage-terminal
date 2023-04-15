@@ -40,7 +40,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import appeng.api.networking.IGridNode;
-import appeng.api.parts.IFacadeContainer;
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.SelectedPart;

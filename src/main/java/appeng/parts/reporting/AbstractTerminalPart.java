@@ -18,8 +18,6 @@
 
 package appeng.parts.reporting;
 
-import java.util.List;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +38,6 @@ import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
 import appeng.menu.me.common.MEStorageMenu;
 import appeng.util.ConfigManager;
-import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.InternalInventoryHost;
 
 /**

@@ -1,9 +1,5 @@
 package appeng.datagen.providers.models;
 
-import static appeng.core.AppEng.makeId;
-
-import java.util.ArrayList;
-
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;

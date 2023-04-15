@@ -39,8 +39,6 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.networking.ControllerBlockEntity;
-import appeng.menu.MenuOpener;
-import appeng.menu.locator.MenuLocators;
 
 public class ControllerBlock extends AEBaseEntityBlock<ControllerBlockEntity> {
 

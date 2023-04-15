@@ -19,7 +19,6 @@
 package appeng.integration.modules.rei;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,40 +27,29 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import dev.architectury.event.CompoundEventResult;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
-import me.shedaniel.rei.api.client.registry.category.ButtonArea;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
-import me.shedaniel.rei.api.client.registry.entry.CollapsibleEntryRegistry;
 import me.shedaniel.rei.api.client.registry.entry.EntryRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry;
-import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
-import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
-import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
 
 import appeng.api.integrations.rei.IngredientConverters;
 import appeng.api.util.AEColor;
 import appeng.client.gui.AEBaseScreen;
 import appeng.core.AEConfig;
-import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
-import appeng.core.definitions.ItemDefinition;
-import appeng.core.localization.GuiText;
-import appeng.core.localization.ItemModText;
 import appeng.integration.abstraction.REIFacade;
 import appeng.integration.modules.jeirei.CompatLayerHelper;
 import appeng.integration.modules.rei.transfer.UseCraftingRecipeTransfer;

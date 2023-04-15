@@ -1,6 +1,5 @@
 package appeng.libs.micromark;
 
-import appeng.libs.micromark.commonmark.CharacterReference;
 import appeng.libs.micromark.html.NumericCharacterReference;
 import appeng.libs.micromark.symbol.Codes;
 import appeng.libs.micromark.symbol.Constants;

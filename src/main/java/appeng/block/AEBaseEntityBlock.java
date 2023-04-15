@@ -45,13 +45,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 
-import appeng.api.implementations.items.IMemoryCard;
-import appeng.api.implementations.items.MemoryCardMessages;
 import appeng.api.util.IOrientable;
-import appeng.block.networking.CableBusBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.AEBaseInvBlockEntity;
-import appeng.util.InteractionUtil;
 import appeng.util.Platform;
 import appeng.util.SettingsFrom;
 

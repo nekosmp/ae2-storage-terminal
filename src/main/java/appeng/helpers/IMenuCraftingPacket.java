@@ -20,8 +20,6 @@ package appeng.helpers;
 
 import java.util.List;
 
-import net.minecraft.world.item.ItemStack;
-
 import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.security.IActionSource;

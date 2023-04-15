@@ -18,7 +18,6 @@
 
 package appeng.util;
 
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +57,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.Fluid;
 
-import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
 import appeng.api.config.SecurityPermissions;
 import appeng.api.config.SortOrder;
@@ -342,9 +340,9 @@ public class Platform {
             return true;
         }
 
-        // If the node has no grid, it counts as unpowered
-        final boolean a_isSecure = a.getLastSecurityKey() != -1;
-        final boolean b_isSecure = b.getLastSecurityKey() != -1;
+        // If the node has no grid, it counts as inactive
+        final boolean a_isSecure = a.isActive() && a.getLastSecurityKey() != -1;
+        final boolean b_isSecure = a.isActive() && b.getLastSecurityKey() != -1;
 
         if (AEConfig.instance().isSecurityAuditLogEnabled()) {
             AELog.info(

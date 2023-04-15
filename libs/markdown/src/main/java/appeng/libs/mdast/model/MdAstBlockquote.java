@@ -1,6 +1,5 @@
 package appeng.libs.mdast.model;
 
-import java.util.List;
 
 /**
  * Blockquote (Parent) represents a section quoted from somewhere else.

@@ -1,6 +1,5 @@
 package appeng.libs.mdast.model;
 
-import appeng.libs.unist.UnistNode;
 
 /**
  * Break (Node) represents a line break, such as in poems or addresses.

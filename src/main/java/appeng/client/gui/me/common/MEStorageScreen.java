@@ -19,7 +19,6 @@
 package appeng.client.gui.me.common;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,7 +76,6 @@ import appeng.menu.me.interaction.StackInteractions;
 import appeng.util.ExternalSearch;
 import appeng.util.IConfigManagerListener;
 import appeng.util.Platform;
-import appeng.util.prioritylist.IPartitionList;
 
 public class MEStorageScreen<C extends MEStorageMenu>
         extends AEBaseScreen<C> implements ISortSource, IConfigManagerListener {

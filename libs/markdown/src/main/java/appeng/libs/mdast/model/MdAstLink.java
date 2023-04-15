@@ -4,7 +4,6 @@ import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Link includes Resource

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "ae2:block/security_station_on"
+      "model": "ae2:block/security_station"
     }
   }
 }

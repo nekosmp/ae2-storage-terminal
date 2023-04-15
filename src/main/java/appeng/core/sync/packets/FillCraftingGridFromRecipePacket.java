@@ -45,7 +45,6 @@ import appeng.core.AELog;
 import appeng.core.sync.BasePacket;
 import appeng.helpers.IMenuCraftingPacket;
 import appeng.util.CraftingRecipeUtil;
-import appeng.util.prioritylist.IPartitionList;
 
 /**
  * This packet will attempt to fill a crafting grid with real items based on a crafting recipe for the purposes of

@@ -58,8 +58,6 @@ import appeng.api.parts.IPartItem;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
-import appeng.core.definitions.AEBlocks;
-import appeng.core.definitions.AEParts;
 import appeng.helpers.ICustomNameObject;
 import appeng.util.CustomNameUtil;
 import appeng.util.InteractionUtil;

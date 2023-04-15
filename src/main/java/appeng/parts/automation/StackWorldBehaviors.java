@@ -2,14 +2,11 @@ package appeng.parts.automation;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appeng.api.behaviors.ExternalStorageStrategy;
 import appeng.api.behaviors.StackExportStrategy;

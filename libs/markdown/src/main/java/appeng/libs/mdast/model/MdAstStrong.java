@@ -1,6 +1,5 @@
 package appeng.libs.mdast.model;
 
-import java.util.List;
 
 /**
  * Strong (Parent) represents strong importance, seriousness, or urgency for its contents.

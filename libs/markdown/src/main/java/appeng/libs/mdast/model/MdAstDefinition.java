@@ -1,6 +1,5 @@
 package appeng.libs.mdast.model;
 
-import appeng.libs.unist.UnistNode;
 import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.Nullable;
 

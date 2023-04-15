@@ -11,7 +11,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
-import mezz.jei.api.gui.handlers.IGhostIngredientHandler.Target;
 
 import appeng.api.stacks.GenericStack;
 import appeng.client.gui.AEBaseScreen;

@@ -24,20 +24,16 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.DoubleSupplier;
 
-import appeng.api.config.Settings;
 import appeng.api.config.TerminalStyle;
 import appeng.api.networking.pathing.ChannelMode;
 import appeng.core.config.BooleanOption;
 import appeng.core.config.ConfigFileManager;
 import appeng.core.config.ConfigSection;
 import appeng.core.config.ConfigValidationException;
-import appeng.core.config.DoubleOption;
 import appeng.core.config.EnumOption;
 import appeng.core.config.IntegerOption;
 import appeng.core.settings.TickRates;
-import appeng.util.EnumCycler;
 
 public final class AEConfig {
 

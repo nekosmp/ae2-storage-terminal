@@ -1,7 +1,5 @@
 package appeng.libs.micromark;
 
-import appeng.libs.micromark.Micromark;
-import appeng.libs.micromark.Tokenizer;
 import appeng.libs.micromark.commonmark.Subtokenize;
 import appeng.libs.micromark.html.CompileOptions;
 import appeng.libs.micromark.html.HtmlCompiler;

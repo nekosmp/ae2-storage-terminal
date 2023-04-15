@@ -1,6 +1,5 @@
 package appeng.libs.mdast.model;
 
-import appeng.libs.micromark.Point;
 import appeng.libs.unist.UnistPoint;
 import appeng.libs.unist.UnistPosition;
 import com.google.gson.stream.JsonWriter;

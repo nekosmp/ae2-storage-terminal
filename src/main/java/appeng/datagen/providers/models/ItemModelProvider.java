@@ -8,8 +8,6 @@ import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import appeng.api.ids.AEItemIds;
-import appeng.api.util.AEColor;
 import appeng.client.render.model.BiometricCardModel;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;

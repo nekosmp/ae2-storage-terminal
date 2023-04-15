@@ -6,9 +6,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import team.reborn.energy.api.EnergyStorage;
 
 import appeng.api.behaviors.GenericInternalInventory;
-import appeng.api.implementations.blockentities.ICrankable;
 import appeng.api.inventories.PartApiLookup;
-import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.blockentity.AEBaseInvBlockEntity;
 import appeng.core.definitions.AEBlockEntities;
 import appeng.helpers.externalstorage.GenericStackFluidStorage;

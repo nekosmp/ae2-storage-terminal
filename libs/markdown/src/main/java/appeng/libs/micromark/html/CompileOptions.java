@@ -1,6 +1,5 @@
 package appeng.libs.micromark.html;
 
-import appeng.libs.micromark.Extension;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

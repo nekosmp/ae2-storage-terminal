@@ -2,9 +2,6 @@ package appeng.libs.micromark;
 
 import appeng.libs.micromark.symbol.Codes;
 import appeng.libs.micromark.symbol.Constants;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.OptionalInt;
 
 public final class ClassifyCharacter {
     private ClassifyCharacter() {

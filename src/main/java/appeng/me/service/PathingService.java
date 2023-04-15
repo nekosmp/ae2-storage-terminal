@@ -23,7 +23,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import appeng.api.features.IPlayerRegistry;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.GridHelper;
 import appeng.api.networking.IGrid;

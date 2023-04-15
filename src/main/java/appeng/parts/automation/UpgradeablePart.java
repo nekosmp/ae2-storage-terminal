@@ -34,7 +34,6 @@ import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.api.util.IConfigManager;
 import appeng.api.util.IConfigurableObject;
-import appeng.core.definitions.AEItems;
 import appeng.parts.BasicStatePart;
 import appeng.util.ConfigManager;
 

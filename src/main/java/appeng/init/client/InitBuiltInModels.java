@@ -24,14 +24,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.resources.ResourceLocation;
 
-import appeng.api.util.AEColor;
 import appeng.client.render.SimpleModelLoader;
 import appeng.client.render.cablebus.CableBusModel;
 import appeng.client.render.model.BiometricCardModel;
 import appeng.core.AppEng;
-import appeng.parts.automation.PlaneModel;
 
 @Environment(EnvType.CLIENT)
 public final class InitBuiltInModels {

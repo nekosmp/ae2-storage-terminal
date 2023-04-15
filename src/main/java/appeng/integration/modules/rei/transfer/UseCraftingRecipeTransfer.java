@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;

@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -70,8 +69,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import appeng.api.parts.IFacadeContainer;
-import appeng.api.parts.IFacadePart;
 import appeng.api.util.AEColor;
 import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.networking.CableBusBlockEntity;

@@ -30,24 +30,14 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.gametest.framework.GameTestRegistry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.levelgen.structure.StructureType;
 
 import appeng.api.IAEAddonEntrypoint;
 import appeng.api.parts.CableRenderMode;
@@ -66,7 +56,6 @@ import appeng.init.InitBlocks;
 import appeng.init.InitItems;
 import appeng.init.InitMenuTypes;
 import appeng.init.client.InitKeyTypes;
-import appeng.init.client.InitParticleTypes;
 import appeng.init.internal.InitGridLinkables;
 import appeng.server.AECommand;
 import appeng.server.services.ChunkLoadingService;
@@ -114,7 +103,6 @@ public abstract class AppEngBase implements AppEng {
 
         registerBlocks(Registry.BLOCK);
         registerItems(Registry.ITEM);
-        registerParticleTypes(Registry.PARTICLE_TYPE);
         registerBlockEntities(Registry.BLOCK_ENTITY_TYPE);
         registerMenuTypes(Registry.MENU);
 
@@ -161,10 +149,6 @@ public abstract class AppEngBase implements AppEng {
 
     public void registerMenuTypes(Registry<MenuType<?>> registry) {
         InitMenuTypes.init(registry);
-    }
-
-    public void registerParticleTypes(Registry<ParticleType<?>> registry) {
-        InitParticleTypes.init(registry);
     }
 
     public void registerCommands(MinecraftServer server) {

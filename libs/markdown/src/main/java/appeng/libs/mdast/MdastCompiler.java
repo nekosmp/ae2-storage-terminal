@@ -36,7 +36,6 @@ import appeng.libs.micromark.TokenProperty;
 import appeng.libs.micromark.TokenizeContext;
 import appeng.libs.micromark.Tokenizer;
 import appeng.libs.micromark.Types;
-import appeng.libs.micromark.html.HtmlContextProperty;
 import appeng.libs.micromark.html.NumericCharacterReference;
 import appeng.libs.micromark.symbol.Codes;
 import appeng.libs.micromark.symbol.Constants;

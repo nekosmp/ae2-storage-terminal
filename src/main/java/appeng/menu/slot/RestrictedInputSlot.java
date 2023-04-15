@@ -31,7 +31,6 @@ import appeng.api.implementations.items.IStorageComponent;
 import appeng.api.inventories.InternalInventory;
 import appeng.client.gui.Icon;
 import appeng.core.definitions.AEItems;
-import appeng.util.Platform;
 
 /**
  * @author AlgorithmX2

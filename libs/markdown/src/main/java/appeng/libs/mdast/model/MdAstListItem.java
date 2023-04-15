@@ -3,7 +3,6 @@ package appeng.libs.mdast.model;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * An item in a {@link MdAstList}.
