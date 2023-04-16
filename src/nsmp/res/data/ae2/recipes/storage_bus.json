@@ -4,8 +4,8 @@
     "c": {
       "tag": "ae2:glass_cable"
     },
-    "C": {
-      "item": "ae2:crystalline_casing"
+    "A": {
+      "item": "ae2:crystalline_alloy"
     },
     "s": {
       "tag": "ae2:metal_sheets"
@@ -16,7 +16,7 @@
   },
   "pattern": [
     " c ",
-    "sCs",
+    "sAs",
     "SSS"
   ],
   "result": {
