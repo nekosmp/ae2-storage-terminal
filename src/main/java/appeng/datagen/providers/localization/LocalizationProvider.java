@@ -137,12 +137,6 @@ public class LocalizationProvider implements IAE2DataProvider {
         add("theoneprobe.ae2.device_offline", "Device Offline");
         add("theoneprobe.ae2.device_online", "Device Online");
         add("theoneprobe.ae2.locked", "Locked");
-        add("theoneprobe.ae2.nested_p2p_tunnel", "Error: Nested P2P Tunnel");
-        add("theoneprobe.ae2.p2p_frequency", "Frequency: %1$s");
-        add("theoneprobe.ae2.p2p_input_many_outputs", "Linked (Input Side) - %d Outputs");
-        add("theoneprobe.ae2.p2p_input_one_output", "Linked (Input Side)");
-        add("theoneprobe.ae2.p2p_output", "Linked (Output Side)");
-        add("theoneprobe.ae2.p2p_unlinked", "Unlinked");
         add("theoneprobe.ae2.showing", "Showing");
         add("theoneprobe.ae2.stored_energy", "%1$d / %2$d");
         add("theoneprobe.ae2.unlocked", "Unlocked");

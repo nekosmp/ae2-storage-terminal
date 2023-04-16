@@ -22,8 +22,5 @@ public enum SettingsFrom {
     /**
      * For exporting: the item was broken or wrenched. For importing: the item was placed.
      */
-    DISMANTLE_ITEM,
-
-    // used memory card?
-    MEMORY_CARD
+    DISMANTLE_ITEM
 }

@@ -76,7 +76,6 @@ import appeng.core.AppEng;
 import appeng.hooks.VisualStateSaving;
 import appeng.hooks.ticking.TickHandler;
 import appeng.me.GridNode;
-import appeng.util.helpers.P2PHelper;
 import appeng.util.prioritylist.IPartitionList;
 
 public class Platform {
@@ -87,8 +86,6 @@ public class Platform {
      * random source, use it for item drop locations...
      */
     private static final RandomSource RANDOM_GENERATOR = RandomSource.create();
-
-    private static final P2PHelper P2P_HELPER = new P2PHelper();
 
     public static final Direction[] DIRECTIONS_WITH_NULL = new Direction[] { Direction.DOWN, Direction.UP,
             Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, null };
@@ -124,10 +121,6 @@ public class Platform {
             AELog.warn("Unable to find class %s. Integration with PonderJS disabled.", className);
             return null;
         }
-    }
-
-    public static P2PHelper p2p() {
-        return P2P_HELPER;
     }
 
     public static RandomSource getRandom() {

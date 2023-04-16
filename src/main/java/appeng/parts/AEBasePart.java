@@ -42,8 +42,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 import appeng.api.implementations.IChannelState;
-import appeng.api.implementations.items.IMemoryCard;
-import appeng.api.implementations.items.MemoryCardMessages;
 import appeng.api.inventories.ISegmentedInventory;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.GridHelper;
@@ -238,51 +236,13 @@ public abstract class AEBasePart
         return true;
     }
 
-    private boolean useMemoryCard(Player player) {
-        final ItemStack memCardIS = player.getInventory().getSelected();
-
-        if (!memCardIS.isEmpty() && this.useStandardMemoryCard()
-                && memCardIS.getItem() instanceof IMemoryCard memoryCard) {
-
-            Item partItem = getPartItem().asItem();
-
-            var name = partItem.getDescriptionId();
-
-            if (InteractionUtil.isInAlternateUseMode(player)) {
-                var data = new CompoundTag();
-                exportSettings(SettingsFrom.MEMORY_CARD, data);
-                if (!data.isEmpty()) {
-                    memoryCard.setMemoryCardContents(memCardIS, name, data);
-                    memoryCard.notifyUser(player, MemoryCardMessages.SETTINGS_SAVED);
-                }
-            } else {
-                var storedName = memoryCard.getSettingsName(memCardIS);
-                var data = memoryCard.getData(memCardIS);
-                if (name.equals(storedName)) {
-                    importSettings(SettingsFrom.MEMORY_CARD, data, player);
-                    memoryCard.notifyUser(player, MemoryCardMessages.SETTINGS_LOADED);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public final boolean onActivate(Player player, InteractionHand hand, Vec3 pos) {
-        if (this.useMemoryCard(player)) {
-            return true;
-        }
-
         return this.onPartActivate(player, hand, pos);
     }
 
     @Override
     public final boolean onShiftActivate(Player player, InteractionHand hand, Vec3 pos) {
-        if (this.useMemoryCard(player)) {
-            return true;
-        }
-
         return this.onPartShiftActivate(player, hand, pos);
     }
 

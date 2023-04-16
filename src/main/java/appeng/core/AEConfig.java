@@ -105,14 +105,12 @@ public final class AEConfig {
     // Misc
     private boolean enableEffects;
     private boolean useLargeFonts;
-    private boolean useColoredCraftingStatus;
     private boolean disableColoredCableRecipesInJEI;
 
     private void syncClientConfig() {
         this.disableColoredCableRecipesInJEI = CLIENT.disableColoredCableRecipesInJEI.get();
         this.enableEffects = CLIENT.enableEffects.get();
         this.useLargeFonts = CLIENT.useLargeFonts.get();
-        this.useColoredCraftingStatus = CLIENT.useColoredCraftingStatus.get();
     }
 
     private void syncCommonConfig() {
@@ -209,10 +207,6 @@ public final class AEConfig {
         return this.useLargeFonts;
     }
 
-    public boolean isUseColoredCraftingStatus() {
-        return this.useColoredCraftingStatus;
-    }
-
     public boolean isDisableColoredCableRecipesInJEI() {
         return this.disableColoredCableRecipesInJEI;
     }
@@ -279,22 +273,6 @@ public final class AEConfig {
         return CLIENT.tooltipMaxCellContentShown.get();
     }
 
-    public boolean isPinAutoCraftedItems() {
-        return CLIENT.pinAutoCraftedItems.get();
-    }
-
-    public void setPinAutoCraftedItems(boolean enabled) {
-        CLIENT.pinAutoCraftedItems.set(enabled);
-    }
-
-    public boolean isNotifyForFinishedCraftingJobs() {
-        return CLIENT.notifyForFinishedCraftingJobs.get();
-    }
-
-    public void setNotifyForFinishedCraftingJobs(boolean enabled) {
-        CLIENT.notifyForFinishedCraftingJobs.set(enabled);
-    }
-
     public boolean isClearGridOnClose() {
         return CLIENT.clearGridOnClose.get();
     }
@@ -314,15 +292,11 @@ public final class AEConfig {
         // Misc
         public final BooleanOption enableEffects;
         public final BooleanOption useLargeFonts;
-        public final BooleanOption useColoredCraftingStatus;
         public final BooleanOption disableColoredCableRecipesInJEI;
         public final BooleanOption debugGuiOverlays;
         public final BooleanOption showPlacementPreview;
-        public final BooleanOption notifyForFinishedCraftingJobs;
-
         // Terminal Settings
         public final EnumOption<TerminalStyle> terminalStyle;
-        public final BooleanOption pinAutoCraftedItems;
         public final BooleanOption clearGridOnClose;
         public final IntegerOption terminalMargin;
 
@@ -345,17 +319,12 @@ public final class AEConfig {
             this.disableColoredCableRecipesInJEI = client.addBoolean("disableColoredCableRecipesInJEI", true);
             this.enableEffects = client.addBoolean("enableEffects", true);
             this.useLargeFonts = client.addBoolean("useTerminalUseLargeFont", false);
-            this.useColoredCraftingStatus = client.addBoolean("useColoredCraftingStatus", true);
             this.debugGuiOverlays = client.addBoolean("showDebugGuiOverlays", false, "Show debugging GUI overlays");
             this.showPlacementPreview = client.addBoolean("showPlacementPreview", true,
                     "Show a preview of part and facade placement");
-            this.notifyForFinishedCraftingJobs = client.addBoolean("notifyForFinishedCraftingJobs", true,
-                    "Show toast when long-running crafting jobs finish.");
 
             var terminals = root.subsection("terminals");
             this.terminalStyle = terminals.addEnum("terminalStyle", TerminalStyle.SMALL);
-            this.pinAutoCraftedItems = terminals.addBoolean("pinAutoCraftedItems", true,
-                    "Pin items that the player auto-crafts to the top of the terminal");
             this.clearGridOnClose = client.addBoolean("clearGridOnClose", false,
                     "Automatically clear the crafting/encoding grid when closing the terminal");
             this.terminalMargin = client.addInt("terminalMargin", 25,
