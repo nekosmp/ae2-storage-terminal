@@ -140,20 +140,6 @@ public abstract class AEKey {
     }
 
     /**
-     * @see AEKeyType#getAmountPerOperation()
-     */
-    public final int getAmountPerOperation() {
-        return getType().getAmountPerOperation();
-    }
-
-    /**
-     * @see AEKeyType#getAmountPerByte()
-     */
-    public final int getAmountPerByte() {
-        return getType().getAmountPerByte();
-    }
-
-    /**
      * @see AEKeyType#formatAmount(long,AmountFormat)
      */
     public String formatAmount(long amount, AmountFormat format) {

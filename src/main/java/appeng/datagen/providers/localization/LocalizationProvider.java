@@ -13,7 +13,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.ButtonToolTips;
@@ -59,12 +58,9 @@ public class LocalizationProvider implements IAE2DataProvider {
     }
 
     private void generateJadeLocalizations() {
-        addJadeProviderDisplayName(TooltipIds.DEBUG, "AE2 Debug Info");
         addJadeProviderDisplayName(TooltipIds.GRID_NODE_STATE, "AE2 Network State");
-        addJadeProviderDisplayName(TooltipIds.POWER_STORAGE, "AE2 Power State");
         addJadeProviderDisplayName(TooltipIds.CRAFTING_MONITOR, "AE2 Crafting Monitor");
         addJadeProviderDisplayName(TooltipIds.PATTERN_PROVIDER, "AE2 Pattern Provider");
-        addJadeProviderDisplayName(TooltipIds.CHARGER, "AE2 Charger");
         addJadeProviderDisplayName(TooltipIds.PART_NAME, "AE2 Part Name");
         addJadeProviderDisplayName(TooltipIds.PART_ICON, "AE2 Part Icon");
         addJadeProviderDisplayName(TooltipIds.PART_MOD_NAME, "AE2 Mod Name");
@@ -96,19 +92,11 @@ public class LocalizationProvider implements IAE2DataProvider {
 
     private void generateLocalizations() {
         add("ae2.permission_denied", "You lack permission to access this.");
-        add("biome.ae2.spatial_storage", "Spatial Storage");
-        add("commands.ae2.ChunkLoggerOff", "Chunk Logging is now off");
-        add("commands.ae2.ChunkLoggerOn", "Chunk Logging is now on");
+        add("commands.ae2.ChunkLoggerOn", "Chunk Logging is now off");
+        add("commands.ae2.ChunkLoggerOff", "Chunk Logging is now on");
         add("commands.ae2.permissions", "You do not have adequate permissions to run this command.");
         add("commands.ae2.usage",
                 "Commands provided by Applied Energistics 2 - use /ae2 list for a list, and /ae2 help _____ for help with a command.");
-        add("entity.minecraft.villager.fluix_researcher", "Fluix Researcher");
-        add("gui.ae2.PatternEncoding.primary_processing_result_hint",
-                "Can be requested through the automated crafting system.");
-        add("gui.ae2.PatternEncoding.primary_processing_result_tooltip", "Primary Processing Result");
-        add("gui.ae2.PatternEncoding.secondary_processing_result_hint",
-                "Can not be directly requested through the automated crafting system, but will be used before stored items in multi-step recipes.");
-        add("gui.ae2.PatternEncoding.secondary_processing_result_tooltip", "Secondary Processing Result");
         add("gui.ae2.security.build.name", "Build");
         add("gui.ae2.security.build.tip",
                 "User can modify the physical structure of the network, and make configuration changes.");
@@ -120,25 +108,17 @@ public class LocalizationProvider implements IAE2DataProvider {
         add("gui.ae2.security.inject.tip", "User is allowed to store new items into storage.");
         add("gui.ae2.security.security.name", "Security");
         add("gui.ae2.security.security.tip", "User can access and modify the security terminal of the network.");
-        add("itemGroup.ae2.facades", "Applied Energistics 2 - Facades");
         add("itemGroup.ae2.main", "Applied Energistics 2");
         add("key.ae2.category", "Applied Energistics 2");
-        add("key.ae2.portable_fluid_cell", "Open Portable Fluid Cell");
-        add("key.ae2.portable_item_cell", "Open Portable Item Cell");
         add("key.ae2.wireless_terminal", "Open Wireless Terminal");
         add("key.toggle_focus.desc", "Toggle search box focus");
         add("stat.ae2.items_extracted", "Items extracted from ME Storage");
         add("stat.ae2.items_inserted", "Items added to ME Storage");
-        add("theoneprobe.ae2.channels", "%1$d Channels");
-        add("theoneprobe.ae2.channels_of", "%1$d of %2$d Channels");
         add("theoneprobe.ae2.contains", "Contains");
-        add("theoneprobe.ae2.crafting", "Crafting: %1$s");
-        add("theoneprobe.ae2.device_missing_channel", "Device Missing Channel");
         add("theoneprobe.ae2.device_offline", "Device Offline");
         add("theoneprobe.ae2.device_online", "Device Online");
         add("theoneprobe.ae2.locked", "Locked");
         add("theoneprobe.ae2.showing", "Showing");
-        add("theoneprobe.ae2.stored_energy", "%1$d / %2$d");
         add("theoneprobe.ae2.unlocked", "Unlocked");
     }
 

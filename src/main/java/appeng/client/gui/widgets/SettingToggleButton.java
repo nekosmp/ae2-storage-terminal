@@ -94,20 +94,6 @@ public class SettingToggleButton<T extends Enum<T>> extends IconButton {
             registerApp(Icon.ACCESS_READ_WRITE, Settings.ACCESS, AccessRestriction.READ_WRITE, ButtonToolTips.IOMode,
                     ButtonToolTips.ReadWrite);
 
-            registerApp(Icon.ARROW_LEFT, Settings.OPERATION_MODE, OperationMode.FILL,
-                    ButtonToolTips.TransferDirection,
-                    ButtonToolTips.TransferToStorageCell);
-            registerApp(Icon.ARROW_RIGHT, Settings.OPERATION_MODE, OperationMode.EMPTY,
-                    ButtonToolTips.TransferDirection,
-                    ButtonToolTips.TransferToNetwork);
-
-            registerApp(Icon.ARROW_LEFT, Settings.IO_DIRECTION, RelativeDirection.LEFT,
-                    ButtonToolTips.TransferDirection,
-                    ButtonToolTips.TransferToStorageCell);
-            registerApp(Icon.ARROW_RIGHT, Settings.IO_DIRECTION, RelativeDirection.RIGHT,
-                    ButtonToolTips.TransferDirection,
-                    ButtonToolTips.TransferToNetwork);
-
             registerApp(Icon.ARROW_UP, Settings.SORT_DIRECTION, SortDir.ASCENDING, ButtonToolTips.SortOrder,
                     ButtonToolTips.Ascending);
             registerApp(Icon.ARROW_DOWN, Settings.SORT_DIRECTION, SortDir.DESCENDING, ButtonToolTips.SortOrder,

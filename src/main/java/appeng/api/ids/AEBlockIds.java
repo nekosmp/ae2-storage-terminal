@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.Block;
 /**
  * Contains {@link Block} ids for various blocks defined by Ae2.
  */
-@SuppressWarnings("unused")
 public final class AEBlockIds {
     public static final ResourceLocation WIRELESS_ACCESS_POINT = id("wireless_access_point");
     public static final ResourceLocation SECURITY_STATION = id("security_station");

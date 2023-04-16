@@ -40,17 +40,6 @@ final class AEFluidKeys extends AEKeyType {
     }
 
     @Override
-    public int getAmountPerOperation() {
-        // On Forge this was 125mb (so 125/1000th of a bucket)
-        return AEFluidKey.AMOUNT_BUCKET * 125 / 1000;
-    }
-
-    @Override
-    public int getAmountPerByte() {
-        return 8 * AEFluidKey.AMOUNT_BUCKET;
-    }
-
-    @Override
     public AEFluidKey readFromPacket(FriendlyByteBuf input) {
         Objects.requireNonNull(input);
 

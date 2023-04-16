@@ -19,30 +19,7 @@
 package appeng.core.settings;
 
 public enum TickRates {
-
-    Interface(5, 120),
-
-    ImportBus(5, 40),
-
-    ExportBus(5, 60),
-
-    AnnihilationPlane(2, 120),
-
-    METunnel(5, 20),
-
-    Inscriber(1, 1),
-
-    Charger(10, 10),
-
-    IOPort(1, 5),
-
-    VibrationChamber(10, 40),
-
-    StorageBus(5, 60),
-
-    ItemTunnel(5, 60),
-
-    LightTunnel(5, 60);
+    StorageBus(5, 60);
 
     private final int defaultMin;
     private final int defaultMax;

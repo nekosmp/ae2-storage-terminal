@@ -65,14 +65,4 @@ public final class ItemRendererHooks {
 
         return false;
     }
-
-    private static void renderInstead(ItemRenderer renderer, ItemStack stack, int x, int y, BakedModel realModel) {
-        OVERRIDING_FOR.set(stack);
-        try {
-            renderer.renderGuiItem(stack, x, y, realModel);
-        } finally {
-            OVERRIDING_FOR.remove();
-        }
-    }
-
 }

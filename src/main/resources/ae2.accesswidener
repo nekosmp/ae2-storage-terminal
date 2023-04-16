@@ -17,9 +17,6 @@ mutable field net/minecraft/world/inventory/Slot y I
 # For JEI registration
 accessible method net/minecraft/world/item/crafting/RecipeManager byType (Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/Map;
 
-# To disable water-bobbing of item entities (for growing crystals)
-extendable method net/minecraft/world/entity/item/ItemEntity setUnderwaterMovement ()V
-
 # For structure registration
 accessible method net/minecraft/data/worldgen/Structures structure (Lnet/minecraft/tags/TagKey;Ljava/util/Map;Lnet/minecraft/world/level/levelgen/GenerationStep$Decoration;Lnet/minecraft/world/level/levelgen/structure/TerrainAdjustment;)Lnet/minecraft/world/level/levelgen/structure/Structure$StructureSettings;
 accessible method net/minecraft/data/worldgen/Structures register (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/levelgen/structure/Structure;)Lnet/minecraft/core/Holder;
@@ -34,9 +31,6 @@ accessible class net/minecraft/client/renderer/RenderStateShard$LineStateShard
 
 # Rendering voxel shape outlines
 accessible method net/minecraft/client/renderer/LevelRenderer renderShape (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V
-
-# For Encoded Pattern Rendering
-accessible method net/minecraft/client/renderer/entity/ItemRenderer renderGuiItem (Lnet/minecraft/world/item/ItemStack;IILnet/minecraft/client/resources/model/BakedModel;)V
 
 # Fabric's Attack Block Hook doesn't set the interaction delay
 accessible field net/minecraft/client/multiplayer/MultiPlayerGameMode destroyDelay I

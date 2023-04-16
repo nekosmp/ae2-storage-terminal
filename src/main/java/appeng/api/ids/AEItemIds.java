@@ -23,18 +23,11 @@
 
 package appeng.api.ids;
 
-import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
-
 import net.minecraft.resources.ResourceLocation;
-
-import appeng.api.util.AEColor;
 
 /**
  * Contains {@link net.minecraft.world.item.Item} ids for various items defined by Ae2.
  */
-@SuppressWarnings("unused")
 public final class AEItemIds {
     public static final ResourceLocation BIOMETRIC_CARD = id("biometric_card");
     public static final ResourceLocation WIRELESS_TERMINAL = id("wireless_terminal");

@@ -22,16 +22,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 
 import appeng.api.features.GridLinkables;
 import appeng.api.features.IGridLinkableHandler;
 import appeng.api.implementations.items.IBiometricCard;
-import appeng.api.implementations.items.IStorageComponent;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.upgrades.Upgrades;
 import appeng.client.gui.Icon;
-import appeng.core.definitions.AEItems;
 
 /**
  * @author AlgorithmX2
@@ -64,10 +61,6 @@ public class RestrictedInputSlot extends AppEngSlot {
         return this;
     }
 
-    private Level getLevel() {
-        return getMenu().getPlayerInventory().player.getCommandSenderWorld();
-    }
-
     @Override
     public boolean mayPlace(ItemStack stack) {
         if (!this.getMenu().isValidForSlot(this, stack)) {
@@ -92,9 +85,6 @@ public class RestrictedInputSlot extends AppEngSlot {
 
         // TODO: might need to check for our own patterns in some cases
         switch (this.which) {
-            case STORAGE_COMPONENT:
-                return stack.getItem() instanceof IStorageComponent
-                        && ((IStorageComponent) stack.getItem()).isStorageComponent(stack);
             case GRID_LINKABLE_ITEM: {
                 var handler = GridLinkables.get(stack.getItem());
                 return handler != null && handler.canLink(stack);
@@ -129,36 +119,12 @@ public class RestrictedInputSlot extends AppEngSlot {
     }
 
     public enum PlacableItemType {
-        STORAGE_CELLS(Icon.BACKGROUND_STORAGE_CELL),
-        ORE(Icon.BACKGROUND_ORE),
-        STORAGE_COMPONENT(Icon.BACKGROUND_STORAGE_COMPONENT),
         /**
          * Only allows items that have a registered {@link IGridLinkableHandler}.
          */
         GRID_LINKABLE_ITEM(Icon.BACKGROUND_WIRELESS_TERM),
-        TRASH(Icon.BACKGROUND_TRASH),
-        /**
-         * Accepts {@link AEItems#CRAFTING_PATTERN}, {@link AEItems#PROCESSING_PATTERN},
-         * {@link AEItems#SMITHING_TABLE_PATTERN} or {@link AEItems#STONECUTTING_PATTERN}.
-         */
-        ENCODED_AE_PATTERN(Icon.BACKGROUND_ENCODED_PATTERN),
-        /**
-         * Only accepts {@link AEItems#CRAFTING_PATTERN} and {@link AEItems#STONECUTTING_PATTERN}.
-         */
-        MOLECULAR_ASSEMBLER_PATTERN(Icon.BACKGROUND_ENCODED_PATTERN),
-        /**
-         * An encoded pattern from any mod (AE2 or otherwise). Delegates to AE2 API to identify such items.
-         */
-        POWERED_TOOL(Icon.BACKGROUND_CHARGABLE),
-        SPATIAL_STORAGE_CELLS(Icon.BACKGROUND_SPATIAL_CELL),
-        FUEL(Icon.BACKGROUND_FUEL),
         UPGRADES(Icon.BACKGROUND_UPGRADE),
-        WORKBENCH_CELL(Icon.BACKGROUND_STORAGE_CELL),
-        BIOMETRIC_CARD(Icon.BACKGROUND_BIOMETRIC_CARD),
-        VIEW_CELL(Icon.BACKGROUND_VIEW_CELL),
-        INSCRIBER_PLATE(Icon.BACKGROUND_PLATE),
-        INSCRIBER_INPUT(Icon.BACKGROUND_INGOT),
-        METAL_INGOTS(Icon.BACKGROUND_INGOT);
+        BIOMETRIC_CARD(Icon.BACKGROUND_BIOMETRIC_CARD);
 
         public final Icon icon;
 

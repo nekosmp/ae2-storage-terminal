@@ -103,25 +103,6 @@ public abstract class AEKeyType {
     }
 
     /**
-     * How much of this key will be transferred as part of a transfer operation. Used to balance item vs. fluids
-     * transfers.
-     * <p>
-     * E.g. used by IO Ports to transfer 1000 mB, not 1 mB to match the item channel transferring a full bucket per
-     * operation.
-     */
-    public int getAmountPerOperation() {
-        return 1;
-    }
-
-    /**
-     * The amount of this key type that can be stored per byte used in a storage cell. Standard value for items is 8,
-     * and for fluids it's 8000.
-     */
-    public int getAmountPerByte() {
-        return 8;
-    }
-
-    /**
      * Attempts to load a key of this type from the given packet buffer.
      */
     @Nullable
