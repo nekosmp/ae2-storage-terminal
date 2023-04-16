@@ -66,8 +66,8 @@ public abstract class AbstractMonitorPart extends AbstractDisplayPart
     private boolean isLocked;
     private IStackWatcher myWatcher;
 
-    public AbstractMonitorPart(IPartItem<?> partItem, boolean requireChannel) {
-        super(partItem, requireChannel);
+    public AbstractMonitorPart(IPartItem<?> partItem) {
+        super(partItem);
 
         getMainNode().addService(IStorageWatcherNode.class, this);
     }

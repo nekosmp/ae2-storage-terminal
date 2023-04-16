@@ -44,7 +44,6 @@ public class WirelessBlockEntity extends AENetworkInvBlockEntity implements IWir
 
     public WirelessBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
-        this.getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL);
         this.getMainNode().setExposedOnSides(EnumSet.noneOf(Direction.class));
     }
 
@@ -76,9 +75,8 @@ public class WirelessBlockEntity extends AENetworkInvBlockEntity implements IWir
         this.setClientFlags(0);
 
         getMainNode().ifPresent((grid, node) -> {
-            if (node.meetsChannelRequirements()) {
-                this.setClientFlags(this.getClientFlags() | CHANNEL_FLAG);
-            }
+            //ATAKKU TODO
+            this.setClientFlags(this.getClientFlags() | CHANNEL_FLAG);
         });
 
         data.writeByte((byte) this.getClientFlags());
@@ -86,7 +84,7 @@ public class WirelessBlockEntity extends AENetworkInvBlockEntity implements IWir
 
     @Override
     public AECableType getCableConnectionType(Direction dir) {
-        return AECableType.SMART;
+        return AECableType.GLASS;
     }
 
     @Override

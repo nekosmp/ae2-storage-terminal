@@ -74,10 +74,6 @@ public interface IGridNodeListener<T> {
      */
     enum State {
         /**
-         * The node's assigned channels have changed. This might only be relevant for nodes that require channels.
-         */
-        CHANNEL,
-        /**
          * The grid that the node's attached to has either started or finished booting up.
          */
         GRID_BOOT

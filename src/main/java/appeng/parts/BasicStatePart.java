@@ -18,7 +18,6 @@
 
 package appeng.parts;
 
-import appeng.api.networking.GridFlags;
 import appeng.api.parts.IPartItem;
 
 @Deprecated(forRemoval = true)
@@ -26,7 +25,6 @@ public abstract class BasicStatePart extends AEBasePart {
 
     public BasicStatePart(IPartItem<?> partItem) {
         super(partItem);
-        this.getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL);
     }
 
 }

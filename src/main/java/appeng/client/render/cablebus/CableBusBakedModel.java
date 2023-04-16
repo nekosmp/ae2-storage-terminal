@@ -236,20 +236,6 @@ public class CableBusBakedModel implements BakedModel, FabricBakedModel {
                 case GLASS:
                     this.cableBuilder.addStraightGlassConnection(facing, cableColor, emitter);
                     break;
-                case COVERED:
-                    this.cableBuilder.addStraightCoveredConnection(facing, cableColor, emitter);
-                    break;
-                case SMART:
-                    this.cableBuilder.addStraightSmartConnection(facing, cableColor,
-                            renderState.getChannelsOnSide().get(facing), emitter);
-                    break;
-                case DENSE_COVERED:
-                    this.cableBuilder.addStraightDenseCoveredConnection(facing, cableColor, emitter);
-                    break;
-                case DENSE_SMART:
-                    this.cableBuilder.addStraightDenseSmartConnection(facing, cableColor,
-                            renderState.getChannelsOnSide().get(facing), emitter);
-                    break;
                 default:
                     break;
             }
@@ -263,21 +249,10 @@ public class CableBusBakedModel implements BakedModel, FabricBakedModel {
         EnumMap<Direction, Integer> attachmentConnections = renderState.getAttachmentConnections();
         for (Direction facing : attachmentConnections.keySet()) {
             int distance = attachmentConnections.get(facing);
-            int channels = renderState.getChannelsOnSide().get(facing);
 
             switch (cableType) {
                 case GLASS:
                     this.cableBuilder.addConstrainedGlassConnection(facing, cableColor, distance, emitter);
-                    break;
-                case COVERED:
-                    this.cableBuilder.addConstrainedCoveredConnection(facing, cableColor, distance, emitter);
-                    break;
-                case SMART:
-                    this.cableBuilder.addConstrainedSmartConnection(facing, cableColor, distance, channels, emitter);
-                    break;
-                case DENSE_COVERED:
-                case DENSE_SMART:
-                    // Dense cables do not render connections to parts since none can be attached
                     break;
                 default:
                     break;
@@ -289,27 +264,10 @@ public class CableBusBakedModel implements BakedModel, FabricBakedModel {
             final Direction facing = connection.getKey();
             final AECableType connectionType = connection.getValue();
             final boolean cableBusAdjacent = renderState.getCableBusAdjacent().contains(facing);
-            final int channels = renderState.getChannelsOnSide().get(facing);
 
             switch (cableType) {
                 case GLASS:
                     this.cableBuilder.addGlassConnection(facing, cableColor, connectionType, cableBusAdjacent, emitter);
-                    break;
-                case COVERED:
-                    this.cableBuilder.addCoveredConnection(facing, cableColor, connectionType, cableBusAdjacent,
-                            emitter);
-                    break;
-                case SMART:
-                    this.cableBuilder.addSmartConnection(facing, cableColor, connectionType, cableBusAdjacent, channels,
-                            emitter);
-                    break;
-                case DENSE_COVERED:
-                    this.cableBuilder.addDenseCoveredConnection(facing, cableColor, connectionType, cableBusAdjacent,
-                            emitter);
-                    break;
-                case DENSE_SMART:
-                    this.cableBuilder.addDenseSmartConnection(facing, cableColor, connectionType, cableBusAdjacent,
-                            channels, emitter);
                     break;
                 default:
                     break;

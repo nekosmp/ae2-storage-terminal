@@ -113,7 +113,7 @@ public interface IGridNode {
      * visual state display to avoid the device looking disabled while the grid is booting.
      */
     default boolean isActive() {
-        return hasGridBooted() && meetsChannelRequirements();
+        return hasGridBooted();
     }
 
     /**
@@ -124,7 +124,7 @@ public interface IGridNode {
      * as the channels might still be outdated.
      */
     default boolean isOnline() {
-        return meetsChannelRequirements();
+        return true;
     }
 
     /**
@@ -132,12 +132,6 @@ public interface IGridNode {
      * @see IPathingService#isNetworkBooting()
      */
     boolean hasGridBooted();
-
-    /**
-     * @return if the node's channel requirements are currently met, use this for display purposes, use isActive for
-     *         status.
-     */
-    boolean meetsChannelRequirements();
 
     /**
      * see if this node has a certain flag
@@ -176,8 +170,4 @@ public interface IGridNode {
      * Fills in details about this node in the given crash report category.
      */
     void fillCrashReportCategory(CrashReportCategory category);
-
-    int getMaxChannels();
-
-    int getUsedChannels();
 }

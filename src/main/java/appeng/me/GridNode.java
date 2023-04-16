@@ -53,7 +53,6 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridNodeListener;
 import appeng.api.networking.IGridNodeService;
 import appeng.api.networking.IGridVisitor;
-import appeng.api.networking.pathing.ChannelMode;
 import appeng.api.parts.IPart;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.util.AEColor;
@@ -87,8 +86,6 @@ public class GridNode implements IGridNode, IPathItem {
     private Grid myGrid;
     private Object visitorIterationNumber = null;
     // connection criteria
-    private int usedChannels = 0;
-    private int lastUsedChannels = 0;
     private final EnumSet<GridFlags> flags;
     protected final EnumSet<Direction> exposedOnSides = EnumSet.noneOf(Direction.class);
     private ClassToInstanceMap<IGridNodeService> services;
@@ -107,10 +104,6 @@ public class GridNode implements IGridNode, IPathItem {
 
     Grid getMyGrid() {
         return this.myGrid;
-    }
-
-    public int usedChannels() {
-        return this.lastUsedChannels;
     }
 
     @FunctionalInterface
@@ -430,11 +423,6 @@ public class GridNode implements IGridNode, IPathItem {
     }
 
     @Override
-    public boolean meetsChannelRequirements() {
-        return !flags.contains(GridFlags.REQUIRE_CHANNEL) || this.getUsedChannels() > 0;
-    }
-
-    @Override
     public boolean hasFlag(GridFlags flag) {
         return flags.contains(flag);
     }
@@ -508,8 +496,6 @@ public class GridNode implements IGridNode, IPathItem {
 
     void setGridStorage(GridStorage s) {
         this.myStorage = s;
-        // Don't reset the channels, since we want the node to remain active until repathing is done to immediately
-        // re-add services (such as storage) for active nodes when they join the grid.
     }
 
     @Override
@@ -523,8 +509,6 @@ public class GridNode implements IGridNode, IPathItem {
 
     @Override
     public void setControllerRoute(IPathItem fast) {
-        this.usedChannels = 0;
-
         GridConnection connection = (GridConnection) fast;
 
         final int idx = this.connections.indexOf(connection);
@@ -535,56 +519,8 @@ public class GridNode implements IGridNode, IPathItem {
     }
 
     @Override
-    public boolean canSupportMoreChannels() {
-        return this.getUsedChannels() < this.getMaxChannels();
-    }
-
-    @Override
-    public int getUsedChannels() {
-        return this.usedChannels;
-    }
-
-    @Override
-    public int getMaxChannels() {
-        if (flags.contains(GridFlags.CANNOT_CARRY)) {
-            return 0;
-        }
-
-        var channelMode = myGrid.getPathingService().getChannelMode();
-        if (channelMode == ChannelMode.INFINITE) {
-            return Integer.MAX_VALUE;
-        }
-
-        if (!flags.contains(GridFlags.DENSE_CAPACITY)) {
-            return 8 * channelMode.getCableCapacityFactor();
-        } else {
-            return 32 * channelMode.getCableCapacityFactor();
-        }
-    }
-
-    @Override
     public Iterable<IPathItem> getPossibleOptions() {
         return ImmutableList.copyOf(this.connections);
-    }
-
-    @Override
-    public void incrementChannelCount(int usedChannels) {
-        this.usedChannels += usedChannels;
-    }
-
-    @Override
-    public void finalizeChannels() {
-        if (hasFlag(GridFlags.CANNOT_CARRY)) {
-            return;
-        }
-
-        if (this.lastUsedChannels != this.getUsedChannels()) {
-            this.lastUsedChannels = this.usedChannels;
-
-            if (this.getInternalGrid() != null) {
-                notifyStatusChange(IGridNodeListener.State.CHANNEL);
-            }
-        }
     }
 
     public long getLastSecurityKey() {

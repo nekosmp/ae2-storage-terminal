@@ -27,32 +27,12 @@ public interface IPathItem {
     void setControllerRoute(IPathItem fast);
 
     /**
-     * used to determine if the finder can continue.
-     */
-    boolean canSupportMoreChannels();
-
-    /**
-     * The maximum number of channels connections to this path item can carry.
-     */
-    int getMaxChannels();
-
-    /**
      * find possible choices for other pathing.
      */
     Iterable<IPathItem> getPossibleOptions();
 
     /**
-     * add one to the channel count, this is mostly for cables.
-     */
-    void incrementChannelCount(int usedChannels);
-
-    /**
      * Tests if this path item has the specific grid flag set.
      */
     boolean hasFlag(GridFlags flag);
-
-    /**
-     * channels are done, wrap it up.
-     */
-    void finalizeChannels();
 }

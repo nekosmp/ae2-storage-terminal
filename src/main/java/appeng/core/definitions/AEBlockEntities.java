@@ -39,7 +39,6 @@ import appeng.blockentity.ClientTickingBlockEntity;
 import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.misc.SecurityStationBlockEntity;
 import appeng.blockentity.networking.CableBusBlockEntity;
-import appeng.blockentity.networking.ControllerBlockEntity;
 import appeng.blockentity.networking.WirelessBlockEntity;
 import appeng.core.AppEng;
 
@@ -54,8 +53,6 @@ public final class AEBlockEntities {
             SecurityStationBlockEntity.class, SecurityStationBlockEntity::new, AEBlocks.SECURITY_STATION);
     public static final BlockEntityType<CableBusBlockEntity> CABLE_BUS = create("cable_bus", CableBusBlockEntity.class,
             CableBusBlockEntity::new, AEBlocks.CABLE_BUS);
-    public static final BlockEntityType<ControllerBlockEntity> CONTROLLER = create("controller",
-            ControllerBlockEntity.class, ControllerBlockEntity::new, AEBlocks.CONTROLLER);
 
     public static Map<ResourceLocation, BlockEntityType<?>> getBlockEntityTypes() {
         return ImmutableMap.copyOf(BLOCK_ENTITY_TYPES);

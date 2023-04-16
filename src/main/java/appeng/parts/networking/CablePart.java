@@ -18,12 +18,9 @@
 
 package appeng.parts.networking;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -40,7 +37,6 @@ import appeng.api.networking.GridHelper;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridNodeListener;
 import appeng.api.networking.IManagedGridNode;
-import appeng.api.networking.pathing.ChannelMode;
 import appeng.api.parts.BusSupport;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartHost;
@@ -60,8 +56,6 @@ public class CablePart extends AEBasePart implements ICablePart {
             nodeOwner.markForUpdate();
         }
     };
-
-    private final int[] channelsOnSide = { 0, 0, 0, 0, 0, 0 };
 
     private Set<Direction> connections = Collections.emptySet();
 
@@ -236,74 +230,15 @@ public class CablePart extends AEBasePart implements ICablePart {
     public void writeToStream(FriendlyByteBuf data) {
         super.writeToStream(data);
 
-        boolean[] writeChannels = new boolean[Direction.values().length];
-        byte[] channelsPerSide = new byte[Direction.values().length];
-
-        for (Direction thisSide : Direction.values()) {
-            var part = this.getHost().getPart(thisSide);
-            if (part != null) {
-                int channels = 0;
-                if (part.getGridNode() != null) {
-                    for (var gc : part.getGridNode().getConnections()) {
-                        channels = Math.max(channels, gc.getUsedChannels());
-                    }
-                }
-                channelsPerSide[thisSide.ordinal()] = getVisualChannels(channels);
-                writeChannels[thisSide.ordinal()] = true;
-            }
-        }
-
         int connectedSidesPacked = 0;
         var n = getGridNode();
         if (n != null) {
             for (var entry : n.getInWorldConnections().entrySet()) {
                 var side = entry.getKey().ordinal();
-                var connection = entry.getValue();
-                channelsPerSide[side] = getVisualChannels(connection.getUsedChannels());
-                writeChannels[side] = true;
                 connectedSidesPacked |= 1 << side;
             }
         }
         data.writeByte((byte) connectedSidesPacked);
-
-        // Only write the used channels for sides where we have a part or another cable
-        for (int i = 0; i < writeChannels.length; i++) {
-            if (writeChannels[i]) {
-                data.writeByte(channelsPerSide[i]);
-            }
-        }
-    }
-
-    private byte getVisualChannels(int channels) {
-        var node = getGridNode();
-        if (node == null) {
-            return 0;
-        }
-
-        byte visualMaxChannels = switch (getCableConnectionType()) {
-            case NONE -> 0;
-            case GLASS, SMART, COVERED -> 8;
-            case DENSE_COVERED, DENSE_SMART -> 32;
-        };
-
-        // In infinite mode, we either return 0 or full strength
-        if (node.getGrid().getPathingService().getChannelMode() == ChannelMode.INFINITE) {
-            return channels <= 0 ? 0 : visualMaxChannels;
-        }
-
-        int gridMaxChannels = node.getMaxChannels();
-        if (visualMaxChannels == 0 || gridMaxChannels == 0) {
-            return 0;
-        }
-
-        // Generally we round down here
-        var result = (byte) (Math.min(visualMaxChannels, channels * visualMaxChannels / gridMaxChannels));
-        // Except if at least 1 channel is used
-        if (result == 0 && channels > 0) {
-            return 1;
-        } else {
-            return result;
-        }
     }
 
     @Override
@@ -313,33 +248,17 @@ public class CablePart extends AEBasePart implements ICablePart {
         int connectedSidesPacked = data.readByte();
         // Save previous state for change-detection
         var previousConnections = this.getConnections();
-
-        boolean channelsChanged = false;
-
+    
         var connections = EnumSet.noneOf(Direction.class);
         for (var d : Direction.values()) {
             boolean conOnSide = (connectedSidesPacked & (1 << d.ordinal())) != 0;
             if (conOnSide) {
                 connections.add(d);
             }
-
-            int ch = 0;
-
-            // Only read channels if there's a part on this side or a cable connection
-            // This works only because cables are always read *last* from the packet update
-            // for a cable bus
-            if (conOnSide || this.getHost().getPart(d) != null) {
-                ch = data.readByte() & 0xFF;
-            }
-
-            if (ch != this.channelsOnSide[d.ordinal()]) {
-                channelsChanged = true;
-                this.setChannelsOnSide(d.ordinal(), ch);
-            }
         }
         this.setConnections(connections);
 
-        return changed || !previousConnections.equals(this.getConnections()) || channelsChanged;
+        return changed || !previousConnections.equals(this.getConnections());
     }
 
     @Override
@@ -347,13 +266,6 @@ public class CablePart extends AEBasePart implements ICablePart {
         super.writeVisualStateToNBT(data);
 
         updateConnections();
-
-        for (var side : Direction.values()) {
-            if (connections.contains(side)) {
-                var sideName = "channels" + StringUtils.capitalize(side.getSerializedName());
-                data.putInt(sideName, channelsOnSide[side.ordinal()]);
-            }
-        }
 
         var connectionsTag = new ListTag();
         for (var connection : connections) {
@@ -366,17 +278,6 @@ public class CablePart extends AEBasePart implements ICablePart {
     public void readVisualStateFromNBT(CompoundTag data) {
         super.readVisualStateFromNBT(data);
 
-        // Restore channels per side for smart cables and also support as
-        // a convenience to set them for all sides at once
-        if (data.contains("channels")) {
-            Arrays.fill(this.channelsOnSide, data.getInt("channels"));
-        } else {
-            for (var side : Direction.values()) {
-                var sideName = "channels" + StringUtils.capitalize(side.getSerializedName());
-                channelsOnSide[side.ordinal()] = data.getInt(sideName);
-            }
-        }
-
         // Restore adjacent connections
         var connections = EnumSet.noneOf(Direction.class);
         var connectionsTag = data.getList("connections", Tag.TAG_STRING);
@@ -387,14 +288,6 @@ public class CablePart extends AEBasePart implements ICablePart {
             }
         }
         setConnections(connections);
-    }
-
-    public int getChannelsOnSide(Direction side) {
-        return this.channelsOnSide[side.ordinal()];
-    }
-
-    void setChannelsOnSide(int i, int channels) {
-        this.channelsOnSide[i] = channels;
     }
 
     Set<Direction> getConnections() {

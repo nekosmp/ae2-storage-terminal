@@ -77,7 +77,6 @@ public class SecurityStationBlockEntity extends AENetworkBlockEntity implements 
     public SecurityStationBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
         this.getMainNode()
-                .setFlags(GridFlags.REQUIRE_CHANNEL)
                 .addService(ISecurityProvider.class, this);
         difference++;
 
@@ -191,7 +190,7 @@ public class SecurityStationBlockEntity extends AENetworkBlockEntity implements 
 
     @Override
     public AECableType getCableConnectionType(Direction dir) {
-        return AECableType.SMART;
+        return AECableType.GLASS;
     }
 
     @Override

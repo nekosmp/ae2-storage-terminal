@@ -34,14 +34,11 @@ import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridConnection;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridNodeListener;
-import appeng.api.networking.pathing.ChannelMode;
 import appeng.me.pathfinding.IPathItem;
 import appeng.util.Platform;
 
 public class GridConnection implements IGridConnection, IPathItem {
 
-    private int usedChannels = 0;
-    private int lastUsedChannels = 0;
     private Object visitorIterationNumber = null;
     /**
      * Note that in grids with a controller, following this side will always lead down the closest path towards the
@@ -112,11 +109,6 @@ public class GridConnection implements IGridConnection, IPathItem {
     }
 
     @Override
-    public int getUsedChannels() {
-        return usedChannels;
-    }
-
-    @Override
     public IPathItem getControllerRoute() {
         if (this.sideA.hasFlag(GridFlags.CANNOT_CARRY)) {
             return null;
@@ -126,8 +118,6 @@ public class GridConnection implements IGridConnection, IPathItem {
 
     @Override
     public void setControllerRoute(IPathItem fast) {
-        this.lastUsedChannels = 0;
-
         // If the shortest route to the controller is via side B, we need to flip the
         // connections sides because side A should be the closest route to the controller.
         if (this.sideB == fast) {
@@ -141,51 +131,13 @@ public class GridConnection implements IGridConnection, IPathItem {
     }
 
     @Override
-    public boolean canSupportMoreChannels() {
-        return this.getLastUsedChannels() < getMaxChannels();
-    }
-
-    @Override
-    public int getMaxChannels() {
-        var mode = sideB.getGrid().getPathingService().getChannelMode();
-        if (mode == ChannelMode.INFINITE) {
-            return Integer.MAX_VALUE;
-        }
-        return 32 * mode.getCableCapacityFactor();
-    }
-
-    @Override
     public Iterable<IPathItem> getPossibleOptions() {
         return ImmutableList.of((IPathItem) this.a(), (IPathItem) this.b());
     }
 
     @Override
-    public void incrementChannelCount(int usedChannels) {
-        this.lastUsedChannels += usedChannels;
-    }
-
-    @Override
     public boolean hasFlag(GridFlags flag) {
         return false;
-    }
-
-    @Override
-    public void finalizeChannels() {
-        if (this.getUsedChannels() != this.getLastUsedChannels()) {
-            this.usedChannels = this.lastUsedChannels;
-
-            if (this.sideA.getInternalGrid() != null) {
-                this.sideA.notifyStatusChange(IGridNodeListener.State.CHANNEL);
-            }
-
-            if (this.sideB.getInternalGrid() != null) {
-                this.sideB.notifyStatusChange(IGridNodeListener.State.CHANNEL);
-            }
-        }
-    }
-
-    private int getLastUsedChannels() {
-        return this.lastUsedChannels;
     }
 
     Object getVisitorIterationNumber() {

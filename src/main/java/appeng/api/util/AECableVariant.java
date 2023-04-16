@@ -24,7 +24,7 @@
 package appeng.api.util;
 
 public enum AECableVariant {
-    NONE, GLASS, COVERED, SMART;
+    NONE, GLASS;
 
     public static AECableVariant min(AECableVariant a, AECableVariant b) {
         return a.compareTo(b) < 0 ? a : b;

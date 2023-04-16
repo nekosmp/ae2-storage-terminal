@@ -16,12 +16,9 @@ import appeng.block.networking.CableBusBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.networking.CableBusBlockEntity;
 import appeng.integration.modules.igtooltip.blocks.GridNodeStateDataProvider;
-import appeng.integration.modules.igtooltip.parts.ChannelDataProvider;
 import appeng.integration.modules.igtooltip.parts.GridNodeStateProvider;
 import appeng.integration.modules.igtooltip.parts.PartHostTooltips;
 import appeng.integration.modules.igtooltip.parts.StorageMonitorDataProvider;
-import appeng.parts.AEBasePart;
-import appeng.parts.networking.IUsedChannelProvider;
 import appeng.parts.reporting.AbstractMonitorPart;
 
 public final class TooltipProviders implements TooltipProvider {
@@ -32,8 +29,6 @@ public final class TooltipProviders implements TooltipProvider {
 
     static {
         // We just have to do this once
-        PartTooltips.addBody(IUsedChannelProvider.class, new ChannelDataProvider());
-        PartTooltips.addServerData(IUsedChannelProvider.class, new ChannelDataProvider());
         PartTooltips.addBody(AbstractMonitorPart.class, new StorageMonitorDataProvider());
         PartTooltips.addBody(IPart.class, new GridNodeStateProvider());
         PartTooltips.addServerData(IPart.class, new GridNodeStateProvider());

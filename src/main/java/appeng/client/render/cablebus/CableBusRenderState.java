@@ -59,11 +59,6 @@ public class CableBusRenderState {
     // etc.)
     private EnumSet<Direction> cableBusAdjacent = EnumSet.noneOf(Direction.class);
 
-    // Specifies the number of channels used for the connection to a given side.
-    // Only contains entries if
-    // connections contains a corresponding entry.
-    private EnumMap<Direction, Integer> channelsOnSide = new EnumMap<>(Direction.class);
-
     private EnumMap<Direction, IPartModel> attachments = new EnumMap<>(Direction.class);
 
     // For each attachment, this contains the distance from the edge until which a
@@ -106,20 +101,12 @@ public class CableBusRenderState {
         this.cableColor = cableColor;
     }
 
-    public EnumMap<Direction, Integer> getChannelsOnSide() {
-        return this.channelsOnSide;
-    }
-
     public EnumMap<Direction, AECableType> getConnectionTypes() {
         return this.connectionTypes;
     }
 
     public void setConnectionTypes(EnumMap<Direction, AECableType> connectionTypes) {
         this.connectionTypes = connectionTypes;
-    }
-
-    public void setChannelsOnSide(EnumMap<Direction, Integer> channelsOnSide) {
-        this.channelsOnSide = channelsOnSide;
     }
 
     public EnumSet<Direction> getCableBusAdjacent() {
@@ -162,7 +149,6 @@ public class CableBusRenderState {
         result = prime * result + (this.cableBusAdjacent == null ? 0 : this.cableBusAdjacent.hashCode());
         result = prime * result + (this.cableColor == null ? 0 : this.cableColor.hashCode());
         result = prime * result + (this.cableType == null ? 0 : this.cableType.hashCode());
-        result = prime * result + (this.channelsOnSide == null ? 0 : this.channelsOnSide.hashCode());
         result = prime * result + (this.connectionTypes == null ? 0 : this.connectionTypes.hashCode());
         result = prime * result + (this.coreType == null ? 0 : this.coreType.hashCode());
         result = prime * result + (this.partModelData == null ? 0 : this.partModelData.hashCode());
@@ -187,7 +173,6 @@ public class CableBusRenderState {
                 && this.coreType == other.coreType
                 && Objects.equals(this.attachmentConnections, other.attachmentConnections)
                 && Objects.equals(this.cableBusAdjacent, other.cableBusAdjacent)
-                && Objects.equals(this.channelsOnSide, other.channelsOnSide)
                 && Objects.equals(this.connectionTypes, other.connectionTypes)
                 && Objects.equals(this.partModelData, other.partModelData);
     }

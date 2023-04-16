@@ -20,7 +20,6 @@ package appeng.server;
 
 import java.util.Locale;
 
-import appeng.server.subcommands.ChannelModeCommand;
 import appeng.server.subcommands.ChunkLogger;
 import appeng.server.subcommands.Supporters;
 import appeng.server.subcommands.TickMonitoring;
@@ -31,7 +30,6 @@ public enum Commands {
 
     // Admin
     Chunklogger(4, new ChunkLogger()),
-    CHANNEL_MODE(4, "channelmode", new ChannelModeCommand()),
     TICK_MONITORING(4, "tickmonitor", new TickMonitoring());
 
     public final int level;

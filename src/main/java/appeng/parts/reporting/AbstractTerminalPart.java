@@ -57,7 +57,7 @@ public abstract class AbstractTerminalPart extends AbstractDisplayPart
     private final IConfigManager cm = new ConfigManager(this::saveChanges);
 
     public AbstractTerminalPart(IPartItem<?> partItem) {
-        super(partItem, true);
+        super(partItem);
 
         this.cm.registerSetting(Settings.SORT_BY, SortOrder.NAME);
         this.cm.registerSetting(Settings.SORT_DIRECTION, SortDir.ASCENDING);

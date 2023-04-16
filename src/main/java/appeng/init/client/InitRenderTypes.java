@@ -37,7 +37,6 @@ public final class InitRenderTypes {
      */
     private static final BlockDefinition<?>[] CUTOUT_BLOCKS = {
             AEBlocks.SECURITY_STATION,
-            AEBlocks.CONTROLLER,
             AEBlocks.WIRELESS_ACCESS_POINT,
     };
 

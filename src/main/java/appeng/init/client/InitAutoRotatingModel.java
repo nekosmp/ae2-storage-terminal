@@ -42,9 +42,7 @@ public final class InitAutoRotatingModel {
     /**
      * Blocks that should not use the auto rotation model.
      */
-    private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
-            AEBlocks.CABLE_BUS,
-            AEBlocks.CONTROLLER);
+    private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(AEBlocks.CABLE_BUS);
 
     // Maps from resource path to customizer
     private static final Map<String, Function<BakedModel, BakedModel>> CUSTOMIZERS = new HashMap<>();

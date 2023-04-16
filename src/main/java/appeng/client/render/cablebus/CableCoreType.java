@@ -37,7 +37,7 @@ import appeng.core.AppEng;
  * in three different ways: - Glass - Covered (also used by the Smart Cable) - Dense
  */
 public enum CableCoreType {
-    GLASS("part/cable/core/glass"), COVERED("part/cable/core/covered"), DENSE("part/cable/core/dense_smart");
+    GLASS("part/cable/core/glass");
 
     private static final Map<AECableType, CableCoreType> cableMapping = generateCableMapping();
 
@@ -49,10 +49,6 @@ public enum CableCoreType {
         Map<AECableType, CableCoreType> result = new EnumMap<>(AECableType.class);
 
         result.put(AECableType.GLASS, CableCoreType.GLASS);
-        result.put(AECableType.COVERED, CableCoreType.COVERED);
-        result.put(AECableType.SMART, CableCoreType.COVERED);
-        result.put(AECableType.DENSE_COVERED, CableCoreType.DENSE);
-        result.put(AECableType.DENSE_SMART, CableCoreType.DENSE);
 
         return ImmutableMap.copyOf(result);
     }

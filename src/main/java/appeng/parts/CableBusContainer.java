@@ -894,15 +894,6 @@ public class CableBusContainer implements AEMultiBlockEntity, ICableBusContainer
 
                 renderState.getConnectionTypes().put(side, connectionType);
             }
-
-            // Collect the number of channels used per side
-            // We have to do this even for non-smart cables since a glass cable can display
-            // a connection as smart if the
-            // adjacent block entity requires it
-            for (var side : Direction.values()) {
-                int channels = cable.getCableConnectionType().isSmart() ? cable.getChannelsOnSide(side) : 0;
-                renderState.getChannelsOnSide().put(side, channels);
-            }
         }
 
         // Determine attachments and facades
@@ -922,10 +913,6 @@ public class CableBusContainer implements AEMultiBlockEntity, ICableBusContainer
 
             // Some attachments want a thicker cable than glass, account for that
             var desiredType = part.getDesiredConnectionType();
-            if (renderState.getCoreType() == CableCoreType.GLASS
-                    && (desiredType == AECableType.SMART || desiredType == AECableType.COVERED)) {
-                renderState.setCoreType(CableCoreType.COVERED);
-            }
 
             int length = (int) part.getCableConnectionLength(null);
             if (length > 0 && length <= 8) {

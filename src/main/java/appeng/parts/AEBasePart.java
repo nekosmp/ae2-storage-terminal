@@ -76,10 +76,6 @@ public abstract class AEBasePart
     @Nullable
     private Component customName;
 
-    // On the client-side this is the state last sent by the server.
-    // On the server it's the state last sent to the client.
-    private boolean clientSideMissingChannel;
-
     public AEBasePart(IPartItem<?> partItem) {
         this.partItem = Objects.requireNonNull(partItem, "partItem");
         this.mainNode = createMainNode().setVisualRepresentation(AEItemKey.of(this.partItem))
@@ -96,12 +92,7 @@ public abstract class AEBasePart
      * @param reason Indicates which of the properties has changed.
      */
     @MustBeInvokedByOverriders
-    protected void onMainNodeStateChanged(IGridNodeListener.State reason) {
-        // Client flags shouldn't depend on grid boot, optimize!
-        if (reason != IGridNodeListener.State.GRID_BOOT) {
-            markForUpdateIfClientFlagsChanged();
-        }
-    }
+    protected void onMainNodeStateChanged(IGridNodeListener.State reason) {}
 
     public final boolean isClientSide() {
         return this.blockEntity == null || this.blockEntity.getLevel() == null
@@ -198,51 +189,6 @@ public abstract class AEBasePart
         if (this.customName != null) {
             data.putString("customName", Component.Serializer.toJson(this.customName));
         }
-    }
-
-    @MustBeInvokedByOverriders
-    @Override
-    public void writeToStream(FriendlyByteBuf data) {
-        this.clientSideMissingChannel = this.isMissingChannel();
-
-        var flags = 0;
-        if (clientSideMissingChannel) {
-            flags |= 2;
-        }
-        data.writeByte(flags);
-    }
-
-    @MustBeInvokedByOverriders
-    @Override
-    public boolean readFromStream(FriendlyByteBuf data) {
-        var flags = data.readByte();
-
-        var wasMissingChannel = this.clientSideMissingChannel;
-
-        this.clientSideMissingChannel = (flags & 2) != 0;
-
-        return shouldSendMissingChannelStateToClient() && clientSideMissingChannel != wasMissingChannel;
-    }
-
-    /**
-     * Used to store the state that is synchronized to clients for the visual appearance of this part as NBT. This is
-     * only used to store this state for tools such as Create Ponders in Structure NBT. Actual synchronization uses
-     * {@link #writeToStream(FriendlyByteBuf)} and {@link #readFromStream(FriendlyByteBuf)}. Any data that is saved to
-     * the NBT tag in {@link #writeToNBT(CompoundTag)} already does not need to be saved here again.
-     */
-    @MustBeInvokedByOverriders
-    @Override
-    public void writeVisualStateToNBT(CompoundTag data) {
-        data.putBoolean("missingChannel", this.isMissingChannel());
-    }
-
-    /**
-     * Loads data saved by {@link #writeVisualStateToNBT(CompoundTag)}.
-     */
-    @MustBeInvokedByOverriders
-    @Override
-    public void readVisualStateFromNBT(CompoundTag data) {
-        this.clientSideMissingChannel = data.getBoolean("missingChannel");
     }
 
     @Override
@@ -402,42 +348,8 @@ public abstract class AEBasePart
         }
     }
 
-    public boolean isMissingChannel() {
-        if (isClientSide()) {
-            return clientSideMissingChannel;
-        } else {
-            var node = getGridNode();
-            return node == null || !node.meetsChannelRequirements();
-        }
-    }
-
     @Override
     public boolean isActive() {
-        return !isMissingChannel();
-    }
-
-    /**
-     * Updates the entire part on the client-side if one of the flags relevant for its visual appearance has changed.
-     */
-    private void markForUpdateIfClientFlagsChanged() {
-        var changed = false;
-
-        if (!changed && shouldSendMissingChannelStateToClient()) {
-            if (isMissingChannel() != this.clientSideMissingChannel) {
-                changed = true;
-            }
-        }
-
-        if (changed) {
-            getHost().markForUpdate();
-        }
-    }
-
-    /**
-     * Override and return false if your part has no visual indicator for the missing channel state and doesn't need
-     * this info on the client.
-     */
-    protected boolean shouldSendMissingChannelStateToClient() {
-        return true;
+        return getGridNode() != null;
     }
 }

@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import appeng.api.config.TerminalStyle;
-import appeng.api.networking.pathing.ChannelMode;
 import appeng.core.config.BooleanOption;
 import appeng.core.config.ConfigFileManager;
 import appeng.core.config.ConfigSection;
@@ -82,9 +81,6 @@ public final class AEConfig {
         }
         return result;
     }
-
-    // Default Energy Conversion Rates
-    private static final double DEFAULT_TR_EXCHANGE = 2.0;
 
     // Config instance
     private static AEConfig instance;
@@ -249,14 +245,6 @@ public final class AEConfig {
         return COMMON.serverOpsIgnoreSecurity.get();
     }
 
-    public ChannelMode getChannelMode() {
-        return COMMON.channels.get();
-    }
-
-    public void setChannelModel(ChannelMode mode) {
-        COMMON.channels.set(mode);
-    }
-
     public int getPathfindingStepsPerTick() {
         return COMMON.pathfindingStepsPerTick.get();
     }
@@ -406,7 +394,6 @@ public final class AEConfig {
         // Misc
         public final BooleanOption debugTools;
         public final BooleanOption serverOpsIgnoreSecurity;
-        public final EnumOption<ChannelMode> channels;
         public final IntegerOption pathfindingStepsPerTick;
 
         // Logging
@@ -427,8 +414,6 @@ public final class AEConfig {
             debugTools = general.addBoolean("unsupportedDeveloperTools", false);
             serverOpsIgnoreSecurity = general.addBoolean("serverOpsIgnoreSecurity", true,
                     "Server operators are not restricted by ME security terminal settings.");
-            channels = general.addEnum("channels", ChannelMode.INFINITE,
-                    "Changes the channel capacity that cables provide in AE2.");
             pathfindingStepsPerTick = general.addInt("pathfindingStepsPerTick", 4,
                     1, 1024,
                     "The number of pathfinding steps that are taken per tick and per grid that is booting. Lower numbers will mean booting takes longer, but less work is done per tick.");

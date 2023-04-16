@@ -86,7 +86,7 @@ public class AENetworkBlockEntity extends AEBaseBlockEntity implements IInWorldG
 
     @Override
     public AECableType getCableConnectionType(Direction dir) {
-        return AECableType.SMART;
+        return AECableType.GLASS;
     }
 
     @Override

@@ -10,7 +10,6 @@ import appeng.core.localization.InGameTooltip;
 public enum GridNodeState {
     OFFLINE(InGameTooltip.DeviceOffline),
     NETWORK_BOOTING(InGameTooltip.NetworkBooting),
-    MISSING_CHANNEL(InGameTooltip.DeviceMissingChannel),
     ONLINE(InGameTooltip.DeviceOnline);
 
     private final InGameTooltip text;
@@ -28,8 +27,6 @@ public enum GridNodeState {
         if (gridNode != null) {
             if (!gridNode.hasGridBooted()) {
                 state = GridNodeState.NETWORK_BOOTING;
-            } else if (!gridNode.meetsChannelRequirements()) {
-                state = GridNodeState.MISSING_CHANNEL;
             } else {
                 state = GridNodeState.ONLINE;
             }

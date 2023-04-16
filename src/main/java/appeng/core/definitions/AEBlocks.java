@@ -48,7 +48,6 @@ import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseBlockItem;
 import appeng.block.misc.SecurityStationBlock;
 import appeng.block.networking.CableBusBlock;
-import appeng.block.networking.ControllerBlock;
 import appeng.block.networking.WirelessBlock;
 import appeng.core.AppEng;
 import appeng.core.CreativeTab;
@@ -63,7 +62,6 @@ public final class AEBlocks {
     
     public static final BlockDefinition<WirelessBlock> WIRELESS_ACCESS_POINT = block("ME Wireless Access Point", AEBlockIds.WIRELESS_ACCESS_POINT, WirelessBlock::new);
     public static final BlockDefinition<SecurityStationBlock> SECURITY_STATION = block("ME Security Terminal", AEBlockIds.SECURITY_STATION, SecurityStationBlock::new);
-    public static final BlockDefinition<ControllerBlock> CONTROLLER = block("ME Controller", AEBlockIds.CONTROLLER, ControllerBlock::new);
     public static final BlockDefinition<CableBusBlock> CABLE_BUS = block("AE2 Cable and/or Bus", AEBlockIds.CABLE_BUS, CableBusBlock::new);
 
 

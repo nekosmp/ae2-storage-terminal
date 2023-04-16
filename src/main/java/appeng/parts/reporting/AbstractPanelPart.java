@@ -41,7 +41,7 @@ public abstract class AbstractPanelPart extends AbstractReportingPart {
     public static final ResourceLocation MODEL_BASE = new ResourceLocation(AppEng.MOD_ID, "part/monitor_base");
 
     public AbstractPanelPart(IPartItem<?> partItem) {
-        super(partItem, false);
+        super(partItem);
     }
 
     @Override

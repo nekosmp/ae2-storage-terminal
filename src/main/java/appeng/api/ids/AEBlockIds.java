@@ -33,7 +33,6 @@ import net.minecraft.world.level.block.Block;
 public final class AEBlockIds {
     public static final ResourceLocation WIRELESS_ACCESS_POINT = id("wireless_access_point");
     public static final ResourceLocation SECURITY_STATION = id("security_station");
-    public static final ResourceLocation CONTROLLER = id("controller");
     public static final ResourceLocation CABLE_BUS = id("cable_bus");
 
     private static ResourceLocation id(String id) {

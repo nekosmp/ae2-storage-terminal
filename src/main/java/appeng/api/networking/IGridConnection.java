@@ -75,9 +75,4 @@ public interface IGridConnection {
      * @return node B
      */
     IGridNode b();
-
-    /**
-     * @return how many channels pass over this connections.
-     */
-    int getUsedChannels();
 }

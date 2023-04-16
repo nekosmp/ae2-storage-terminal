@@ -56,12 +56,8 @@ public abstract class AbstractReportingPart extends AEBasePart implements IPart 
     private byte spin = 0; // 0-3
     private int opacity = -1;
 
-    protected AbstractReportingPart(IPartItem<?> partItem, boolean requireChannel) {
+    protected AbstractReportingPart(IPartItem<?> partItem) {
         super(partItem);
-
-        if (requireChannel) {
-            this.getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL);
-        }
     }
 
     @Override
