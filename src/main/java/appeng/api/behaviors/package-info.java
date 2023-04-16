@@ -1,14 +1,6 @@
 /**
  * Classes to allow addons to define behavior of AE2's own devices when they have to interact with custom key types.
  *
- * <h3>Part implementations</h3>
- * <ul>
- * <li>Import bus: {@link appeng.api.behaviors.StackImportStrategy}.</li>
- * <li>Export bus: {@link appeng.api.behaviors.StackExportStrategy}.</li>
- * <li>Formation plane: {@link appeng.api.behaviors.PlacementStrategy}.</li>
- * <li>Annihilation plane: {@link appeng.api.behaviors.PickupStrategy}.</li>
- * </ul>
- *
  * <h3>Working with inventories</h3>
  * <ul>
  * <li>Building {@link appeng.api.storage.MEStorage}s from other kinds of inventories, used by the storage bus and the

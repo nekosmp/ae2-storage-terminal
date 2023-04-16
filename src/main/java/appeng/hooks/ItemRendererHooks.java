@@ -22,7 +22,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemStack;
 
 import appeng.api.client.AEStackRendering;
@@ -31,9 +30,6 @@ import appeng.api.stacks.GenericStack;
 import appeng.client.gui.me.common.StackSizeRenderer;
 
 public final class ItemRendererHooks {
-
-    // Prevents recursion in the hook below
-    private static final ThreadLocal<ItemStack> OVERRIDING_FOR = new ThreadLocal<>();
 
     private ItemRendererHooks() {
     }

@@ -26,6 +26,7 @@ import appeng.datagen.providers.models.BlockModelProvider;
 import appeng.datagen.providers.models.CableModelProvider;
 import appeng.datagen.providers.models.ItemModelProvider;
 import appeng.datagen.providers.models.PartModelProvider;
+import appeng.datagen.providers.recipes.CraftingRecipes;
 import appeng.datagen.providers.tags.BlockTagsProvider;
 import appeng.datagen.providers.tags.ItemTagsProvider;
 
@@ -44,6 +45,9 @@ public class AE2DataGenerators {
         generator.addProvider(true, new ItemModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new CableModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new PartModelProvider(generator, existingFileHelper));
+
+        // Recipes
+        generator.addProvider(true, new CraftingRecipes(generator));
 
         // Must run last
         generator.addProvider(true, localization);

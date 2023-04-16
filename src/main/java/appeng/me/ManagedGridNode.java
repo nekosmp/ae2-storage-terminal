@@ -64,7 +64,7 @@ public class ManagedGridNode implements IManagedGridNode {
         private Set<Direction> exposedOnSides = EnumSet.allOf(Direction.class);
         private AEItemKey visualRepresentation = null;
         private EnumSet<GridFlags> flags = EnumSet.noneOf(GridFlags.class);
-        private double idlePowerUsage = 1.0;
+
         private int owner = -1; // ME player id of owner
         private Level level;
         private BlockPos pos;

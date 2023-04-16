@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2:wireless_terminal"
+    },
+    {
+      "item": "minecraft:crafting_table"
+    },
+    {
+      "item": "ae2:crystalline_alloy"
+    }
+  ],
+  "result": {
+    "item": "ae2:wireless_crafting_terminal"
+  }
+}

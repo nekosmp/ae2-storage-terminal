@@ -49,13 +49,10 @@ import appeng.core.AppEng;
 @Environment(EnvType.CLIENT)
 public class CableBusModel implements BasicUnbakedModel {
 
-    public static final ResourceLocation TRANSLUCENT_FACADE_MODEL = AppEng.makeId("part/translucent_facade");
-
     @Override
     public Collection<ResourceLocation> getDependencies() {
         PartModelsInternal.freeze();
         var models = new ArrayList<>(PartModelsInternal.getModels());
-        models.add(TRANSLUCENT_FACADE_MODEL);
         return models;
     }
 
@@ -71,8 +68,6 @@ public class CableBusModel implements BasicUnbakedModel {
         Map<ResourceLocation, BakedModel> partModels = this.loadPartModels(bakery, modelState);
 
         CableBuilder cableBuilder = new CableBuilder(spriteGetter);
-
-        BakedModel translucentFacadeModel = bakery.bake(TRANSLUCENT_FACADE_MODEL, modelState);
 
         // This should normally not be used, but we *have* to provide a particle texture
         // or otherwise damage models will

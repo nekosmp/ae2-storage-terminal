@@ -38,7 +38,7 @@ public final class AEItemIds {
     public static final ResourceLocation CAPACITY_CARD = id("capacity_card");
     public static final ResourceLocation FUZZY_CARD = id("fuzzy_card");
 
-    private static ResourceLocation id(String id) {
+    public static ResourceLocation id(String id) {
         return new ResourceLocation(AEConstants.MOD_ID, id);
     }
 }

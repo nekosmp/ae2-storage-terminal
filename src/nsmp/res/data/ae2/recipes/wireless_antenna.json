@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "M": {
+      "tag": "ae2:metal_ingots"
+    },
+    "S": {
+      "tag": "ae2:metal_sheets"
+    },
+    "A": {
+      "item": "ae2:crystalline_alloy"
+    }
+  },
+  "pattern": [
+    " E ",
+    "SAS",
+    " M "
+  ],
+  "result": {
+    "item": "ae2:wireless_antenna"
+  }
+}

@@ -2,12 +2,11 @@
   "schemaVersion": 1,
   "id": "ae2",
   "version": "${version}",
-  "name": "Applied Energistics 2",
-  "description": "A Mod about matter, energy and using them to conquer the world..",
-  "authors": ["TeamAppliedEnergistics"],
+  "name": "AE2 [neko.smp]",
+  "description": "A Mod about matter, energy and using them to conquer the world.",
+  "authors": ["TeamAppliedEnergistics", "Atakku"],
   "contact": {
-    "homepage": "https://appliedenergistics.github.io/",
-    "sources": "https://github.com/AppliedEnergistics/Applied-Energistics-2/"
+    "sources": "https://github.com/nekosmp/nsmp-ae2"
   },
   "license": "LGPL",
   "icon": "assets/ae2/logo.png",
@@ -23,7 +22,8 @@
   "depends": {
     "fabricloader": ">=0.14.8",
     "fabric": ">=0.66.0",
-    "minecraft": ">=1.19.1"
+    "minecraft": ">=1.19.1",
+    "create": "*"
   },
   "conflicts": {
     "appliedenergistics2": "*"

@@ -433,12 +433,4 @@ public interface IPart extends ICustomCableConnection {
      */
     default void addEntityCrashInfo(CrashReportCategory section) {
     }
-
-    /**
-     * This method may be implemented by a part to request a specific type of cable connection for rendering. Mechanics
-     * are not affected by this in any way.
-     */
-    default AECableType getDesiredConnectionType() {
-        return AECableType.GLASS;
-    }
 }

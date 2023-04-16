@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
+
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -61,7 +63,7 @@ public final class AEItems {
     public static final ItemDefinition<Item> INVERTER_CARD = item("Inverter Card", AEItemIds.INVERTER_CARD, Upgrades::createUpgradeCardItem);
     public static final ItemDefinition<Item> CAPACITY_CARD = item("Capacity Card", AEItemIds.CAPACITY_CARD, Upgrades::createUpgradeCardItem);
     public static final ItemDefinition<Item> FUZZY_CARD = item("Fuzzy Card", AEItemIds.FUZZY_CARD, Upgrades::createUpgradeCardItem);
-    
+
     // spotless:on
 
     public static List<ItemDefinition<?>> getItems() {
@@ -85,12 +87,12 @@ public final class AEItems {
         return colors;
     }
 
-    static <T extends Item> ItemDefinition<T> item(String name, ResourceLocation id,
+    public static <T extends Item> ItemDefinition<T> item(String name, ResourceLocation id,
             Function<FabricItemSettings, T> factory) {
         return item(name, id, factory, CreativeTab.INSTANCE);
     }
 
-    static <T extends Item> ItemDefinition<T> item(String name, ResourceLocation id,
+    public static <T extends Item> ItemDefinition<T> item(String name, ResourceLocation id,
             Function<FabricItemSettings, T> factory,
             CreativeModeTab group) {
 

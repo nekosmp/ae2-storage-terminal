@@ -1,6 +1,5 @@
 package appeng.parts.automation;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -53,22 +52,6 @@ public final class StackWorldBehaviors {
      */
     public static AEKeyFilter hasExportStrategyFilter() {
         return what -> exportStrategies.getMap().containsKey(what.getType());
-    }
-
-    public static StackImportStrategy createImportFacade(ServerLevel level, BlockPos fromPos, Direction fromSide) {
-        var strategies = new ArrayList<StackImportStrategy>(importStrategies.getMap().size());
-        for (var supplier : importStrategies.getMap().values()) {
-            strategies.add(supplier.create(level, fromPos, fromSide));
-        }
-        return new StackImportFacade(strategies);
-    }
-
-    public static StackExportStrategy createExportFacade(ServerLevel level, BlockPos fromPos, Direction fromSide) {
-        var strategies = new ArrayList<StackExportStrategy>(exportStrategies.getMap().size());
-        for (var supplier : exportStrategies.getMap().values()) {
-            strategies.add(supplier.create(level, fromPos, fromSide));
-        }
-        return new StackExportFacade(strategies);
     }
 
     public static Map<AEKeyType, ExternalStorageStrategy> createExternalStorageStrategies(ServerLevel level,

@@ -69,12 +69,12 @@ public final class AEBlocks {
         return Collections.unmodifiableList(BLOCKS);
     }
 
-    private static <T extends Block> BlockDefinition<T> block(String englishName, ResourceLocation id,
+    public static <T extends Block> BlockDefinition<T> block(String englishName, ResourceLocation id,
             Supplier<T> blockSupplier) {
         return block(englishName, id, blockSupplier, null);
     }
 
-    private static <T extends Block> BlockDefinition<T> block(
+    public static <T extends Block> BlockDefinition<T> block(
             String englishName,
             ResourceLocation id,
             Supplier<T> blockSupplier,

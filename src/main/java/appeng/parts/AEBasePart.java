@@ -35,7 +35,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -57,7 +56,6 @@ import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
 import appeng.helpers.ICustomNameObject;
 import appeng.util.CustomNameUtil;
-import appeng.util.InteractionUtil;
 import appeng.util.Platform;
 import appeng.util.SettingsFrom;
 

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2:terminal"
+    },
+    {
+      "item": "ae2:wireless_antenna"
+    },
+    {
+      "item": "ae2:crystalline_casing"
+    }
+  ],
+  "result": {
+    "item": "ae2:wireless_terminal"
+  }
+}

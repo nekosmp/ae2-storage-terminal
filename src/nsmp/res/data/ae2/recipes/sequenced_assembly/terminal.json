@@ -1,0 +1,98 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "ae2:crystalline_alloy"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "ae2:terminal"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_terminal"
+        },
+        {
+          "amount": 40500,
+          "fluid": "minecraft:lava",
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_terminal"
+        },
+        [
+          {
+            "item": "create:precision_mechanism"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_terminal"
+        },
+        [
+          {
+            "tag": "c:glass_blocks"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ]
+    },
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ],
+      "processingTime": 50,
+      "results": [
+        {
+          "item": "ae2:incomplete_terminal"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "ae2:incomplete_terminal"
+  }
+}

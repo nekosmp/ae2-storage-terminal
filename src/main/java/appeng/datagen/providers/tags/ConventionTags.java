@@ -18,9 +18,15 @@
 
 package appeng.datagen.providers.tags;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 
 /**
@@ -38,6 +44,16 @@ public final class ConventionTags {
 
     public static final TagKey<Item> GLASS_CABLE = tag("ae2:glass_cable");
     public static final TagKey<Item> WRENCH = tag("c:wrenches");
+
+    public static final TagKey<Item> CAN_REMOVE_COLOR = tag("ae2:can_remove_color");
+    public static final Map<DyeColor, TagKey<Item>> DYES = Arrays.stream(DyeColor.values())
+    .collect(Collectors.toMap(
+            Function.identity(),
+            dye -> tag("c:" + dye.getSerializedName() + "_dye")));
+
+    public static final TagKey<Item> dye(DyeColor color) {
+        return DYES.get(color);
+    }
 
     private static TagKey<Item> tag(String name) {
         return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(name));

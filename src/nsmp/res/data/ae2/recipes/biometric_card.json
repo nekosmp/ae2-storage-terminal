@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "M": {
+      "tag": "ae2:metal_ingots"
+    },
+    "S": {
+      "tag": "ae2:metal_sheets"
+    },
+    "A": {
+      "item": "ae2:crystalline_alloy"
+    }
+  },
+  "pattern": [
+    "AMM",
+    "SRS"
+  ],
+  "result": {
+    "item": "ae2:biometric_card"
+  }
+}

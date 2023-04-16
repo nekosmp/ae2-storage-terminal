@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "c": {
+      "tag": "ae2:glass_cable"
+    },
+    "C": {
+      "item": "ae2:crystalline_casing"
+    },
+    "s": {
+      "tag": "ae2:metal_sheets"
+    },
+    "S": {
+      "tag": "ae2:metal_ingots"
+    }
+  },
+  "pattern": [
+    " c ",
+    "sCs",
+    "SSS"
+  ],
+  "result": {
+    "item": "ae2:storage_bus"
+  }
+}

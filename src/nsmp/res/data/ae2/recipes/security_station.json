@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "T": {
+      "tag": "ae2:terminals"
+    },
+    "M": {
+      "tag": "ae2:metal_ingots"
+    },
+    "S": {
+      "tag": "ae2:metal_sheets"
+    },
+    "c": {
+      "tag": "ae2:glass_cable"
+    },
+    "C": {
+      "item": "ae2:crystalline_casing"
+    },
+    "G": {
+      "tag": "c:gems"
+    }
+  },
+  "pattern": [
+    "STS",
+    "cCc",
+    "MGM"
+  ],
+  "result": {
+    "item": "ae2:security_station"
+  }
+}

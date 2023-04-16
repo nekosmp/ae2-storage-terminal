@@ -1,0 +1,106 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "tag": "c:diamonds"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "ae2:crystalline_alloy"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_alloy"
+        },
+        [
+          {
+            "tag": "c:quartz"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ]
+    },
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ],
+      "processingTime": 50,
+      "results": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_alloy"
+        },
+        {
+          "amount": 40500,
+          "fluid": "minecraft:lava",
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_alloy"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "ae2:incomplete_alloy"
+  }
+}

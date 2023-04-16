@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2:wireless_antenna"
+    },
+    {
+      "tag": "ae2:glass_cable"
+    }
+  ],
+  "result": {
+    "item": "ae2:wireless_access_point"
+  }
+}

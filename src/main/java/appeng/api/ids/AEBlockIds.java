@@ -34,7 +34,7 @@ public final class AEBlockIds {
     public static final ResourceLocation SECURITY_STATION = id("security_station");
     public static final ResourceLocation CABLE_BUS = id("cable_bus");
 
-    private static ResourceLocation id(String id) {
+    public static ResourceLocation id(String id) {
         return new ResourceLocation(AEConstants.MOD_ID, id);
     }
 }

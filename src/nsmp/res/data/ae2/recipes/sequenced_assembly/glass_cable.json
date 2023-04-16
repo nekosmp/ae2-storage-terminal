@@ -1,0 +1,81 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "tag": "c:glass_blocks"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "count": 16,
+      "item": "ae2:fluix_glass_cable"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_cable"
+        },
+        [
+          {
+            "item": "ae2:crystalline_alloy"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_cable"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_cable"
+        },
+        {
+          "amount": 40500,
+          "fluid": "minecraft:lava",
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_cable"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_cable"
+        }
+      ],
+      "results": [
+        {
+          "item": "ae2:incomplete_cable"
+        }
+      ]
+    },
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "ae2:incomplete_cable"
+        }
+      ],
+      "processingTime": 50,
+      "results": [
+        {
+          "item": "ae2:incomplete_cable"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "ae2:incomplete_cable"
+  }
+}

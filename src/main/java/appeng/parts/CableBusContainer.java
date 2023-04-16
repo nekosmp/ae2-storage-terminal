@@ -911,9 +911,6 @@ public class CableBusContainer implements AEMultiBlockEntity, ICableBusContainer
             final IPartCollisionHelper bch = new BusCollisionHelper(renderState.getBoundingBoxes(), side, true);
             part.getBoxes(bch);
 
-            // Some attachments want a thicker cable than glass, account for that
-            var desiredType = part.getDesiredConnectionType();
-
             int length = (int) part.getCableConnectionLength(null);
             if (length > 0 && length <= 8) {
                 renderState.getAttachmentConnections().put(side, length);

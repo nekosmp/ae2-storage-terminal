@@ -1,0 +1,16 @@
+{
+  "type": "create:item_application",
+  "ingredients": [
+    {
+      "item": "create:railway_casing"
+    },
+    {
+      "item": "ae2:crystalline_alloy"
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2:crystalline_casing"
+    }
+  ]
+}

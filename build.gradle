@@ -17,7 +17,7 @@
  */
 
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '1.1-SNAPSHOT'
     id 'io.github.juuxel.loom-quiltflower' version '1.7.1'
     id "com.github.johnrengelman.shadow" version "7.0.0"
 }
@@ -59,7 +59,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.18.1:2021.12.19@zip")
+        parchment("org.parchmentmc.data:parchment-1.19.2:2022.11.27@zip")
     }
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -116,9 +116,15 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    include modImplementation("teamreborn:energy:${project.tr_energy_version}") {
-        exclude group: "net.fabricmc.fabric-api"
+
+	// Create - dependencies are added transitively
+	modCompileOnly("com.simibubi.create:create-fabric-1.19.2:0.5.0f-776") {
+            exclude group: "net.fabricmc.fabric-api"
+            exclude group: "dev.onyxstudios.cardinal-components-api"
+            exclude group: "dev.cafeteria"
     }
+	modLocalRuntime("maven.modrinth:lazydfu:0.1.3")
+	modLocalRuntime("com.terraformersmc:modmenu:4.2.0-beta.2")
 
     internal 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -191,6 +197,17 @@ allprojects {
                 includeGroup "curse.maven"
             }
         }
+        maven { url = "https://maven.shedaniel.me/" } // Cloth Config, REI
+        maven { url = "https://dvs1.progwml6.com/files/maven/" } // JEI
+        maven { url = "https://maven.parchmentmc.org" } // Parchment mappings
+        maven { url = "https://maven.quiltmc.org/repository/release" } // Quilt Mappings
+        maven { url = "https://api.modrinth.com/maven" } // LazyDFU
+        maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
+        maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
+        maven { url = "https://cursemaven.com" } // Forge Config API Port
+        maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+        maven { url = "https://jitpack.io/" } // Mixin Extras, Fabric ASM
+        maven { url = "https://maven.tterrag.com/" } // Flywheel
     }
 
     // ensure everything uses UTF-8 and not some random codepage chosen by gradle
@@ -242,9 +259,9 @@ sourceSets {
     main {
         compileClasspath += sourceSets.portaforgy.output
         runtimeClasspath += sourceSets.portaforgy.output
-        resources {
-            srcDir 'src/generated/resources'
-        }
+        resources.srcDirs += 'src/generated/resources'
+        java.srcDirs += 'src/nsmp/java'
+        resources.srcDirs += 'src/nsmp/res'
     }
     test {
         compileClasspath += sourceSets.portaforgy.output

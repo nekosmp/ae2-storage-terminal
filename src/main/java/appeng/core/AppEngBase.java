@@ -38,7 +38,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
+import rs.neko.nsmp.ae2.CreateCompat;
 import appeng.api.IAEAddonEntrypoint;
 import appeng.api.parts.CableRenderMode;
 import appeng.core.definitions.AEBlocks;
@@ -98,6 +98,9 @@ public abstract class AppEngBase implements AppEng {
         AEItems.init();
         AEBlocks.init();
         AEParts.init();
+
+        // Initialize custom items
+        CreateCompat.init();
 
         // Now that item instances are available, we can initialize registries that need item instances
         InitGridLinkables.init();

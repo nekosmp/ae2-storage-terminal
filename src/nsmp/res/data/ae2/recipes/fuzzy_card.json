@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2:crystalline_alloy"
+    },
+    {
+      "item": "minecraft:comparator"
+    }
+  ],
+  "result": {
+    "item": "ae2:fuzzy_card"
+  }
+}

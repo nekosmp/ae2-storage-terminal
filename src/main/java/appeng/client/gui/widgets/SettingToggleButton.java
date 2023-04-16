@@ -39,8 +39,6 @@ import appeng.api.config.AccessRestriction;
 import appeng.api.config.FullnessMode;
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.LockCraftingMode;
-import appeng.api.config.OperationMode;
-import appeng.api.config.RelativeDirection;
 import appeng.api.config.SchedulingMode;
 import appeng.api.config.Setting;
 import appeng.api.config.Settings;
