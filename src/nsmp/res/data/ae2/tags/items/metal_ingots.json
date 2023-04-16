@@ -4,8 +4,8 @@
     "minecraft:iron_ingot",
     "minecraft:copper_ingot",
     "minecraft:gold_ingot",
+    "create:brass_ingot",
     "minecraft:netherite_ingot",
-    "create:zinc_ingot",
-    "create:brass_ingot"
+    "create:zinc_ingot"
   ]
 }

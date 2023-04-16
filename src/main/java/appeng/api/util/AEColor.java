@@ -35,6 +35,7 @@ import net.minecraft.world.item.DyeColor;
  * Should be the same order as Dyes, excluding Transparent.
  */
 public enum AEColor {
+    TRANSPARENT("Fluix", "gui.ae2.Fluix", "fluix", null, 0x1B2344, 0x895CA8, 0xD7BBEC, 0x000000),
 
     WHITE("White", "gui.ae2.White", "white", DyeColor.WHITE, 0xBEBEBE, 0xDBDBDB, 0xFAFAFA, 0x000000),
     ORANGE("Orange", "gui.ae2.Orange", "orange", DyeColor.ORANGE, 0xF99739, 0xFAAE44, 0xF4DEC3, 0x000000),
@@ -53,8 +54,7 @@ public enum AEColor {
     BROWN("Brown", "gui.ae2.Brown", "brown", DyeColor.BROWN, 0x724E35, 0xB7967F, 0xE0D2C8, 0x000000),
     GREEN("Green", "gui.ae2.Green", "green", DyeColor.GREEN, 0x45A021, 0x60E32E, 0xE3F2E3, 0x000000),
     RED("Red", "gui.ae2.Red", "red", DyeColor.RED, 0xA50029, 0xFF003C, 0xFFE6ED, 0x000000),
-    BLACK("Black", "gui.ae2.Black", "black", DyeColor.BLACK, 0x2B2B2B, 0x565656, 0x848484, 0xFFFFFF),
-    TRANSPARENT("Fluix", "gui.ae2.Fluix", "fluix", null, 0x1B2344, 0x895CA8, 0xD7BBEC, 0x000000);
+    BLACK("Black", "gui.ae2.Black", "black", DyeColor.BLACK, 0x2B2B2B, 0x565656, 0x848484, 0xFFFFFF);
 
     public static final List<AEColor> VALID_COLORS = Arrays.asList(WHITE, ORANGE, MAGENTA, LIGHT_BLUE, YELLOW, LIME,
             PINK, GRAY, LIGHT_GRAY, CYAN, PURPLE, BLUE, BROWN, GREEN, RED, BLACK);
