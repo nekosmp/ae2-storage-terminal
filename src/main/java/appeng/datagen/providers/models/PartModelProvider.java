@@ -22,13 +22,6 @@ public class PartModelProvider extends ModelProvider<BlockModelBuilder> {
 
     @Override
     protected void registerModels() {
-        addBuiltInModel("part/annihilation_plane");
-        addBuiltInModel("part/annihilation_plane_on");
-        addBuiltInModel("part/identity_annihilation_plane");
-        addBuiltInModel("part/identity_annihilation_plane_on");
-        addBuiltInModel("part/formation_plane");
-        addBuiltInModel("part/formation_plane_on");
-        addBuiltInModel("part/p2p/p2p_tunnel_frequency");
     }
 
     /**
