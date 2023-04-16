@@ -29,6 +29,7 @@ import appeng.api.features.IGridLinkableHandler;
 import appeng.api.implementations.items.IBiometricCard;
 import appeng.api.implementations.items.IStorageComponent;
 import appeng.api.inventories.InternalInventory;
+import appeng.api.upgrades.Upgrades;
 import appeng.client.gui.Icon;
 import appeng.core.definitions.AEItems;
 
@@ -100,6 +101,8 @@ public class RestrictedInputSlot extends AppEngSlot {
             }
             case BIOMETRIC_CARD:
                 return stack.getItem() instanceof IBiometricCard;
+            case UPGRADES:
+                return Upgrades.isUpgradeCardItem(stack);
             default:
                 break;
         }
