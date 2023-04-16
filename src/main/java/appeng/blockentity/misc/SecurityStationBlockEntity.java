@@ -42,7 +42,6 @@ import appeng.api.features.IPlayerRegistry;
 import appeng.api.features.Locatables;
 import appeng.api.implementations.blockentities.IColorableBlockEntity;
 import appeng.api.inventories.InternalInventory;
-import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNodeListener;
 import appeng.api.networking.events.GridSecurityChange;
 import appeng.api.networking.security.ISecurityProvider;

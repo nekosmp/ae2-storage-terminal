@@ -33,12 +33,6 @@ public enum GridFlags {
     CANNOT_CARRY,
 
     /**
-     * This block is part of a multiblock, used in conjunction with REQUIRE_CHANNEL, and {@link IGridMultiblock} see
-     * this interface for details.
-     */
-    MULTIBLOCK,
-
-    /**
      * Indicates which path might be preferred, this only matters if two routes of equal length exist, ad only changes
      * the order they are processed in.
      */

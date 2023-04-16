@@ -61,7 +61,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
  *
  * @param <T> Self type, for simpler chaining of methods.
  */
-@SuppressWarnings("deprecation")
 public class ModelBuilder<T extends ModelBuilder<T>> extends ModelFile {
 
     @Nullable

@@ -23,12 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGrid;
-import appeng.api.networking.IGridMultiblock;
-import appeng.api.networking.IGridNode;
-import appeng.me.GridConnection;
-import appeng.me.GridNode;
 
 /**
  * Calculation to assign channels starting from the controllers. Basically a BFS, with one step each tick.

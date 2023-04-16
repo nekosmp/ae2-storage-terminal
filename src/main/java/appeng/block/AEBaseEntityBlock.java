@@ -185,11 +185,6 @@ public abstract class AEBaseEntityBlock<T extends AEBaseBlockEntity> extends AEB
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
             InteractionHand hand, BlockHitResult hit) {
-        ItemStack heldItem;
-        if (player != null && !player.getItemInHand(hand).isEmpty()) {
-            heldItem = player.getItemInHand(hand);
-        }
-
         return this.onActivated(level, pos, player, hand, player.getItemInHand(hand), hit);
     }
 

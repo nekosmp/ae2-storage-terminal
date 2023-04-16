@@ -19,7 +19,6 @@
 package appeng.client.render.cablebus;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;

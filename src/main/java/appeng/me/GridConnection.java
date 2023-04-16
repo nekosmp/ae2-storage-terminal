@@ -33,7 +33,6 @@ import appeng.api.exceptions.SecurityConnectionException;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridConnection;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.IGridNodeListener;
 import appeng.me.pathfinding.IPathItem;
 import appeng.util.Platform;
 

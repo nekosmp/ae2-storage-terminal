@@ -28,7 +28,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 
 import appeng.api.util.AEColor;
-import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.datagen.providers.IAE2DataProvider;
 

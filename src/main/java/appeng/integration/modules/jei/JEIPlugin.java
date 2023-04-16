@@ -1,6 +1,5 @@
 package appeng.integration.modules.jei;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -14,12 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
@@ -29,9 +26,7 @@ import mezz.jei.api.runtime.IJeiRuntime;
 
 import appeng.api.integrations.jei.IngredientConverters;
 import appeng.client.gui.AEBaseScreen;
-import appeng.core.AEConfig;
 import appeng.core.AppEng;
-import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.integration.abstraction.JEIFacade;

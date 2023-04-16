@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import appeng.api.implementations.IChannelState;
 import appeng.api.implementations.blockentities.IWirelessAccessPoint;
 import appeng.api.inventories.InternalInventory;
-import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNodeListener;
 import appeng.api.util.AECableType;
