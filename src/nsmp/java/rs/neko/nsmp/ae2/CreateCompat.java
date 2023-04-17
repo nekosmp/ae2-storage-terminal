@@ -1,5 +1,6 @@
 package rs.neko.nsmp.ae2;
 
+import com.simibubi.create.content.contraptions.base.CasingBlock;
 import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
 
 import appeng.api.ids.AEBlockIds;
@@ -10,9 +11,9 @@ import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 
 public class CreateCompat {
   public static class Ids {
@@ -37,7 +38,7 @@ public class CreateCompat {
   public static final ItemDefinition<MaterialItem> WIRELESS_ANTENNA = AEItems.item("Wireless Antenna", Ids.WIRELESS_ANTENNA, MaterialItem::new);
   
   // Register blocks
-  public static final BlockDefinition<Block> CABLE_BUS = AEBlocks.block("Crystalline Casing", Ids.CRYSTALLINE_CASING, () -> new Block(Properties.of(Material.AMETHYST)));
+  public static final BlockDefinition<CasingBlock> CRYSTALLINE_CASING = AEBlocks.block("Crystalline Casing", Ids.CRYSTALLINE_CASING, () -> new CasingBlock(Properties.of(Material.AMETHYST, MaterialColor.TERRACOTTA_ORANGE)));
 
   public static void init() {}
 }
