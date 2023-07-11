@@ -70,11 +70,11 @@ dependencies {
         exclude group: "org.yaml" // snakeyaml
         exclude group: "blue.endless" // jankson
     }
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}") {
-        exclude group: "net.fabricmc.fabric-api"
-        exclude group: "org.yaml" // snakeyaml
-        exclude group: "blue.endless" // jankson
-    }
+    //modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}") {
+    //    exclude group: "net.fabricmc.fabric-api"
+    //    exclude group: "org.yaml" // snakeyaml
+    //    exclude group: "blue.endless" // jankson
+    //}
 
     if (project.runtime_itemlist_mod == "jei") {
         modLocalRuntime modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}") {
@@ -118,7 +118,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
 
 	// Create - dependencies are added transitively
-	modCompileOnly("com.simibubi.create:create-fabric-1.19.2:0.5.0f-776") {
+	modCompileOnly("com.simibubi.create:create-fabric-1.19.2:0.5.1-b-build.1089+mc1.19.2") {
             exclude group: "net.fabricmc.fabric-api"
             exclude group: "dev.onyxstudios.cardinal-components-api"
             exclude group: "dev.cafeteria"

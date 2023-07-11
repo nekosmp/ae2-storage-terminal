@@ -1,7 +1,7 @@
 package rs.neko.nsmp.ae2;
 
-import com.simibubi.create.content.contraptions.base.CasingBlock;
-import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyItem;
+import com.simibubi.create.content.decoration.encasing.CasingBlock;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 
 import appeng.api.ids.AEBlockIds;
 import appeng.api.ids.AEItemIds;
